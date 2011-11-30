@@ -1,0 +1,108 @@
+diff --git a/Makefile b/Makefile
+index 2380995..4b32f0e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,8 @@
+ VERSION = 1
+ PATCHLEVEL = 6
+ SUBLEVEL = 8
+-#EXTRAVERSION = -$(shell date "+%j.%R:%S")
++# EXTRAVERSION = -$(shell date "+%j.%R:%S")
++EXTRAVERSION = -ep
+ ARCH ?= arm
+ 
+ BUILDDATE = $(shell date "+%Y.%b.%d-%R:%S")
+diff --git a/src/mach-lpc313x/Kconfig b/src/mach-lpc313x/Kconfig
+index 31d0308..723e62f 100644
+--- a/src/mach-lpc313x/Kconfig
++++ b/src/mach-lpc313x/Kconfig
+@@ -2,7 +2,8 @@ if ARCH_LPC313X
+ 
+ choice
+ 	prompt "LPC313X Implementations"
+-	default MACH_EA313x_V1
++	#default MACH_EA313x_V1
++	default MACH_EPLPC3131_V1
+ 
+ config MACH_VAL3153
+ 	bool "NXP validation board VAL3131"
+@@ -33,6 +34,9 @@ config MACH_EA3152
+ 	select USES_NAND
+ 	select USES_SPINOR
+ 
++config MACH_EPLPC3131_V1
++		bool "Embedded Projects GmbH LPC3131"
++
+ endchoice
+ 
+ 
+@@ -85,7 +89,7 @@ config ATAG_PHYS
+ config ARCH_NUMBER
+ 	int
+ 	default 9999 if (MACH_VAL3153)
+-	default 9998 if (MACH_EA313x_V1 || MACH_EA313x_V2)
++	default 9998 if (MACH_EA313x_V1 || MACH_EA313x_V2 || MACH_EPLPC3131_V1)
+ 	default 9997 if (MACH_VAL3154)
+ 	default 9996 if (MACH_EA3152)
+ 
+diff --git a/src/mach-lpc313x/drv-mmc.c b/src/mach-lpc313x/drv-mmc.c
+index 2e17e74..8794d29 100644
+--- a/src/mach-lpc313x/drv-mmc.c
++++ b/src/mach-lpc313x/drv-mmc.c
+@@ -555,6 +555,10 @@ void SECTION mmc_acquire (void)
+ 		DBG (1, "%s: Card not inserted 0x%lx\n", __FUNCTION__, GPIO_STATE(IOCONF_GPIO));
+ 		return;
+ 	}
++#elif defined(CONFIG_MACH_EPLPC3131_V1)
++   /* FIXME: add card selection code here. Until then 
++	    card is always selected.
++	  */
+ #endif
+ 
+ 	/* clear card type */
+diff --git a/src/mach-lpc313x/initialize.c b/src/mach-lpc313x/initialize.c
+index 269be1b..e2ab8e8 100644
+--- a/src/mach-lpc313x/initialize.c
++++ b/src/mach-lpc313x/initialize.c
+@@ -223,11 +223,26 @@ void __naked __section (.bootstrap) initialize_bootstrap (void)
+   /* enable oe toggle between consecutive reads */
+   SYS_MPMC_WTD_DEL0 = _BIT(5) | 15;
+   SYS_MPMC_WTD_DEL1 = _BIT(5) | 4;
++#elif defined(CONFIG_MACH_EPLPC3131_V1)
++  /* FIXME this is currently a copy of the above CONFIG_MACH_EA313x_V1 
++     without LCD and DM9000 */
++
++  /* enable oe toggle between consecutive reads */
++  SYS_MPMC_WTD_DEL0 = _BIT(5) | 15;
++  SYS_MPMC_WTD_DEL1 = _BIT(5) | 4;
+ #endif
+   
+   /* SDRAM */
+   MPMC_DYRDCFG    = MPMC_SDRAMC_RDCFG_CMDDELAY_STG;
++#if defined(CONFIG_MACH_EPLPC3131_V1)
++  /* FIXME: At this point I must use SDRAMC_16HP_32Mx16_4B_R13_C10.
++     In my view the correct value would be SDRAMC_16LP_4Mx16_4B_R12_C8,
++     but it does not work.
++  */
++  MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
++#else
+   MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
++#endif
+   MPMC_DYRASCAS   = MPMC_SDRAMC_RASCAS_RAS2 | MPMC_SDRAMC_RASCAS_CAS2;
+   /* min 20ns program 1 so that atleast 2 HCLKs are used */
+   MPMC_DYTRP    = NS_TO_MPMCCLK(20, HCLK);
+@@ -256,7 +271,13 @@ void __naked __section (.bootstrap) initialize_bootstrap (void)
+ 
+   /* set mode register by reading the address */
+   __REG (EXT_SDRAM_PHYS + SDRAM_CHIP_MODE);
+-  MPMC_DYCONFIG  = SDRAMC_16HP_32Mx16_4B_R13_C10;
++
++#if defined(CONFIG_MACH_EPLPC3131_V1)
++	MPMC_DYCONFIG   = SDRAMC_16LP_4Mx16_4B_R12_C8;
++#else
++  MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
++#endif
++
+   /* select normal operating mode */
+   MPMC_DYNCTL    = MPMC_SDRAMC_CTL_CE | MPMC_SDRAMC_CTL_CS | MPMC_SDRAMC_CTL_NORMAL_CMD;
+ 

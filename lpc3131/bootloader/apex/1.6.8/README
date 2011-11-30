@@ -1,0 +1,33 @@
+H. Hoegl, 2011-09-29 
+Lit.: www.lpclinux.com
+
+tar zxvf apex-1.6.8.tar.gz
+mv apex-1.6.8 work_1.6.8
+cd work_1.6.8
+patch -p1 < ../apex-1.6.8_lpc313x.patch
+patch -p1 < ../ep3131.patch
+
+. ./set.sh
+
+---set.sh---
+P1=/opt/eldk-5.0/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/
+P2=/opt/eldk-5.0/armv5te/sysroots/i686-oesdk-linux/bin/armv5te-linux-gnueabi/
+
+export ARCH=arm 
+export CROSS_COMPILE=arm-linux-gnueabi-
+export PATH=$P1:$P2:$PATH
+---
+
+make apex.bin
+
+Nachsehen, auf welcher Partition der Bootloader ist, in diesem Beispiel
+/dev/sdb2.
+
+Karte hat zwei Partitionen:
+
+   1. sdb2  (BootIt fuer apex)
+   2. sdb1  (ext2)
+
+sudo dd if=src/arch-arm/rom/apex.bin of=/dev/sdb2 bs=512
+sync
+

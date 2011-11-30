@@ -1,0 +1,3696 @@
+H. Hoegl, 2011-10-06, <Hubert.Hoegl@hs-augsburg.de>
+
+Welche Linux Kernel gibt es fuer den LPC3131?
+
+  1. Download der Patches fuer Vanilla Kernel auf lpclinux.com
+        - 2.6.28
+        - 2.6.33
+
+  2. git://git.lpclinux.com/linux-2.6.33-lpc313x
+        - 2.6.28
+        - 2.6.33  <-- Der funktioniert mit MMC Karte, auch im rw Modus!
+
+  3. Upstream Kernel soll auch LPC support haben.
+
+  4. Board Support Package von NXP fuer den LPC3131 
+     http://ics.nxp.com/support/software/lpc313x.bsp.linux/
+
+  5. Kernel von Embedded Artists. Den gibt es nur auf CDROM. Ist der
+     anders?
+
+  6. Kernel von Olimex (fuer LPC-H3131). Da ruehrt sich aber nicht viel.
+     https://github.com/promovicz/linux-2.6.33-lpc313x
+  
+Newsgroups
+
+  a. http://www.lpclinux.com/Forums/WebHome
+     http://www.lpclinux.com/Forums/ForumLPC313x
+
+  b. http://tech.dir.groups.yahoo.com/group/lpc3000/message/802
+
+  c. LPC313x Kernel Patch Forum
+     http://www.lpclinux.com/Forums/LPC313xLinuxPatch
+
+  d. LPC313x Apex Patch Forum
+     http://www.lpclinux.com/Forums/LPC313xApexPatch
+
+
+2011-09-13
+---------- 
+
+* Selber kompilierter Kernel 2.6.33 (work/eplpc-kernel/) mit Benedikts
+  Apex.
+
+Terminal ready
+1594132 bytes transferred
+# boot
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (55 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux... done, booting the kernel.
+Linux version 2.6.33 (hhoegl@gazelle) (gcc version 4.5.1 (GCC) ) #2 Tue Sep 13 23:03:33 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+PID hash table entries: 32 (order: -5, 128 bytes)
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 4868KB available (2772K code, 207K data, 112K init, 0K highmem)
+Hierarchical RCU implementation.
+NR_IRQS:37
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x50 bank:2 bit:16 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Calibrating delay loop... 89.70 BogoMIPS (lpj=448512)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+NET: Registered protocol family 16
+Registering USB gadget 0x00001120 0x0ec00004 (3)
+LPC31: Power Management init.
+bio: create slab <bio-0> at 0
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+Advanced Linux Sound Architecture Driver Version 1.0.21.
+NET: Registered protocol family 2
+IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+TCP established hash table entries: 512 (order: 0, 4096 bytes)
+TCP bind hash table entries: 512 (order: -1, 2048 bytes)
+TCP: Hash tables configured (established 512 bind 512)
+TCP reno registered
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+pca9532 0-0060: setting platform data
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+NetWinder Floating Point Emulator V0.97 (double precision)
+JFFS2 version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+ROMFS MTD (C) 2007 Red Hat, Inc.
+msgmni has been set to 16
+io scheduler noop registered (default)
+Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+loop: module loaded
+nand_get_flash_type: second ID read did not match 2f,2f against 00,9f
+No NAND device found.
+spi_lpc313x spi_lpc313x.0: chipselect 0 already in use
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+dm9000 Ethernet Driver, V1.31
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0x2b882928
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0xa0882928
+dm9000 dm9000.0: read wrong id 0xa02a2928
+dm9000 dm9000.0: wrong id: 0xa02a2928
+dm9000 dm9000.0: not found (-19).
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+Initializing USB Mass Storage driver...
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+mice: PS/2 mouse device common for all mice
+i2c /dev entries driver
+lpc313x-wdt lpc313x-wdt: Watchdog device driver initialized.
+cpuidle: using governor ladder
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+No device for DAI lpc313x-i2s
+LPC313x ASOC main clock : 48000 (36864000)
+asoc: UDA1380 <-> lpc313x-i2s mapping ok
+ALSA device list:
+  #0: LPC313X_I2S_UDA1380 (UDA1380)
+TCP cubic registered
+Waiting for root device /dev/mmcblk0p2...
+[...haengt hier...]
+
+
+* 2.6.28 (von Benedikt kompiliertes zImage)
+
+Terminal ready
+# copy ext2://2/zImage 0x30008000
+813848 bytes transferred
+# boot
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (55 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux....................................................... done, booting the kernel.
+Linux version 2.6.28.2 (bene@studio) (gcc version 4.3.5 (Buildroot 2011.02) ) #24 Sat Jul 23 20:37:39 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x17 bank:0 bit:23 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+PID hash table entries: 32 (order: 5, 128 bytes)
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 6324KB available (1504K code, 139K data, 80K init)
+Calibrating delay loop... 89.60 BogoMIPS (lpj=179200)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+Unable to register USB gadget. Check USB_ID jumper!!!!!
+SCSI subsystem initialized
+NetWinder Floating Point Emulator V0.97 (extended precision)
+msgmni has been set to 16
+io scheduler noop registered
+io scheduler anticipatory registered (default)
+Serial: 8250/16550 driver1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+Driver 'sd' needs updating - please use bus_type methods
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+cpuidle: using governor ladder
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+VFP support v0.3: not present
+Waiting for root device /dev/mmcblk0p2...
+mmc0: new SDHC card at address d555
+mmcblk0: mmc0:d555 SU04G 3.79 GiB 
+ mmcblk0: p1 p2
+VFS: Mounted root (ext2 filesystem) readonly.
+Freeing init memory: 80K
+[...haengt hier...]
+
+
+2011-09-14 
+----------
+
+* 2.6.33: Aenderung in linux-2.6.33/arch/arm/mach-lpc313x/include/mach/irqs.h	
+  Siehe Patch in kernel/
+
+
+----
+
+2011-09-14 
+
+---
+
+copy ext2://2/zImage 0x30008000
+boot console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootwait loglevel=7
+
+---
+
+http://oreilly.com/linux/excerpts/9780596100797/kernel-boot-command-line-parameter-reference.html
+
+---
+
+Kernel Optionen: initcall_debug debug mem=8M init=/bin/sh
+---
+
+
+2.6.28
+
+Terminal ready
+# copy ext2://2/zImage 0x30008000
+813848 bytes transferred
+# boot
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (55 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux....................................................... done, booting the kernel.
+Linux version 2.6.28.2 (bene@studio) (gcc version 4.3.5 (Buildroot 2011.02) ) #24 Sat Jul 23 20:37:39 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x17 bank:0 bit:23 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+PID hash table entries: 32 (order: 5, 128 bytes)
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 6324KB available (1504K code, 139K data, 80K init)
+Calibrating delay loop... 89.60 BogoMIPS (lpj=179200)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+Unable to register USB gadget. Check USB_ID jumper!!!!!
+SCSI subsystem initialized
+NetWinder Floating Point Emulator V0.97 (extended precision)
+msgmni has been set to 16
+io scheduler noop registered
+io scheduler anticipatory registered (default)
+Serial: 8250/16550 driver1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+Driver 'sd' needs updating - please use bus_type methods
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+cpuidle: using governor ladder
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+VFP support v0.3: not present
+Waiting for root device /dev/mmcblk0p2...
+mmc0: new SDHC card at address d555
+mmcblk0: mmc0:d555 SU04G 3.79 GiB 
+ mmcblk0: p1 p2
+VFS: Mounted root (ext2 filesystem) readonly.
+Freeing init memory: 80K
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+serial8250: too much work for irq10
+...
+
+
+----
+
+2.6.33
+
+apex> copy ext2://2/zImage-33 0x30008000
+1592848 bytes transferred
+apex> p
+ext2-drv *= mmc
+cmdline *= console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+startup *= wait 10;copy ext2://2/zImage 0x30008000;boot
+kernelsrc *= lnand:768k+2m
+bootaddr *= 0x30008000
+arch-number *= 9998
+apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootwait
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (55 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootwait'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux... done, booting the kernel.
+Linux version 2.6.33 (hhoegl@gazelle) (gcc version 4.5.1 (GCC) ) #4 Tue Sep 13 23:55:37 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootwait
+PID hash table entries: 32 (order: -5, 128 bytes)
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 4868KB available (2772K code, 207K data, 112K init, 0K highmem)
+Hierarchical RCU implementation.
+NR_IRQS:37
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x50 bank:2 bit:16 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Calibrating delay loop... 89.70 BogoMIPS (lpj=448512)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+NET: Registered protocol family 16
+Registering USB gadget 0x00001120 0x0ec00004 (3)
+LPC31: Power Management init.
+bio: create slab <bio-0> at 0
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+Advanced Linux Sound Architecture Driver Version 1.0.21.
+NET: Registered protocol family 2
+IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+TCP established hash table entries: 512 (order: 0, 4096 bytes)
+TCP bind hash table entries: 512 (order: -1, 2048 bytes)
+TCP: Hash tables configured (established 512 bind 512)
+TCP reno registered
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+pca9532 0-0060: setting platform data
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+NetWinder Floating Point Emulator V0.97 (double precision)
+JFFS2 version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+ROMFS MTD (C) 2007 Red Hat, Inc.
+msgmni has been set to 16
+io scheduler noop registered (default)
+Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+loop: module loaded
+nand_get_flash_type: second ID read did not match 2f,2f against 00,9f
+No NAND device found.
+spi_lpc313x spi_lpc313x.0: chipselect 0 already in use
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+Initializing USB Mass Storage driver...
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+mice: PS/2 mouse device common for all mice
+i2c /dev entries driver
+lpc313x-wdt lpc313x-wdt: Watchdog device driver initialized.
+cpuidle: using governor ladder
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+No device for DAI lpc313x-i2s
+LPC313x ASOC main clock : 48000 (36864000)
+asoc: UDA1380 <-> lpc313x-i2s mapping ok
+ALSA device list:
+  #0: LPC313X_I2S_UDA1380 (UDA1380)
+TCP cubic registered
+Waiting for root device /dev/mmcblk0p2...
+
+
+----
+
+Mit 2.6.28:
+
+...
+Waiting for root device /dev/mmcblk0p2...
+mmc0: new SDHC card at address d555
+mmcblk0: mmc0:d555 SU04G 3.79 GiB 
+ mmcblk0: p1 p2
+VFS: Mounted root (ext2 filesystem) readonly.
+Freeing init memory: 80K
+Warning: unable to open an initial console.
+...
+(hier gab es kein /dev/ Verzeichnis im RootFS)
+
+Direkt nach dem Einstecken des USB Steckers gibt es
+beim Booten den IRQ10 Fehler.
+
+Ab und zu Bootet das Board nicht. Haengt das mit ATAG Adressen
+zusammen?
+
+-----------
+
+2011-09-14 
+Der 2.6.33 Kernel bootet!
+
+- Kernel ohne Module gebaut (dann braucht er /lib/modules/ nicht).
+- Aenderungen fuer MMC Kartendetektion noetig.
+- siehe kernel/
+
+* Zunaechst Kernel mit init=/bin/sh gestartet
+
+APEX Boot Loader 1.6.8 -- Copyright (c) 2004-2008 Marc Singer
+  compiled for Unspecified target on 2011.Aug.01-06:33:06
+
+    APEX comes with ABSOLUTELY NO WARRANTY.  It is free software and
+    you are welcome to redistribute it under certain circumstances.
+    For details, refer to the file COPYING in the program source.
+
+  apex => mem:0x11029000+0xe214   (57876 bytes)
+  env  => lnand:512k+256k         (bad-region)
+
+    Use the command 'help help' to get started.
+
+# wait 10
+
+apex> copy ext2://2/zImage-33 0x30008000
+1222024 bytes transferred
+apex> p
+ext2-drv *= mmc
+cmdline *= console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+startup *= wait 10;copy ext2://2/zImage 0x30008000;boot
+kernelsrc *= lnand:768k+2m
+bootaddr *= 0x30008000
+arch-number *= 9998
+apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait init=/bin/sh
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (68 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait init=/bin/sh'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux... done, booting the kernel.
+Linux version 2.6.33 (hhoegl@gorilla) (gcc version 4.5.1 (GCC) ) #9 Wed Sep 14 22:43:19 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait init=/bin/sh
+PID hash table entries: 32 (order: -5, 128 bytes)
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 5676KB available (2048K code, 143K data, 108K init, 0K highmem)
+Hierarchical RCU implementation.
+NR_IRQS:37
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x17 bank:0 bit:23 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Calibrating delay loop... 89.70 BogoMIPS (lpj=448512)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+NET: Registered protocol family 16
+Registering USB gadget 0x00001120 0x0ec00004 (3)
+LPC31: Power Management init.
+bio: create slab <bio-0> at 0
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+NET: Registered protocol family 2
+IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+TCP established hash table entries: 512 (order: 0, 4096 bytes)
+TCP bind hash table entries: 512 (order: -1, 2048 bytes)
+TCP: Hash tables configured (established 512 bind 512)
+TCP reno registered
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+pca9532 0-0060: setting platform data
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+NetWinder Floating Point Emulator V0.97 (double precision)
+msgmni has been set to 16
+io scheduler noop registered (default)
+Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+loop: module loaded
+nand_get_flash_type: second ID read did not match 93,93 against a0,a0
+No NAND device found.
+spi_lpc313x spi_lpc313x.0: chipselect 0 already in use
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+Initializing USB Mass Storage driver...
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+Freescale High-Speed USB SOC Device Controller driver (Apr 20, 2007)
+g_ether gadget: using random self ethernet address
+g_ether gadget: using random host ethernet address
+usb0: MAC 6a:f0:49:30:24:e5
+usb0: HOST MAC 3e:d6:3e:e4:10:ae
+g_ether gadget: Ethernet Gadget, version: Memorial Day 2008
+g_ether gadget: g_ether ready
+fsl-usb2-udc: bind to driver g_ether
+mice: PS/2 mouse device common for all mice
+i2c /dev entries driver
+lpc313x-wdt lpc313x-wdt: Watchdog device driver initialized.
+cpuidle: using governor ladder
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+TCP cubic registered
+Waiting for root device /dev/mmcblk0p2...
+mmc0: new SDHC card at address d555
+mmcblk0: mmc0:d555 SU04G 3.79 GiB 
+ mmcblk0: p1 p2
+VFS: Mounted root (ext2 filesystem) readonly on device 179:2.
+Freeing init memory: 108K
+sh-3.2# ls
+bin  etc     lib     mnt   root  sys       tmp  var     zImage-28
+dev  images  lost+found  proc  sbin  tftpboot  usr  zImage  zImage-33
+sh-3.2# python
+Python 2.5.1 (r251:54863, Nov 24 2008, 18:39:57) 
+[GCC 4.2.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> for i in range(10):
+...    print i
+... 
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+>>> 
+
+---------------------------------
+
+Dann Kernel mit normalem init gestartet (ohne init=...)
+
+apex> copy ext2://2/zImage-33 0x30008000
+1222024 bytes transferred
+apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait 
+ARCH_ID: 9998 (0x270e)
+ATAG_HEADER
+ATAG_MEM: start 0x30000000  size 0x00800000
+ATAG_CMDLINE: (55 bytes) 'console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait'
+ATAG_END
+Booting kernel at 0x30008000...
+Uncompressing Linux... done, booting the kernel.
+Linux version 2.6.33 (hhoegl@gorilla) (gcc version 4.5.1 (GCC) ) #9 Wed Sep 14 22:43:19 CEST 2011
+CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00053177
+CPU: VIVT data cache, VIVT instruction cache
+Machine: NXP EA313X
+Memory policy: ECC disabled, Data cache writeback
+Built 1 zonelists in Zone order, mobility grouping off.  Total pages: 2032
+Kernel command line: console=ttyS0,115200n8 root=/dev/mmcblk0p2 ro rootwait
+PID hash table entries: 32 (order: -5, 128 bytes)
+Dentry cache hash table entries: 1024 (order: 0, 4096 bytes)
+Inode-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Memory: 8MB = 8MB total
+Memory: 5676KB available (2048K code, 143K data, 108K init, 0K highmem)
+Hierarchical RCU implementation.
+NR_IRQS:37
+irq=30 Event=0x67 bank:3 bit:7 type:3
+irq=31 Event=0x7a bank:3 bit:26 type:2
+irq=32 Event=0x77 bank:3 bit:23 type:2
+irq=33 Event=0x7b bank:3 bit:27 type:0
+irq=34 Event=0x18 bank:0 bit:24 type:1
+irq=35 Event=0x17 bank:0 bit:23 type:0
+irq=36 Event=0x55 bank:2 bit:21 type:0
+Console: colour dummy device 80x30
+console [ttyS0] enabled
+Calibrating delay loop... 89.70 BogoMIPS (lpj=448512)
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+NET: Registered protocol family 16
+Registering USB gadget 0x00001120 0x0ec00004 (3)
+LPC31: Power Management init.
+bio: create slab <bio-0> at 0
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+NET: Registered protocol family 2
+IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+TCP established hash table entries: 512 (order: 0, 4096 bytes)
+TCP bind hash table entries: 512 (order: -1, 2048 bytes)
+TCP: Hash tables configured (established 512 bind 512)
+TCP reno registered
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+pca9532 0-0060: setting platform data
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+i2c i2c-0: Master timed out. stat = 2a00, cntrl = 000e. Resetting master...
+NetWinder Floating Point Emulator V0.97 (double precision)
+msgmni has been set to 16
+io scheduler noop registered (default)
+Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+�serial8250: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+�serial8250.0: ttyS0 at MMIO 0x15001000 (irq = 10) is a NXP16750
+brd: module loaded
+loop: module loaded
+nand_get_flash_type: second ID read did not match 93,93 against a0,a0
+No NAND device found.
+spi_lpc313x spi_lpc313x.0: chipselect 0 already in use
+spi_lpc313x spi_lpc313x.0: LPC313x SPI driver
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+Initializing USB Mass Storage driver...
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+Freescale High-Speed USB SOC Device Controller driver (Apr 20, 2007)
+g_ether gadget: using random self ethernet address
+g_ether gadget: using random host ethernet address
+usb0: MAC b6:94:2d:7d:d5:aa
+usb0: HOST MAC 92:b2:7d:34:2e:ab
+g_ether gadget: Ethernet Gadget, version: Memorial Day 2008
+g_ether gadget: g_ether ready
+fsl-usb2-udc: bind to driver g_ether
+mice: PS/2 mouse device common for all mice
+i2c /dev entries driver
+lpc313x-wdt lpc313x-wdt: Watchdog device driver initialized.
+cpuidle: using governor ladder
+lpc313x_mmc lpc313x_mmc.0: LPC313x MMC controller at irq 26
+TCP cubic registered
+Waiting for root device /dev/mmcblk0p2...
+mmc0: new SDHC card at address d555
+mmcblk0: mmc0:d555 SU04G 3.79 GiB 
+ mmcblk0: p1 p2
+VFS: Mounted root (ext2 filesystem) readonly on device 179:2.
+Freeing init memory: 108K
+INIT: version 2.86 booting
+/etc/rc.d/rc.sysinit: line 18: /etc/sysconfig/network: Read-only file system
+	Welcome to DENX Embedded Linux Environment
+	Press 'I' to enter interactive startup.
+Cannot access the Hardware Clock via any known method.
+Use the --debug option to see the details of our search for an access method.
+Setting clock  (utc): Thu Jan  1 01:00:02 CET 1970 [  OK  ]
+Building the cache 
+/sbin/ldconfig: Can't remove old temporary cache file /etc/ld.so.cache~: Read-only file system
+[FAILED]
+/etc/rc.d/rc.sysinit: line 381: /etc/fstab: Read-only file system
+/etc/rc.d/rc.sysinit: line 382: /etc/fstab: Read-only file system
+/etc/rc.d/rc.sysinit: line 383: /etc/fstab: Read-only file system
+Setting hostname localhost:  [  OK  ]
+Checking filesystems
+WARNING: couldn't open /etc/fstab: No such file or directory
+Checking all file systems.
+[  OK  ]
+rm: cannot remove `/etc/mtab~': Read-only file system
+rm: cannot remove `/etc/mtab~~': Read-only file system
+can't create lock file /etc/mtab~343: Read-only file system (use -n flag to override)
+Mounting local filesystems:  can't create lock file /etc/mtab~348: Read-only file system (use -n flag to override)
+[FAILED]
+touch: cannot touch `/var/lib/random-seed': Read-only file system
+chmod: cannot access `/var/lib/random-seed': No such file or directory
+rm: cannot remove `/var/lock/lvm/*': Read-only file system
+rm: cannot remove `/var/lock/subsys/*': Read-only file system
+rm: cannot remove `/var/run/console/*': Read-only file system
+rm: cannot remove `/var/run/mdadm/*': Read-only file system
+rm: cannot remove `/var/run/named/*': Read-only file system
+rm: cannot remove `/var/run/netreport/*': Read-only file system
+rm: cannot remove `/var/run/ppp/*': Read-only file system
+rm: cannot remove `/var/run/saslauthd/*': Read-only file system
+rm: cannot remove `/var/run/wpa_supplicant/*': Read-only file system
+/etc/rc.d/rc.sysinit: line 860: /var/run/utmp: Read-only file system
+touch: cannot touch `/var/log/wtmp': Read-only file system
+chgrp: cannot access `/var/run/utmp': No such file or directory
+chgrp: cannot access `/var/log/wtmp': No such file or directory
+chmod: cannot access `/var/run/utmp': No such file or directory
+chmod: cannot access `/var/log/wtmp': No such file or directory
+rm: cannot remove `/tmp/.X*-lock': Read-only file system
+rm: cannot remove `/tmp/.lock.*': Read-only file system
+rm: cannot remove `/tmp/.gdm_socket': Read-only file system
+rm: cannot remove `/tmp/.s.PGSQL.*': Read-only file system
+chown: cannot access `/tmp/.ICE-unix': No such file or directory
+Enabling /etc/fstab swaps:  swapon: cannot open /etc/fstab: No such file or directory [FAILED]
+/etc/rc.d/rc.sysinit: line 930: /var/log/dmesg: Read-only file system
+touch: cannot touch `/var/run/getkey_done': Read-only file system
+rm: cannot remove `/var/run/getkey_done': Read-only file system
+INIT: Entering runlevel: 3
+Starting system logger: [FAILED]
+Starting kernel logger: [  OK  ]
+touch: cannot touch `/var/lock/subsys/local': Read-only file system
+rm: cannot remove `/var/run/confirm': Read-only file system
+
+DENX ELDK version 4.2 build 2008-11-24
+Linux 2.6.33 on a armv5tejl
+
+localhost login: root
+-bash-3.2# lsmod
+Opening /proc/modules: No such file or directory
+-bash-3.2# ls /proc/
+1    3    91         execdomains  kpageflags    sched_debug  version
+101  4    96         filesystems  loadavg       self         vmallocinfo
+108  412  buddyinfo  fs           locks         slabinfo     vmstat
+133  413  bus        interrupts   meminfo       softirqs     zoneinfo
+134  434  cmdline    iomem        misc          stat
+135  5    cpu        ioports      mounts        sys
+2    6    cpuinfo    irq          mtd           sysvipc
+265  87   devices    kallsyms     net           timer_list
+268  89   diskstats  kmsg         pagetypeinfo  tty
+294  9    driver     kpagecount   partitions    uptime
+-bash-3.2# 
+
+--------------------
+
+2011-09-19 (Mo)
+
+Neuer Kernel 2.6.33 mit Modulen in menuconfig eingeschaltet:
+
+- make zImage
+
+- make modules
+
+- make modules_install INSTALL_MOD_PATH=/home/hhoegl/eplpc-kernel/git.lpclinux.com/install
+  legt /lib/modules/2.6.33/... an! Das ist wichtig, sonst crasht der
+  Kernel beim Start.
+
+- Finde Module die in den Kernel kompiliert sind:
+
+  grep '=y$' .config|less
+
+Apex
+
+ copy ext2://2/zImage-33-2 0x30008000 
+ printenv
+ boot
+
+USB 
+----
+
+- Kernelkonfiguration:
+    - <*> Support for host-side USB   <---- XXX heisst das, dass sowohl Host
+          als auch Device geht?  Wird das beim Booten festgelegt?
+    - [ ] OTG support (kompiliert nur ohne OTG)
+
+USB Kabel in 3131 OTG hat zur Folge, dass die Konsole zunaechst 
+verschwindet und dann als ttyUSB1 wieder erscheint:
+
+[ 3614.272107] hub 2-0:1.0: port 2 disabled by hub (EMI?), re-enabling...
+[ 3614.272124] usb 2-2: USB disconnect, address 7
+[ 3614.272675] cp210x ttyUSB0: cp210x converter now disconnected from ttyUSB0
+[ 3614.272744] cp210x 2-2:1.0: device disconnected
+[ 3614.568165] usb 2-2: new full speed USB device using uhci_hcd and address 8
+[ 3614.729555] usb 2-2: configuration #1 chosen from 1 choice
+[ 3614.735460] cp210x 2-2:1.0: cp210x converter detected
+[ 3614.844635] usb 2-2: reset full speed USB device using uhci_hcd and address 8
+[ 3614.990642] usb 2-2: cp210x converter now attached to ttyUSB1
+
+USB Gadget (mit oder ohne OTG moeglich)
+-----------
+
+Info
+
+   http://www.linux-usb.org/gadget/
+   http://www.linux-usb.org/gadget/h2-otg.html
+   http://www.armadeus.com/wiki/index.php?title=USB_Gadget
+
+Kernel neu kompiliert mit OTG eingeschaltet und G_ZERO.
+
+Fehler beim Kompilieren:
+
+drivers/built-in.o: In function `usb_enumerate_device':
+lpc313x_mmc.c:(.text+0x49580): undefined reference to `is_targeted'
+drivers/built-in.o: In function `lpc_ehci_remove':
+lpc313x_mmc.c:(.text+0x5acbc): undefined reference to `otg_put_transceiver'
+drivers/built-in.o: In function `lpc_ehci_probe':
+lpc313x_mmc.c:(.text+0x5ae90): undefined reference to `otg_get_transceiver'
+lpc313x_mmc.c:(.text+0x5aed4): undefined reference to `otg_put_transceiver'
+drivers/built-in.o: In function `fsl_udc_probe':
+lpc313x_mmc.c:(.init.text+0x3470): undefined reference to `otg_get_transceiver'
+
+Versuche Aenderungen:
+
+drivers/usb/host/ehci-lpc.c:/*  --hh 
+drivers/usb/core/hub.c:int is_targeted(struct usb_device *udev); /* --hh */
+
+Wahrscheinlich wurde OTG noch nicht mit dem 2.6.33 Kernel getestet.
+
+Jetzt OTG abgeschaltet und USB gadgets als Module.
+
+Versuch: MMC Karte als "rw" mounten. Viele Fehlermeldungen! Klappt noch
+nicht.
+
+-bash-3.2# modprobe g_zero
+-bash-3.2# lsmod
+Module                  Size  Used by
+g_zero                 11212  - 
+-bash-3.2# 
+
+dmesg berichtet:
+
+zero gadget: Gadget Zero, version: Cinco de Mayo 2008
+zero gadget: zero ready
+fsl-usb2-udc: bind to driver zero
+-bash-3.2# 
+
+Keine Reaktion, weder auf 3131 noch beim Host.
+
+Es gibt kein lsusb: 
+
+   -bash: lsusb: command not found
+
+Teste nun 
+
+-bash-3.2# modprobe g_file_storage file=/tmp/backing_file.gz
+
+Vorher backing_file.gz per download besorgt. Wie man es selber macht
+steht hier:  http://www.linux-usb.org/gadget/file_storage.html
+
+Das berichtet dmesg:
+
+device: 'gadget-lun0': device_add
+PM: Adding info for No Bus:gadget-lun0
+g_file_storage gadget: File-backed Storage Gadget, version: 20 November 2008
+g_file_storage gadget: Number of LUNs=1
+g_file_storage gadget-lun0: ro=1, file: /tmp/backing_file.gz
+fsl-usb2-udc: bind to driver g_file_storage
+
+Wieder kein Effekt.
+
+Zur Info: Nun habe ich folgende Module
+
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_serial.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/gadgetfs.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_printer.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_ether.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_zero.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_cdc.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_file_storage.ko
+./lib/modules/2.6.33/kernel/drivers/usb/gadget/g_mass_storage.ko
+./lib/modules/2.6.33/kernel/drivers/scsi/scsi_wait_scan.ko
+
+Ich hab's: Jumper J3 bei LPC_VBUS vergessen.
+
+Mit Treiber g_file_storage auf dem LPC sagt nun der Hostrechner:
+
+[12102.660092] usb 1-1: new high speed USB device using ehci_hcd and address 25
+[12102.805557] usb 1-1: configuration #1 chosen from 1 choice
+[12102.810853] scsi10 : SCSI emulation for USB Mass Storage devices
+[12102.811657] usb-storage: device found at 25
+[12102.811669] usb-storage: waiting for device to settle before scanning
+[12107.809416] usb-storage: device scan complete
+[12107.810577] scsi 10:0:0:0: Direct-Access     Linux    File-Stor Gadget 0319 PQ: 0 ANSI: 2
+[12107.813595] sd 10:0:0:0: Attached scsi generic sg2 type 0
+[12107.820438] sd 10:0:0:0: [sdc] 113 512-byte logical blocks: (57.8 kB/56.5 KiB)
+[12107.923445] sd 10:0:0:0: [sdc] Write Protect is on
+[12107.923460] sd 10:0:0:0: [sdc] Mode Sense: 0f 00 80 00
+[12107.923470] sd 10:0:0:0: [sdc] Assuming drive cache: write through
+[12108.033422] sd 10:0:0:0: [sdc] Assuming drive cache: write through
+[12108.033441]  sdc: unknown partition table
+[12108.153634] sd 10:0:0:0: [sdc] Assuming drive cache: write through
+[12108.153655] sd 10:0:0:0: [sdc] Attached SCSI disk
+
+Nun g_zero, dmesg auf Host:
+
+[12464.972098] usb 1-1: new high speed USB device using ehci_hcd and address 26
+[12465.121609] usb 1-1: configuration #3 chosen from 2 choices
+[12465.208148] usbtest 1-1:3.0: Linux gadget zero
+[12465.208167] usbtest 1-1:3.0: high speed {control in/out bulk-in bulk-out} tests (+alt)
+[12465.208271] usbcore: registered new interface driver usbtest
+
+Muss nun Tests machen wie in 
+http://www.linux-usb.org/usbtest/ beschrieben:
+
+   Host                    Test Device
+---------                 --------------
+
+   Modul usbtest           Modul g_zero
+   Programm testusb
+
+
+----
+
+Einschub: Linux auf 3131 untersucht (2.6.33 und ELDK 4.2):
+
+* top
+
+Tasks:  24 total,   1 running,  23 sleeping,   0 stopped,   0 zombie
+Cpu(s):  1.6%us,  0.0%sy,  0.0%ni, 98.0%id,  0.0%wa,  0.3%hi,  0.0%si,  0.0%st
+Mem:      5612k total,     4916k used,      696k free,       84k buffers
+Swap:        0k total,        0k used,        0k free,     2428k cached
+
+
+  687 root      20   0  2160  996  816 R  1.6 17.7   0:00.81 top                
+   94 root      20   0     0    0    0 S  0.0  0.0   0:00.00 ksuspend_usbd      
+   98 root      20   0     0    0    0 S  0.0  0.0   0:00.00 khubd              
+  105 root      20   0     0    0    0 S  0.0  0.0   0:00.03 kmmcd              
+  130 root      20   0     0    0    0 S  0.0  0.0   0:00.00 khungtaskd         
+  131 root      20   0     0    0    0 S  0.0  0.0   0:00.14 kswapd0       
+
+
+* .sh-3.2# cat /proc/cpuinfo 
+
+Processor       : ARM926EJ-S rev 5 (v5l)
+BogoMIPS        : 89.70
+Features        : swp half thumb fastmult edsp java 
+CPU implementer : 0x41
+CPU architecture: 5TEJ
+CPU variant     : 0x0
+CPU part        : 0x926
+CPU revision    : 5
+
+Hardware        : NXP EA313X
+Revision        : 0000
+Serial          : 0000000000000000
+..
+
+-bash-3.2# cat interrupts 
+           CPU0
+  5:      26484        INTC  LPC313x Timer Tick
+ 10:       1167        INTC  serial
+ 11:          0        INTC  pnx-i2c
+ 12:          0        INTC  pnx-i2c
+ 23:          0        INTC  spiirq
+ 24:          4        INTC  DMAC
+ 25:          0        INTC  nandirq
+ 26:       6188        INTC  lpc313x_mmc.0
+ 27:          0        INTC  fsl-usb2-udc
+ 35:          0  EVENTROUTER  mmc-cd
+Err:          0
+
+-bash-3.2# ps -e
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init
+    2 ?        00:00:00 kthreadd
+    3 ?        00:00:00 ksoftirqd/0
+    4 ?        00:00:00 watchdog/0
+    5 ?        00:00:00 events/0
+    6 ?        00:00:00 khelper
+    9 ?        00:00:00 async/mgr
+   85 ?        00:00:00 sync_supers
+   87 ?        00:00:00 bdi-default
+   89 ?        00:00:00 kblockd/0
+   94 ?        00:00:00 ksuspend_usbd
+   98 ?        00:00:00 khubd
+  105 ?        00:00:00 kmmcd
+  130 ?        00:00:00 khungtaskd
+  131 ?        00:00:00 kswapd0
+  132 ?        00:00:00 aio/0
+  262 ?        00:00:00 mtdblockd
+  265 ?        00:00:00 spi_lpc313x.0
+  290 ?        00:00:00 mmcqd
+  503 ?        00:00:00 rpcbind
+  525 ?        00:00:00 xinetd
+  561 ?        00:00:00 login
+  638 ttyS0    00:00:00 bash
+  738 ttyS0    00:00:00 psh-3.2
+
+# df
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/nfs               3907068   1014632   2693964  28% /
+
+* -bash-3.2# mount
+/dev/nfs on / type nfs (rw)     <--- warum /dev/nfs ????
+none on /proc type proc (rw)
+sysfs on /sys type sysfs (rw)
+ 
+
+* sys/
+	block
+	bus
+	class
+	    bdi
+	    block
+	    firmware
+	    i2c-adapter
+	    i2c-dev
+	    input
+	    mem
+	    misc
+	    mmc_host
+	    mtd
+	    net
+	    scsi_device
+	    scsi_disk
+	    scsi_generic
+	    scsi_host
+	    spi_master
+	    spidev
+	    tty
+	    usbmon
+	    vc
+	    vtconsole
+	dev
+	devices
+	firmware
+	fs
+	kernel
+	module
+	power
+
+-bash-3.2# ls dev/
+apm_bios  hda12  hda19  hda8     mtd1  mtdblock0  mtdblock7  tty   tty6
+console   hda13  hda2   hda9     mtd2  mtdblock1  null       tty0  tty7
+fb0       hda14  hda3   initctl  mtd3  mtdblock2  ram0       tty1  tty8
+hda       hda15  hda4   kmem     mtd4  mtdblock3  ram1       tty2  ttyS0
+hda1      hda16  hda5   mapper   mtd5  mtdblock4  ram2       tty3  ttySA0
+hda10     hda17  hda6   mem      mtd6  mtdblock5  ram3       tty4  urandom
+hda11     hda18  hda7   mtd0     mtd7  mtdblock6  random     tty5  zero
+
+-bash-3.2# cat /proc/meminfo
+MemTotal:           5612 kB
+MemFree:             700 kB
+Buffers:             176 kB
+Cached:             2180 kB
+SwapCached:            0 kB
+Active:             1880 kB
+Inactive:           1300 kB
+Active(anon):        292 kB
+Inactive(anon):      532 kB
+Active(file):       1588 kB
+Inactive(file):      768 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:           840 kB
+Mapped:             1200 kB
+Shmem:                 0 kB
+Slab:               1292 kB
+SReclaimable:        568 kB
+SUnreclaim:          724 kB
+KernelStack:         192 kB
+PageTables:           80 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:        2804 kB
+Committed_AS:       2412 kB
+VmallocTotal:     638976 kB
+VmallocUsed:          48 kB
+VmallocChunk:     638872 kB
+
+sh-3.2# ls /bin/
+arch      dmesg          gunzip    mktemp         rmdir    touch
+awk       dnsdomainname  gzip      more           rpm      tracepath
+basename  doexec         hostname  mount          rvi      tracepath6
+bash      domainname     igawk     mountpoint     rview    true
+cat       dumpkeys       ipcalc    mv             sed      umount
+chgrp     echo           kbd_mode  netstat        setfont  uname
+chmod     egrep          kill      nice           sh       unicode_start
+chown     env            link      nisdomainname  sleep    unicode_stop
+cp        ex             ln        pgawk          sort     unlink
+cpio      false          loadkeys  ping           stty     usleep
+cut       fgrep          login     ping6          su       vi
+date      gawk           ls        ps             sync     view
+dd        grep           mkdir     pwd            tar      ypdomainname
+df        gtar           mknod     rm             taskset  zcat
+
+
+-bash-3.2# ls /usr/bin/
+[                      fold             mstretch             setfacl
+a2p                    free             mterm                setfattr
+ab                     freetype-config  mtest                setkeycodes
+addftinfo              ftp              mtest2               setleds
+addr2line              ftpcount         muserfd              setmetamode
+apr-1-config           ftpwho           namei                setsid
+apropos                funzip           nano-X               setterm
+apu-1-config           g++              nanowm               sg
+ar                     gawk             ncurses5-config      sha1sum
+arm-linux-gnueabi-c++  gcc              neon-config          sha224sum
+arm-linux-gnueabi-g++  gcj              neqn                 sha256sum
+arm-linux-gnueabi-gcc  gcjh             net-snmp-config      sha384sum
+arm-linux-gnueabi-gcj  gcore            net-snmp-config-arm  sha512sum
+as                     gcov             newgrp               showconsolefont
+attr                   gdb              nl                   showkey
+autoconf               gdbserver        nm                   shred
+autoheader             gdbtui           nohup                shuf
+autom4te               gencat           nroff                size
+autoreconf             gendiff          ntpstat              skill
+autoscan               geqn             nxterm               slabtop
+autoupdate             get_module       nxterm.ppm           snice
+awk                    getconf          objcopy              snmpbulkget
+base64                 getent           objdump              snmpbulkwalk
+bashbug-32             getfacl          od                   snmpconf
+bc                     getfattr         odbc_config          snmpdelta
+berkeley_db_svc        getkeycodes      odbcinst             snmpdf
+bunzip2                getopt           omshell              snmpget
+byacc                  gindxbib         opannotate           snmpgetnext
+bzcat                  glib-config      oparchive            snmpinform
+bzcmp                  glib-genmarshal  opcontrol            snmpnetstat
+bzdiff                 glib-gettextize  open                 snmpset
+bzgrep                 glib-mkenums     openssl              snmpstatus
+bzip2                  glookbib         openvt               snmptable
+bzip2recover           gmake            opgprof              snmptest
+bzless                 gneqn            ophelp               snmptranslate
+bzmore                 gnroff           opimport             snmptrap
+c++                    gobject-query    opreport             snmpusm
+c++filt                gpasswd          oprofiled            snmpvacm
+c2ph                   gpic             passwd               snmpwalk
+c89                    gprof            paste                soelim
+c99                    grefer           patch                splain
+cal                    grn              pathchk              split
+captoinfo              grodvi           pcprofiledump        sprof
+cc                     groff            pcregrep             ssh
+chacl                  groffer          pcretest             stat
+chage                  grolbp           perl                 strace
+chattr                 grolj4           perl5.8.8            strings
+chfn                   grops            perlbug              strip
+chrt                   grotty           perldoc              sum
+chsh                   groups           pfbtops              sx
+chvt                   gsoelim          pftp                 systool
+cksum                  gtbl             pg_config            sz
+clear                  gtroff           pg_dump              tac
+clusterdb              gunzip           pg_dumpall           tail
+cmp                    gzexe            pg_restore           tailf
+col                    gzip             pgrep                tbl
+colcrt                 h2ph             pic                  tee
+colrm                  head             pic2graph            telnet
+column                 hexdump          piconv               test
+comm                   hostid           pinky                tfmtodit
+compile_et             hpftodit         pkill                tftp
+compress               htdbm            pl2pm                tic
+cpp                    htdigest         pmap                 time
+createdb               htpasswd         pod2html             tload
+createlang             iconv            pod2latex            toe
+createuser             id               pod2man              top
+crontab                ifnames          pod2text             tput
+csplit                 indxbib          pod2usage            tr
+curl                   infocmp          podchecker           traptoemail
+cut                    infotocap        podselect            troff
+db_archive             install          post-grohtml         tset
+db_checkpoint          ionice           pr                   tsort
+db_deadlock            ipcrm            pre-grohtml          tty
+db_dump                ipcs             printenv             ucd5820stat
+db_dump185             isosize          printf               udevinfo
+db_hotbackup           isql             protoize             udevtest
+db_load                iusql            psed                 ul
+db_printlog            jcf-dump         psfaddtable          uncompress
+db_recover             join             psfgettable          unexpand
+db_stat                jv-scan          psfstriptable        uniq
+db_upgrade             kbdrate          psfxtable            unprotoize
+db_verify              kill             psql                 unzip
+dbclient               killall          pstree               unzipsfx
+dc                     last             pstree.x11           uptime
+ddate                  lastb            pstruct              users
+deallocvt              lastlog          ptx                  utmpdump
+dfbdump                lchfn            pwdx                 uuidgen
+dfbg                   lchsh            pydoc                vacuumdb
+nfo                ld               python               vdir
+dfbinput               ldd              python-config        vmstat
+dfblayer               less             python2              w
+dfbpenmount            lessecho         python2.5            wall
+dfbscreen              lesskey          python2.5-config     watch
+dfbsummon              lesspipe.sh      ranlib               wc
+diff                   lex              rb                   whatis
+diff3                  libpng-config    rcp                  whereis
+dir                    libpng12-config  rdate                which
+dircolors              libtool          readelf              whiptail
+dirname                libtoolize       readlink             who
+dltest                 libusb-config    refer                whoami
+dprofpp                lkbib            reindexdb            write
+dropbearconvert        loadunimap       rename               xargs
+dropbearkey            locale           renice               xmlcatalog
+dropdb                 localedef        reset                xmllint
+droplang               logger           rev                  xmlwf
+dropuser               logname          rexec                xsubpp
+du                     logresolve       rlogin               xxd
+duma                   look             rpcgen               yacc
+ecpg                   lookbib          rpm2cpio             yes
+encode_keychange       lsattr           rpmbuild             zcmp
+env                    m4               rpmdb                zdiff
+eqn                    make             rpmgraph             zegrep
+eqn2graph              malpha           rpmquery             zfgrep
+expand                 man              rpmsign              zforce
+expr                   man2html         rpmverify            zgrep
+factor                 manpath          rsh                  zip
+faillog                mapscrn          rx                   zipcloak
+fdformat               mcookie          rz                   zipgrep
+fgconsole              md5sum           s2p                  zipinfo
+file                   mdemo            sasl2-sample-client  zipnote
+find                   mesg             sasl2-sample-server  zipsplit
+find2perl              mib2c-update     sb                   zless
+fixproc                mine             scp                  zmore
+flex                   mk_cmds          screen               znew
+flex++                 mkdfiff          script               zsoelim
+flock                  mkdgiff          sdiff
+fmt                    mkfifo           seq
+
+-bash-3.2# ls /sbin/
+MAKEDEV          fuser                   losetup                  rdisc
+addpart          fwparam_ibft            lsmod                    reboot
+agetty           generate-modprobe.conf  lspci                    resize2fs
+arp              genhostid               lspcmcia                 rmmod
+arping           getkey                  mdadm                    route
+badblocks        gettime                 mdadm.static             rpc.statd
+blkid            halt                    mdassemble.static        rpcbind
+blockdev         hdparm                  mii-diag                 rpcinfo
+busybox          hwclock                 mii-tool                 rtmon
+cbq              iconvconfig             mingetty                 runlevel
+chkconfig        ifcfg                   mkdosfs                  scsi_id
+clock            ifconfig                mke2fs                   service
+consoletype      ifdown                  mkfs                     setpci
+ctrlaltdel       ifenslave               mkfs.cramfs              setsysfont
+debugfs          ifrename                mkfs.ext2                sfdisk
+delpart          ifup                    mkfs.ext3                shutdown
+depmod           init                    mkfs.msdos               slattach
+dhclient         initlog                 mkfs.vfat                sln
+dhclient-script  insmod                  mkswap                   start_udev
+dmsetup          insmod.static           modinfo                  sulogin
+dmsetup.static   ip                      modprobe                 swapoff
+dosfsck          ipmaddr                 mount.nfs                swapon
+dosfslabel       iptables                mount.nfs4               sysctl
+dtc              iptables-restore        nameif                   syslogd
+dumpe2fs         iptables-save           netplugd                 tc
+e2fsck           iptables-xml            netreport                telinit
+e2image          iptunnel                nologin                  timeserver
+e2label          iscsi-iname             nscd                     tune2fs
+ether-wake       iscsi_discovery         pam_console_apply        udevcontrol
+ethtool          iscsiadm                pam_tally                udevd
+fdisk            iscsid                  pam_tally2               udevsettle
+findfs           iwconfig                pam_timestamp_check      udevtrigger
+firmware_helper  iwevent                 partx                    umount.nfs
+fsck             iwgetid                 pccardctl                umount.nfs4
+fsck.cramfs      iwlist                  pcmcia-check-broken-cis  unix_chkpwd
+fsck.ext2        iwpriv                  pcmcia-socket-startup    unix_update
+fsck.ext3        iwspy                   pidof                    update-pciids
+fsck.msdos       killall5                pivot_root               weak-modules
+fsck.vfat        klogd                   plipconfig               xdd
+fstab-decode     ldconfig                poweroff                 zdump
+ftdump           logsave                 ppp-watch                zic
+
+
+-bash-3.2# ls /usr/sbin
+adduser               lgroupmod          pwunconv
+alternatives          lid                readprofile
+apachectl             lnewusers          rfddump
+appweb                lnstat             rfdformat
+apxs                  logrotate          rndc
+arpd                  lpasswd            rndc-confgen
+arping                lsof               rotatelogs
+boa                   luseradd           routed
+chat                  luserdel           rpc.mountd
+chpasswd              lusermod           rpc.nfsd
+chroot                lvchange           rpcdebug
+ckconfig              lvconvert          rpcinfo
+clockdiff             lvcreate           rtacct
+cracklib-check        lvdisplay          safe_finger
+cracklib-format       lvextend           sasl2-shared-mechlist
+cracklib-packer       lvm                saslauthd
+cracklib-unpacker     lvmchange          sasldblistusers2
+create-cracklib-dict  lvmdiskscan        saslpasswd2
+crond                 lvmdump            setpcaps
+dhcpd                 lvmsadc            showmount
+dhcrelay              lvmsar             sm-notify
+dns-keygen            lvreduce           smartctl
+dnssec-keygen         lvremove           smartd
+dnssec-signzone       lvrename           snmpd
+doc_loadbios          lvresize           snmptrapd
+docfdisk              lvs                sntp
+dropbear              lvscan             ss
+ethtool               lwresd             start-statd
+execcap               makewhatis         sucap
+exportfs              mkdict             suexec
+filefrag              mkfs.jffs          sumtool
+flash_erase           mklost+found       sys-unconfig
+flash_eraseall        mksock             tcpd
+flash_info            mtd_debug          testsaslauthd
+flash_lock            named              tickadj
+flash_otp_dump        named-bootconf     tracepath
+flash_otp_info        named-checkconf    tracepath6
+flash_unlock          named-checkzone    try-from
+flashcp               named-compilezone  tunelp
+ftl_check             nanddump           udevmonitor
+ftl_format            nandwrite          update-alternatives
+ftprestart            newusers           update-reader.conf
+ftpshut               nfsstat            useradd
+getpcaps              nftl_format        userdel
+groupadd              nftldump           usermod
+groupdel              nstat              usernetctl
+groupmems             ntp-keygen         vgcfgbackup
+groupmod              ntp-wait           vgcfgrestore
+grpck                 ntpd               vgchange
+grpconv               ntpdate            vgck
+grpunconv             ntpdc              vgconvert
+htcacheclean          ntpq               vgcreate
+httpClient            ntptime            vgdisplay
+httpPassword          ntptrace           vgexport
+httpd                 packer             vgextend
+httpd.worker          pcscd              vgimport
+httxt2dbm             ping6              vgmerge
+hwclock               pluginviewer       vgmknodes
+ietadm                pppd               vgreduce
+ietd                  pppdump            vgremove
+in.ftpd               pppoe-discovery    vgrename
+in.rexecd             pppstats           vgs
+in.rlogind            privatepw          vgscan
+in.rshd               pvchange           vgsplit
+in.telnetd            pvcreate           vigr
+in.tftpd              pvdisplay          vipw
+in.wuftpd             pvmove             vsftpd
+inetdconvert          pvremove           wpa_cli
+jffs2dump             pvresize           wpa_passphrase
+kbdrate               pvs                wpa_supplicant
+lchage                pvscan             wu.ftpd
+lgroupadd             pwck               xferstats
+lgroupdel             pwconv             xinetd
+
+sh-3.2# ls /lib
+cpp                     libglib-2.0.so.0             libpam_misc.so.0.81.2
+firmware                libglib-2.0.so.0.1200.13     libpamc.so.0
+iptables                libgmodule-2.0.so.0          libpamc.so.0.81.0
+kbd                     libgmodule-2.0.so.0.1200.13  libpcprofile.so
+ld-2.6.so               libgobject-2.0.so.0          libpcre.so.0
+ld-linux.so.3           libgobject-2.0.so.0.1200.13  libpcre.so.0.0.1
+ldscripts               libgomp.a                    libproc-3.2.7.so
+lib                     libgomp.la                   libpthread-2.6.so
+libBrokenLocale-2.6.so  libgomp.so                   libpthread.a
+libBrokenLocale.a       libgomp.so.1                 libpthread.so
+libBrokenLocale.so      libgomp.so.1.0.0             libpthread.so.0
+libBrokenLocale.so.1    libgomp.spec                 libpthread.so_orig
+libSegFault.so          libgthread-2.0.so.0          libpthread_nonshared.a
+libanl-2.6.so           libgthread-2.0.so.0.1200.13  libresolv-2.6.so
+libanl.a                libiberty.a                  libresolv.a
+libanl.so               libieee.a                    libresolv.so
+libanl.so.1             libiw.so.28                  libresolv.so.2
+libattr.so              libm-2.6.so                  librt-2.6.so
+libattr.so.1            libm.a                       librt.a
+libattr.so.1.1.0        libm.so                      librt.so
+libblkid.so.1           libm.so.6                    librt.so.1
+libblkid.so.1.0         libmcheck.a                  libss.so.2
+libbsd-compat.a         libmemusage.so               libss.so.2.0
+libbsd.a                libmudflap.a                 libssl.so.0.9.8b
+libc-2.6.so             libmudflap.dir               libssp.a
+libc.a                  libmudflap.la                libssp.dir
+libc.so                 libmudflap.so                libssp.la
+libc.so.6               libmudflap.so.0              libssp.so
+libc.so_orig            libmudflap.so.0.0.0          libssp.so.0
+libc_nonshared.a        libmudflapth.a               libssp.so.0.0.0
+libcap.so               libmudflapth.la              libssp_nonshared.a
+libcap.so.1             libmudflapth.so              libssp_nonshared.la
+libcap.so.1.10          libmudflapth.so.0            libstdc++.a
+libcom_err.so.2         libmudflapth.so.0.0.0        libstdc++.dir
+libcom_err.so.2.1       libnsl-2.6.so                libstdc++.la
+libcrypt-2.6.so         libnsl.a                     libstdc++.so
+libcrypt.a              libnsl.so                    libstdc++.so.6
+libcrypt.so             libnsl.so.1                  libstdc++.so.6.0.9
+libcrypt.so.1           libnss_compat-2.6.so         libsupc++.a
+libcrypto.so.0.9.8b     libnss_compat.so             libsupc++.la
+libdb-4.5.so            libnss_compat.so.2           libtermcap.so.2
+libdevmapper.a          libnss_dns-2.6.so            libtermcap.so.2.0.8
+libdevmapper.a.1.02     libnss_dns.so                libthread_db-1.0.so
+libdevmapper.so         libnss_dns.so.2              libthread_db.so
+libdevmapper.so.1.02    libnss_files-2.6.so          libthread_db.so.1
+libdl-2.6.so            libnss_files.so              libutil-2.6.so
+libdl.a                 libnss_files.so.2            libutil.a
+libdl.so                libnss_hesiod-2.6.so         libutil.so
+libdl.so.2              libnss_hesiod.so             libutil.so.1
+libe2p.so.2             libnss_hesiod.so.2           libuuid.so.1
+libe2p.so.2.3           libnss_nis-2.6.so            libuuid.so.1.2
+libexpat.so.0           libnss_nis.so                libwrap.so
+libexpat.so.0.5.0       libnss_nis.so.2              libwrap.so.0
+libext2fs.so.2          libnss_nisplus-2.6.so        libwrap.so.0.7.6
+libext2fs.so.2.4        libnss_nisplus.so            libz.so.1
+libg.a                  libnss_nisplus.so.2          libz.so.1.2.3
+libgcc_s.dir            libpam.so.0                  modules
+libgcc_s.so             libpam.so.0.81.6             security
+libgcc_s.so.1           libpam_misc.so.0             udev
+
+
+-bash-3.2# ls /usr/lib
+Mcrt1.o                       libmwfonts.so
+Scrt1.o                       libmwimages.a
+appweb                        libmwimages.so
+boa                           libmwin.a
+busybox                       libmwin.so
+cracklib_dict.hwm             libmwinlib.a
+cracklib_dict.pwd             libmwinlib.so
+cracklib_dict.pwi             libnano-X.a
+crt1.o                        libnano-X.so
+crti.o                        libncurses++.a
+crtn.o                        libncurses.a
+debug                         libncurses.so
+directfb-1.0-0                libncurses.so.5
+e2fsprogs.lang                libncurses.so.5.6
+evolution-openldap            libneon.so
+gcc                           libneon.so.24
+gconv                         libneon.so.24.0.7
+gcrt1.o                       libnetsnmp.a
+glib                          libnetsnmp.so
+glib-2.0                      libnetsnmp.so.15
+groff                         libnetsnmp.so.15.0.0
+httpd                         libnetsnmpagent.a
+krb5                          libnetsnmpagent.so
+libappweb.so                  libnetsnmpagent.so.15
+libappweb.so.2                libnetsnmpagent.so.15.0.0
+libappweb.so.2.2.2            libnetsnmphelpers.a
+libappwebStatic.a             libnetsnmphelpers.so
+libapr-1.a                    libnetsnmphelpers.so.15
+libapr-1.la                   libnetsnmphelpers.so.15.0.0
+libapr-1.so                   libnetsnmpmibs.a
+libapr-1.so.0                 libnetsnmpmibs.so
+libapr-1.so.0.2.8             libnetsnmpmibs.so.15
+libaprutil-1.a                libnetsnmpmibs.so.15.0.0
+libaprutil-1.la               libnetsnmptrapd.a
+libaprutil-1.so               libnetsnmptrapd.so
+libaprutil-1.so.0             libnetsnmptrapd.so.15
+libaprutil-1.so.0.2.8         libnetsnmptrapd.so.15.0.0
+libattr.a                     libnewt.so
+libattr.so                    libnewt.so.0.52
+libbeecrypt.so                libnewt.so.0.52.6
+libbeecrypt.so.6              libnn.so.1
+libbeecrypt.so.6.4.0          libnn.so.1.0.0
+libbfd-2.17.90-1.20070806.so  libodbc.so
+libbfd.a                      libodbc.so.1
+libblkid.a                    libodbc.so.1.0.0
+libblkid.so                   libodbccr.so.1
+libboundparam.so.1            libodbccr.so.1.0.0
+libboundparam.so.1.0.0        libodbcdrvcfg1S.so.1
+libbz2.a                      libodbcdrvcfg1S.so.1.0.0
+libbz2.so                     libodbcdrvcfg2S.so.1
+libbz2.so.1                   libodbcdrvcfg2S.so.1.0.0
+libbz2.so.1.0.4               libodbcinst.so.1
+libcom_err.a                  libodbcinst.so.1.0.0
+libcom_err.so                 libodbcminiS.so.1
+libcrack.a                    libodbcminiS.so.1.0.0
+libcrack.la                   libodbcmyS.so
+libcrack.so                   libodbcmyS.so.1
+libcrack.so.2                 libodbcmyS.so.1.0.0
+libcrack.so.2.8.0             libodbcnnS.so.1
+libcrypto.a                   libodbcnnS.so.1.0.0
+libcrypto.so                  libodbcpsql.so
+libcrypto.so.6                libodbcpsql.so.1
+libcurl.so.4                  libodbcpsql.so.1.0.0
+libcurl.so.4.0.0              libodbcpsql.so.2
+libcurses.a                   libodbcpsql.so.2.0.0
+libcurses.so                  libodbcpsqlS.so
+libdb-4.5.a                   libodbcpsqlS.so.1
+libdb-4.5.la                  libodbcpsqlS.so.1.0.0
+libdb-4.5.so                  libodbctxt.so.1
+libdb.so                      libodbctxt.so.1.0.0
+libdb_cxx-4.5.a               libodbctxtS.so.1
+libdb_cxx-4.5.la              libodbctxtS.so.1.0.0
+libdb_cxx-4.5.so              libopcodes-2.17.90-1.20070806.so
+libdb_cxx.so                  libopcodes.a
+libdes425.so                  liboplodbcS.so.1
+libdes425.so.3                liboplodbcS.so.1.0.0
+libdes425.so.3.0              liboraodbcS.so.1
+libdirect-1.0.so.0            liboraodbcS.so.1.0.0
+libdirect-1.0.so.0.0.0        libpam.so
+libdirectfb-1.0.so.0          libpam_misc.so
+libdirectfb-1.0.so.0.0.0      libpamc.so
+libduma.so.0                  libpanel.a
+libduma.so.0.0                libpanel.so
+libe2p.a                      libpanel.so.5
+libe2p.so                     libpanel.so.5.6
+libecpg.a                     libpci.a
+libecpg.so                    libpcrecpp.so.0
+libecpg.so.5                  libpcrecpp.so.0.0.0
+libecpg.so.5.2                libpcreposix.so.0
+libecpg_compat.a              libpcreposix.so.0.0.0
+libecpg_compat.so             libpcsclite.so
+libecpg_compat.so.2           libpcsclite.so.1
+libecpg_compat.so.2.2         libpcsclite.so.1.0.0
+libesoobS.so.1                libpgport.a
+libesoobS.so.1.0.0            libpgtypes.a
+libexpat.a                    libpgtypes.so
+libexpat.la                   libpgtypes.so.2
+libexpat.so                   libpgtypes.so.2.2
+libext2fs.a                   libpng.so
+libext2fs.so                  libpng.so.3
+libfl.a                       libpng.so.3.16.0
+libform.a                     libpng12.so
+libform.so                    libpng12.so.0
+libform.so.5                  libpng12.so.0.16.0
+libform.so.5.6                libpopt.a
+libfreetype.so                libpopt.la
+libfreetype.so.6              libpopt.so
+libfreetype.so.6.3.15         libpopt.so.0
+libfusion-1.0.so.0            libpopt.so.0.0.0
+libfusion-1.0.so.0.0.0        libpq.a
+libglib-1.2.so.0              libpq.so
+libglib-1.2.so.0.0.10         libpq.so.5
+libglib-2.0.so                libpq.so.5.0
+libglib.a                     libpython2.5.so
+libglib.la                    libpython2.5.so.1.0
+libglib.so                    libreadline.so
+libgmodule-1.2.so.0           libreadline.so.5
+libgmodule-1.2.so.0.0.10      libreadline.so.5.2
+libgmodule-2.0.so             librpm-4.4.so
+libgmodule.a                  librpm.a
+libgmodule.la                 librpm.la
+libgmodule.so                 librpm.so
+libgmp.so.3                   librpmbuild-4.4.so
+libgmp.so.3.3.3               librpmbuild.a
+libgmpxx.so.3                 librpmbuild.la
+libgmpxx.so.3.0.5             librpmbuild.so
+libgobject-2.0.so             librpmdb-4.4.so
+libgssapi_krb5.so             librpmdb.a
+libgssapi_krb5.so.2           librpmdb.la
+libgssapi_krb5.so.2.2         librpmdb.so
+libgssrpc.so                  librpmio-4.4.so
+libgssrpc.so.4                librpmio.a
+libgssrpc.so.4.0              librpmio.la
+libgthread-1.2.so.0           librpmio.so
+libgthread-1.2.so.0.0.10      libsapdbS.so.1
+libgthread-2.0.so             libsapdbS.so.1.0.0
+libgthread.a                  libsasl2.so
+libgthread.la                 libsasl2.so.2
+libgthread.so                 libsasl2.so.2.0.22
+libgtrtst.so.1                libslang.so
+libgtrtst.so.1.0.0            libslang.so.2
+libhistory.so                 libslang.so.2.0.7
+libhistory.so.5               libsnmp.a
+libhistory.so.5.2             libsnmp.so
+libiberty.a                   libsnmp.so.15
+libk5crypto.so                libsnmp.so.15.0.0
+libk5crypto.so.3              libsqlite3.so
+libk5crypto.so.3.1            libsqlite3.so.0
+libkadm5clnt.so               libsqlite3.so.0.8.6
+libkadm5clnt.so.5             libss.a
+libkadm5clnt.so.5.1           libss.so
+libkadm5srv.so                libssl.a
+libkadm5srv.so.5              libssl.so
+libkadm5srv.so.5.1            libssl.so.6
+libkdb5.so                    libsysfs.a
+libkdb5.so.4                  libsysfs.so
+libkdb5.so.4.0                libsysfs.so.2
+libkrb4.so                    libsysfs.so.2.0.1
+libkrb4.so.2                  libtdsS.so.1
+libkrb4.so.2.0                libtdsS.so.1.0.0
+libkrb5.so                    libtemplate.so.1
+libkrb5.so.3                  libtemplate.so.1.0.0
+libkrb5.so.3.3                libtermcap.a
+libkrb5support.so             libtermcap.so
+libkrb5support.so.0           libtirpc.so
+libkrb5support.so.0.1         libtirpc.so.1
+libl.a                        libtirpc.so.1.0.7
+liblber-2.3.so.0              libusb-0.1.so.4
+liblber-2.3.so.0.2.22         libusb-0.1.so.4.4.4
+liblber.a                     libusb.so
+liblber.so                    libusbpp-0.1.so.4
+libldap-2.3.so.0              libusbpp-0.1.so.4.4.4
+libldap-2.3.so.0.2.22         libusbpp.so
+libldap.a                     libuser
+libldap.so                    libuser.so
+libldap_r-2.3.so.0            libuser.so.1
+libldap_r-2.3.so.0.2.22       libuser.so.1.1.8
+libldap_r.a                   libuuid.a
+libldap_r.so                  libuuid.so
+libltdl.a                     libvncauth.a
+libltdl.la                    libvncauth.so
+libltdl.so                    libxml2.so.2
+libltdl.so.3                  libxml2.so.2.6.29
+libltdl.so.3.1.4              libz.a
+libmagic.so.1                 libz.so
+libmagic.so.1.0.0             locale
+libmenu.a                     ltp
+libmenu.so                    openssl
+libmenu.so.5                  pcsc
+libmenu.so.5.6                perl5
+libmimerS.so.1                pgsql
+libmimerS.so.1.0.0            pkgconfig
+libmp.so.3                    pppd
+libmp.so.3.1.7                python1.5
+libmwdrivers.a                python2.2
+libmwdrivers.so               python2.5
+libmwengine.a                 rpm
+libmwengine.so                sasl2
+libmwfonts.a                  tc
+
+
+* Wenn man die MMC Karte mit "rw" mountet, gibt es viele I/O Fehler.
+  Woran liegt das? Habe schon eine zweite Karte "class 10" probiert,  
+  gleiches Resultat.
+
+...
+INIT: version 2.86 booting
+                Welcome to DENX Embedded Linux Environment
+                Press 'I' to enter interactive startup.
+Cannot access the Hardware Clock via any known method.
+Use the --debug option to see the details of our search for an access method.
+Setting clock  (utc): Thu Jan  1 01:00:02 CET 1970 [  OK  ]
+Building the cache mmcblk0: error -115 sending stop command, response 0xc00, car
+d status 0xe00
+lpc313x_mmc lpc313x_mmc.0: data timeout error
+end_request: I/O error, dev mmcblk0, sector 20538
+Buffer I/O error on device mmcblk0p2, logical block 0
+lost page write due to I/O error on mmcblk0p2
+end_request: I/O error, dev mmcblk0, sector 20546
+Buffer I/O error on device mmcblk0p2, logical block 1
+lost page write due to I/O error on mmcblk0p2
+mmcblk0: error -115 sending stop command, response 0xc00, card status 0xe00
+lpc313x_mmc lpc313x_mmc.0: data timeout error
+end_request: I/O error, dev mmcblk0, sector 830834
+Buffer I/O error on device mmcblk0p2, logical block 101287
+lost page write due to I/O error on mmcblk0p2
+end_request: I/O error, dev mmcblk0, sector 830842
+Buffer I/O error on device mmcblk0p2, logical block 101288
+lost page write due to I/O error on mmcblk0p2
+lost page write due to I/O error on mmcblk0p2
+mmcblk0: error -115 sending stop command, response 0xc00, card status 0xe00
+lpc313x_mmc lpc313x_mmc.0: data timeout error
+end_request: I/O error, dev mmcblk0, sector 808922
+Buffer I/O error on device mmcblk0p2, logical block 98548
+lost page write due to I/O error on mmcblk0p2
+mmcblk0: error -115 sending stop command, response 0xc00, card status 0xe00
+lpc313x_mmc lpc313x_mmc.0: data timeout error
+end_request: I/O error, dev mmcblk0, sector 809226
+Buffer I/O error on device mmcblk0p2, logical block 98586
+lost page write due to I/O error on mmcblk0p2
+mmcblk0: error -115 sending stop command, response 0xc00, card status 0xe00
+lpc313x_mmc lpc313x_mmc.0: data timeout error
+end_request: I/O error, dev mmcblk0, sector 809234
+Buffer I/O error on device mmcblk0p2, logical block 98587
+lost page write due to I/O error on mmcblk0p2
+mmcblk0: error -115 sending stop command, response 0xc00, card status 0xe00
+...
+
+* Ein paar moegliche Parameter fuer die Bootargs
+
+  console=ttyAM0 root=/dev/mmcblk0p1 rootwait mmc_core.use_spi_crc=0
+  noinitrd
+  rootfstype=ext2
+  debug
+  panic=10
+  mem=8M
+  S       <-- single user mode
+
+* XXX TO DO Boot Meldung:
+
+Cannot access the Hardware Clock via any known method.
+Use the --debug option to see the details of our search for an access method.
+Setting clock  (utc): Thu Jan  1 01:00:03 CET 1970 [  OK  ]
+
+2011-09-20 Kommandos zum Booten
+===============================
+
+SanDisk Karte (4G, class 2)
+---------------------------
+
+apex> copy ext2://2/zImage-33-4 0x30008000
+1297408 bytes transferred 
+
+apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p2 rw rootwait
+
+
+Neue Karte (4G, class 10,_nicht_ SanDisk)
+-----------------------------------------
+
+apex> copy ext2://1/zImage-33-4 0x30008000
+1297408 bytes transferred
+
+apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait
+
+
+
+2011-09-20 Versuche mit ELDK 5.0 
+================================
+
+- Neue SD Karte (4G, class 10)
+
+- Kernel 2.6.33 fuer 3131 aus Git Repo. Zunaechst mit init=/bin/sh
+  gestartet, da ELDK 5 mit X11 starten moechte. Das haengt dann.
+
+  SO BOOTET DER RECHNER ZUR NOT:
+
+  apex> copy ext2://1/zImage-33-4 0x30008000
+  apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait init=/bin/sh
+
+- Init Script in /etc/init.d/. Links darauf gesetzt in rcX.d/.
+  Beispiel: K20xserver-nodm -> ../init.d/xserver-nodm
+
+- Manche Init Skripte pruefen Kernel Kommandozeile, z.B. 
+  x11=false
+  psplash=false
+  
+  apex> boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait x11=false psplash=false
+
+- boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait init=/sbin/init
+
+  haengt hier:
+
+  ...
+  INIT: version 2.88 booting
+  Error opening /dev/fb0: No such device or address
+  Starting udeverror initializing control socketConfiguring network interfaces... done.
+  Starting portmap daemon...
+  portmap: fork: No such devicenet.ipv4.conf.default.rp_filter = 1
+  net.ipv4.conf.all.rp_filter = 1
+  hwclock: can't open '/dev/misc/rtc': No such file or directory
+  Fri May 20 22:20:00 UTC 2011
+  hwclock: can't open '/dev/misc/rtc': No such file or directory
+  (hier haengt es)
+
+  /etc/default/rcS <-- geandert auf VERBOSE=yes 
+
+  Aufpassen: Wenn man im Root-FS auf der SD Karte was aendert, muss man
+  vor dem naechsten Reboot "sync" eingeben.
+
+  Nun  /etc/init.d/hwclock.sh auf /etc/init.d/__hwclock.sh geaendert:
+
+INIT: version 2.88 booting
+Error opening /dev/fb0: No such device or address
+Starting udeverror initializing control socketActivating swap
+Mounting local filesystems...
+Populating volatile Filesystems.
+Configuring network interfaces... done.
+Starting portmap daemon...
+portmap: fork: No such devicenet.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+/etc/init.d/rc: /etc/rcS.d/S55bootmisc.sh: line 67: /etc/init.d/hwclock.sh: not found
+Fri May 20 22:20:00 UTC 2011
+/etc/init.d/rc: /etc/rcS.d/S55bootmisc.sh: line 77: /etc/init.d/hwclock.sh: not found
+
+hwclock in /etc/rcS.d/S55bootmisc.sh auskommentiert.
+
+Jetzt haengt es hier:
+
+    INIT: version 2.88 booting
+    Boot splashscreen disabled
+    Starting udeverror initializing control socketActivating swap
+    Mounting local filesystems...
+    Populating volatile Filesystems.
+    Configuring network interfaces... done.
+    Starting portmap daemon...
+    portmap: fork: No such devicenet.ipv4.conf.default.rp_filter = 1
+    net.ipv4.conf.all.rp_filter = 1
+
+Das ist in rcS.d/S43portmap. 
+
+Deshalb einige Dateien in rcS.d/ mit Unterstrich umbenannt:
+
+/etc/rcS.d # ls
+S00psplash.sh    S10checkroot.sh  S37populate-volatile.sh  _S43portmap
+S02banner.sh     S20modutils.sh   S38devpts.sh             _S45mountnfs.sh
+S03sysfs.sh      S30procps.sh     S39hostname.sh
+S04udev          S35mountall.sh   S55bootmisc.sh
+S06alignment.sh  S36udev-cache    _S40networking
+
+Jetzt haengt es hier:
+
+Mounting local filesystems...
+Populating volatile Filesystems.    <===  rcS.d/S37populate-volatile.sh
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+(haengt)
+
+Tipp: Aktuellen Runlevel ausgeben mit "who -r"
+
+Haengt immer noch:
+
+rc start
+Boot splashscreen disabled
+Starting udeverror initializing control socketActivating swap
+Mounting local filesystems...
+Populating volatile Filesystems.
+Popul. Ende
+S38 Anfang
+S38 Ende
+S39 Anfang
+S39 Ende
+S55 <0>
+S55 <1>
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+S55 <10>
+rc end
+
+Loesung, so dass init ausdruckt was es macht:
+
+   /etc/default/rcS <-- VERBOSE auf "very" setzen.
+
+Dann bekomme ich den Ausdruck (vermischt mit meinen echo Anweisungen):
+
+INIT: version 2.88 booting
+rc start
+INIT: Running /etc/rcS.d/S00psplash.sh start...
+Boot splashscreen disabled
+INIT: Running /etc/rcS.d/S02banner.sh start...
+INIT: Running /etc/rcS.d/S03sysfs.sh start...
+INIT: Running /etc/rcS.d/S04udev start...
+Starting udeverror initializing control socketINIT: Running /etc/rcS.d/S06alignment.sh start...
+INIT: Running /etc/rcS.d/S10checkroot.sh start...
+Activating swap
+INIT: Running /etc/rcS.d/S20modutils.sh start...
+INIT: Running /etc/rcS.d/S30procps.sh start...
+INIT: Running /etc/rcS.d/S35mountall.sh start...
+Mounting local filesystems...
+INIT: Running /etc/rcS.d/S36udev-cache start...
+INIT: Running /etc/rcS.d/S37populate-volatile.sh start...
+Populating volatile Filesystems.
+Popul. Ende
+INIT: Running /etc/rcS.d/S38devpts.sh start...
+S38 Anfang
+S38 Ende
+INIT: Running /etc/rcS.d/S39hostname.sh start...
+S39 Anfang
+S39 Ende
+INIT: Running /etc/rcS.d/S55bootmisc.sh start...
+S55 <0>
+S55 <1>
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+S55 <10>
+rc end
+
+Hier haengt der init Prozess, egal was ich mache. Eigentlich muesste
+init nun in den eingestellten Runlevel gehen und dort die Skripte in rcX.d/
+aufrufen. Macht er aber nicht. Villeicht haengt das damit zusammen, dass
+das Netzwerk nicht initialisiert ist.
+
+
+2011-09-20 | Guter Text zu Init und Runlevels:
+http://linuxmafia.com/pub/linux/suse-linux-internals/chapter6.html
+
+Wenn man init, shutdown oder aehnliches auf der Kommandozeile eingibt,
+kommt immer der Fehler:
+
+   init: timeout opening/writing control channel /dev/initctl
+
+
+# cat /etc/fstab 
+# stock fstab - you probably want to override this with a machine specific one
+
+rootfs               /                    auto       defaults              1  1
+proc                 /proc                proc       defaults              0  0
+devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
+usbdevfs             /proc/bus/usb        usbdevfs   noauto                0  0
+tmpfs                /var/volatile        tmpfs      defaults              0  0
+tmpfs                /media/ram           tmpfs      defaults              0  0
+
+Nun sysvinit-2.88dsf/src/ crosskompiliert fuer ARM. Moechte Debug 
+Anweisungen in den Quelltext schreiben.
+
+
+* 2011-09-21 
+
+sysvinit debuggen
+
+In ~/sysvinit-2.88dsf/src/init.h:
+
+/* Debug and test modes */
+#define DEBUG    1      /* Debug code off */
+#define INITDEBUG  1      /* Fork at startup to debug init. */
+
+
+* 2011-09-22 
+
+inittab von ELDK 4.2 enthaelt mingetty:
+
+    # Run gettys in standard runlevels
+    3:2345:respawn:/sbin/mingetty --noclear console
+
+Kernel Kommandozeile mit Parametern in Gaensefuesschen klappt nicht:
+
+copy ext2://1/zImage-33-4 0x30008000    # ohne Swap
+copy ext2://1/zImage-33-5 0x30008000    # mit Swap
+copy ext2://1/zImage-33-6 0x30008000    # mehr USB Treiber (net)
+copy ext2://1/zImage-33-7 0x30008000    # 
+boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait init=/bin/sh
+boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait 
+boot console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait single
+
+Ab wann ist im Kernel der GDB Stub aktiv? Kann man schon die hinteren
+Teile damit debuggen? Eigentlich muesste man auch den init Vorgang damit
+debuggen koennen, oder?
+
+Fifo:
+
+   rm -f /dev/initctl
+   mknod -m 600 /dev/initctl p
+
+Hilfe: http://www.vanemery.com/Linux/Serial/serial-console.html
+
+Bringe sysvinit erst mal nicht zum Laufen bei ELDK-5.0! Es haengt am
+Oeffnen des getty, /dev/console kann anscheinend nicht geoeffnet werden.
+ELDK-4.2 funktioniert.
+
+----
+
+Versuche Debian/ARM zu bekommen:
+
+- http://wiki.debian.org/Multistrap
+- http://wiki.debian.org/EmDebian/CrossDebootstrap
+- Lit.: Debian GNU/Linux Installation Guide (for ARM)
+        http://www.debian.org/releases/stable/armel/
+
+Fedora/ARM:
+
+- http://fedoraproject.org/wiki/Architectures/ARM/F13-ARM-Beta1
+
+Auch Ubuntu/ARM gibt es:
+
+https://wiki.edubuntu.org/ARM/RootfsFromScratch
+
+OpenEmbedded
+
+- http://www.openembedded.org/wiki/Getting_started
+- http://armbedded.de/documentation/html/linuxguide/ch07.html
+- http://elinux.org/images/3/33/Mlocke-elc2008-oe.pdf
+
+Literatur zum Booten, Init, ...
+
+- Greg O'Keefe 
+  http://tldp.org/HOWTO/From-PowerUp-To-Bash-Prompt-HOWTO.html
+
+- Greg O'Keefe, How To Build a Minimal Linux System from Source Code
+  http://users.cecs.anu.edu.au/~okeefe/p2b/buildMin/buildMin.html
+
+- Linux System Administrators Guide
+  http://tldp.org/LDP/sag/html/index.html
+
+- Linux From Scratch
+  http://www.linuxfromscratch.org
+
+- Molli - My Own Little Linux (Variante von LFS)
+  http://www.selfservix.de/molli/index.html
+
+- Booting ARM Linux
+  http://www.simtec.co.uk/products/SWLINUX/files/booting_article.html
+
+
+* 2011-09-25 | Neuer Versuch, booten mit ELDK 5.0 zu schaffen (init Problem):
+
+  - Alle Links in rcS.d/ und rc5.d/ unschaedlich gemacht (tar cvf links.tar .)
+    Damit klappt das Booten!
+
+  - Nun nacheinander wieder eingebaut in rcS.d/:
+
+    S02banner.sh
+    S03sysfs.sh
+    S06alignment.sh
+    S10checkroot.sh
+    S20modutils.sh
+    S30procps.sh
+    S35mountall.sh
+    S37populate-volatile.sh
+    S38devpts.sh
+    S39hostname.sh
+    S55bootmisc.sh
+
+    Hier passiert der Fehler:
+
+    ERROR:  ./S04udev   <-- haengt
+    Das ist der Inhalt in Stichpunkten (sollte man verstehen lernen):
+         - /etc/udev/udev.conf
+	 - /sys/class, /proc/mounts, 
+	 - /sbin/pidof -x udevd
+	 - Mount tmpfs on /dev
+	   mount -n -o mode=0755 -t tmpfs none "/dev"
+	   mkdir -m 0755 /dev/pts
+	   mkdir -m 1777 /dev/shm
+	 - /etc/dev.tar
+	 - echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
+	 - /sbin/udevd -d
+	 - /sbin/udevadm control --env=STARTUP=1
+	 - /sbin/udevadm trigger ...
+	 - /sbin/udevadm settle ...
+
+    Nachdem das dev/ Verzeichnis mit udev aufgebaut wurde, wird danach
+    ein "Cache" mit S36udev-cache gemacht. Das ist schlicht die Zeile
+
+        cd /; tar cf /etc/dev.tar dev
+
+    Interessant: Beim _ersten_ Booten wird S98configure ausgefuehrt. Das
+    ruft alle Postinstall-Scripts in /etc/rpm-postinsts/*.sh auf. 
+    Als Nebeneffekt werden auch neue S* und K* in den verschiedenen
+    Runlevels erzeugt. Rechner stuerzt ab bei der Ausfuehrung von
+    S98configure, da der Speicher zu klein ist. Auch das
+    Kompilieren mit gcc fuehrt zu einem Absturz.
+
+    rc5.d/ bleibt leer.
+
+Mit dem winzigen Speicher von 8M klarkommen:
+
+   - ulimit -v 8192   # maximum virtual memory to be 8Mb
+
+   - GCC Parameter
+      http://hostingfu.com/article/compiling-with-gcc-on-low-memory-vps
+      gcc  --param ggc-min-expand=0 --param ggc-min-heapsize=8192
+
+   - Wie kann man den Kernel zu weniger Speicherverbrauch bringen?
+
+Leider kann man bei 8M Hauptspeicher nicht mit dem gcc nativ
+kompilieren.  Hier ist ein Beispiel, wie GCC abbricht durch zu wenig Speicher:
+
+---
+root@armv5te:/# gcc --param ggc-min-expand=0 --param ggc-min-heapsize=0 main.c
+main.c: In function 'main':
+main.c:5:4: warning: incompatible implicit declaration of built-in function 'printf'
+as invoked oom-killer: gfp_mask=0x200da, order=0, oom_adj=0
+[<c0028794>] (unwind_backtrace+0x0/0xd0) from [<c0064e80>] (dump_header.clone.13+0x3c/0x108)
+[<c0064e80>] (dump_header.clone.13+0x3c/0x108) from [<c0064f7c>] (oom_kill_process.clone.14+0x30/0xe8)
+[<c0064f7c>] (oom_kill_process.clone.14+0x30/0xe8) from [<c0065314>] (__out_of_memory+0x14c/0x170)
+[<c0065314>] (__out_of_memory+0x14c/0x170) from [<c0065534>] (out_of_memory+0x78/0xac)
+[<c0065534>] (out_of_memory+0x78/0xac) from [<c0067dcc>] (__alloc_pages_nodemask+0x43c/0x53c)
+[<c0067dcc>] (__alloc_pages_nodemask+0x43c/0x53c) from [<c00758a8>] (handle_mm_fault+0x12c/0x9b8)
+[<c00758a8>] (handle_mm_fault+0x12c/0x9b8) from [<c0029700>] (do_page_fault+0xdc/0x1c4)
+[<c0029700>] (do_page_fault+0xdc/0x1c4) from [<c00221d8>] (do_DataAbort+0x30/0x98)
+[<c00221d8>] (do_DataAbort+0x30/0x98) from [<c0022d40>] (ret_from_exception+0x0/0x10)
+Exception stack(0xc0773fb0 to 0xc0773ff8)
+3fa0:                                     40318010 00000000 0001700c 40341000
+3fc0: 000b56c8 00010001 000b56d0 00040004 00000000 00000002 03c1a13f 00000002
+3fe0: 00000000 beef1b08 00016808 4208c6d0 20000010 ffffffff
+Mem-info:
+Normal per-cpu:
+CPU    0: hi:    0, btch:   1 usd:   0
+active_anon:462 inactive_anon:466 isolated_anon:0
+ active_file:24 inactive_file:0 isolated_file:0
+ unevictable:0 dirty:0 writeback:0 unstable:0
+ free:90 slab_reclaimable:59 slab_unreclaimable:175
+ mapped:14 shmem:3 pagetables:28 bounce:0
+Normal free:360kB min:360kB low:448kB high:540kB active_anon:1848kB inactive_anon:1864kB active_file:96kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:8128kB mlocked:0kB dirty:0kB writeback:0kB mapped:56kB shmem:12kB slab_reclaimable:236kB slab_unreclaimable:700kB kernel_stack:192kB pagetables:112kB unstable:0kB bounce:0kB writeback_tmp:0kB pages_scanned:256 all_unreclaimable? yes
+lowmem_reserve[]: 0 0
+Normal: 0*4kB 1*8kB 0*16kB 1*32kB 1*64kB 0*128kB 1*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 360kB
+27 total pagecache pages
+2048 pages of RAM
+129 free pages
+645 reserved pages
+234 slab pages
+48 pages shared
+0 pages swap cached
+Out of memory: kill process 610 (as) score 100 or a child
+Killed process 610 (as) vsz:6436kB, anon-rss:3428kB, file-rss:56kB
+gcc: Internal error: Killed (program as)
+Please submit a full bug report.
+See <http://gcc.gnu.org/bugs.html> for instructions.
+
+GDB (mit Python!) startet auch bei 8M Speicher bei ELDK-5.0:
+
+root@armv5te:/# gdb
+
+GNU gdb (GDB) 7.2
+Copyright (C) 2010 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "arm-linux-gnueabi".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+(gdb) 
+
+Hier ein paar Kommandos (ELDK-5.0):
+
+root@armv5te:/sbin# df
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/root              3852296    583472   3073136  16% /
+tmpfs                     2804         8      2796   0% /var/volatile
+tmpfs                     2804         0      2804   0% /media/ram
+
+root@armv5te:/sbin# mount
+rootfs on / type rootfs (rw)
+/dev/root on / type ext2 (rw,relatime,errors=continue)
+proc on /proc type proc (rw,relatime)
+sysfs on /sys type sysfs (rw,relatime)
+devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
+tmpfs on /var/volatile type tmpfs (rw,relatime)
+tmpfs on /media/ram type tmpfs (rw,relatime)
+
+root@armv5te:/sbin# cat /proc/cmdline 
+console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait
+
+root@armv5te:/sbin# who -r
+         run-level 5  Sep 25 22:20                   last=S
+
+root@armv5te:/sbin# runlevel
+N 5
+
+
+root@armv5te:/sbin# ps -e
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init
+    2 ?        00:00:00 kthreadd
+    3 ?        00:00:00 ksoftirqd/0
+    4 ?        00:00:00 watchdog/0
+    5 ?        00:00:00 events/0
+    6 ?        00:00:00 khelper
+    9 ?        00:00:00 async/mgr
+   85 ?        00:00:00 sync_supers
+   87 ?        00:00:00 bdi-default
+   89 ?        00:00:00 kblockd/0
+   94 ?        00:00:00 ksuspend_usbd
+   98 ?        00:00:00 khubd
+  105 ?        00:00:00 kmmcd
+  130 ?        00:00:00 khungtaskd
+  131 ?        00:00:00 kswapd0
+  132 ?        00:00:00 aio/0
+  262 ?        00:00:00 mtdblockd
+  265 ?        00:00:00 spi_lpc313x.0
+  290 ?        00:00:03 mmcqd
+  484 ttyS0    00:00:00 sh
+  485 tty1     00:00:00 getty
+  599 ?        00:00:00 flush-179:0
+  638 ttyS0    00:00:00 ps
+
+
+top
+---
+
+top - 23:36:41 up  1:16,  1 user,  load average: 0.00, 0.03, 0.06
+Tasks:  23 total,   1 running,  22 sleeping,   0 stopped,   0 zombie
+Cpu(s):  1.0%us,  0.7%sy,  0.0%ni, 98.4%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:      5612k total,     4900k used,      712k free,      344k buffers
+Swap:        0k total,        0k used,        0k free,     2772k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND           
+  671 root      20   0  2344 1060  892 R  1.6 18.9   0:00.71 top                
+    1 root      20   0  1592   92   36 S  0.0  1.6   0:00.61 init               
+    2 root      20   0     0    0    0 S  0.0  0.0   0:00.01 kthreadd           
+    3 root      20   0     0    0    0 S  0.0  0.0   0:00.03 ksoftirqd/0        
+    4 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 watchdog/0         
+    5 root      20   0     0    0    0 S  0.0  0.0   0:00.00 events/0           
+    6 root      20   0     0    0    0 S  0.0  0.0   0:00.14 khelper            
+    9 root      20   0     0    0    0 S  0.0  0.0   0:00.00 async/mgr          
+   85 root      20   0     0    0    0 S  0.0  0.0   0:00.00 sync_supers        
+   87 root      20   0     0    0    0 S  0.0  0.0   0:00.00 bdi-default        
+   89 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kblockd/0          
+   94 root      20   0     0    0    0 S  0.0  0.0   0:00.00 ksuspend_usbd      
+   98 root      20   0     0    0    0 S  0.0  0.0   0:00.00 khubd              
+  105 root      20   0     0    0    0 S  0.0  0.0   0:00.03 kmmcd              
+  130 root      20   0     0    0    0 S  0.0  0.0   0:00.00 khungtaskd         
+  131 root      20   0     0    0    0 S  0.0  0.0   0:00.17 kswapd0            
+  132 root      20   0     0    0    0 S  0.0  0.0   0:00.00 aio/0
+
+
+root@armv5te:/usr/lib/python2.6# python
+Python 2.6.6 (r266:84292, May 20 2011, 22:44:14) 
+[GCC 4.5.1] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+(leider fehlt BaseHTTPServer, sonst noch andere?)
+
+XX To Do: Wo sind die Logfiles in /var/log/?
+Antwort: In rc5.d/S20syslog wird syslog gestartet (busybox).
+
+   - chkconfig --list syslog 
+   - /sbin/syslogd -m 0 
+   - root@armv5te:~# /sbin/syslogd  -n
+     syslogd: socket: Address family not supported by protocol
+   Fuer syslog muss das Netzwerk aktiviert sein!
+
+2011-09-27 | Swap Space einrichten (Tipp von Benedikt)
+
+Verwende Tutorial: http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/
+
+root@armv5te:~# free -m
+             total       used       free     shared    buffers     cached
+Mem:             5          4          0          0          0          2
+-/+ buffers/cache:          1          3
+Swap:            0          0          0
+
+Create a swap file with 64MB:
+
+root@armv5te:~# dd if=/dev/zero of=/swapfile1 bs=1024 count=65536
+
+65536+0 records in
+65536+0 records out
+67108864 bytes (67 MB) copied, 62.7821 s, 1.1 MB/s
+
+
+root@armv5te:~# ls -l /swapfile1 
+-rw-r--r-- 1 root root 67108864 Sep 25 22:36 /swapfile1
+
+
+t@armv5te:~# mkswap /swapfile1
+Setting up swapspace version 1, size = 65532 KiB
+no label, UUID=ca9d4f3c-c4f8-4749-9078-8f79aed8509d
+
+Diese Zeile in /etc/fstab:
+
+   /swapfile1 swap swap defaults 0 0
+
+oder
+
+   # swapon /swapfile1
+
+Leider immer Fehlermeldung:
+
+root@armv5te:~# swapon -a
+swapon: /swapfile1: swapon failed: Function not implemented
+
+Aha, man muss im Kernel unter "General Settings" Swap aktivieren.
+
+
+-----
+
+Anmerkung: Leider gibt es "procinfo" nicht auf ELDK5.
+
+* 2011-09-27 | USB Host Controller
+
+...
+device class 'usbmon': registering
+device: 'usbmon0': device_add
+PM: Adding info for No Bus:usbmon0
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+ehci_hcd: block sizes: qh 60 qtd 96 itd 160 sitd 96
+bus: 'platform': add driver lpc-ehci
+Initializing USB Mass Storage driver...
+bus: 'usb': add driver usb-storage
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+Freescale High-Speed USB SOC Device Controller driver (Apr 20, 2007)
+bus: 'platform': add driver fsl-usb2-udc
+fsl-usb2-udc
+bus: 'platform': really_probe: probing driver fsl-usb2-udc with device fsl-usb2-udc.0
+device: 'gadget': device_add
+PM: Adding info for No Bus:gadget
+driver: 'fsl-usb2-udc.0': driver_bound: bound to device 'fsl-usb2-udc'
+bus: 'platform': really_probe: bound device fsl-usb2-udc.0 to driver fsl-usb2-udc
+... 
+
+Das Verzeichnis /proc/bus/usb fehlt. Kernel andern kompilieren? Antwort: Das usbfs
+ist deprecated. Man sollte statt dessen udev Regeln verwenden.
+
+Schaltungsfehler: GND3 ist nicht mit GND verbunden. Deshalb kommt auf dem USB Host
+Stecker auch keine Spannung an die USB Geraete. Verbinde beide Massen.
+
+ID Pin der USB OTG Schnittstelle explizit mit Masse verbunden, das signalisiert
+die USB Host Funktion. Das muesste eigentlich im Kabel erledigt werden. Mein USB 
+Adapter aus zwei USB-A Buchsen kann das leider nicht.
+
+SD Karte (4G) ueber einen Kartenleser an den LPC3131 Host Stecker angesteckt:
+
+1-1: New USB device found, idVendor=14cd, idProduct=125a
+usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=2
+usb 1-1: Product: Mass Storage Device
+usb 1-1: Manufacturer: Generic
+usb 1-1: SerialNumber: 812520090519
+scsi0 : usb-storage 1-1:1.0
+scsi 0:0:0:0: Direct-Access     USB Mass Storage Device        PQ: 0 ANSI: 0 CCS
+sd 0:0:0:0: Attached scsi generic sg0 type 0
+sd 0:0:0:0: [sda] 7959552 512-byte logical blocks: (4.07 GB/3.79 GiB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Assuming drive cache: write through
+sd 0:0:0:0: [sda] Assuming drive cache: write through
+ sda:
+ sda1 sda2
+sd 0:0:0:0: [sda] Assuming drive cache: write through
+sd 0:0:0:0: [sda] Attached SCSI removable disk
+
+Das Device /dev/sda fehlt jedoch.  Es sollte automatisch erstellt werden (evtl. 
+Module laden scsi_mod, sd_mod, and usb_storage.
+
+Lege das Device von Hand an:
+
+   root@armv5te:~# mknod /dev/sda1 b 8 1
+
+(Eigentlich sollten die Devices von hotplug angelegt werden, /proc/sys/kernel/hotplug).
+Man kann das Kommando aber auch in ein Startup Skript rcX/ schreiben.
+
+Hotplug:
+root@armv5te:/etc/rcS.d# cat /proc/sys/kernel/hotplug 
+/sbin/hotplug
+Im RootFS ELDK-5.0/ fehlt aber /sbin/hotplug.
+
+
+Mounte einen USB Dongle mit 16G. Das klappt!
+
+   root@armv5te:~# mount -t ext2 /dev/sda1 mnt/
+   EXT2-fs (sda1): warning: mounting ext3 filesystem as ext2
+   EXT2-fs (sda1): warning: maximal mount count reached, running e2fsck is recommended
+
+   root@armv5te:~# ls mnt
+   110-fotoalbum
+   2011
+   Bilder
+   ELDK-5
+   Fotos-09-10-unbek
+   Fotos-110308
+
+root@armv5te:~# df
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/root              3852296    650384   3006224  18% /
+tmpfs                     2792        12      2780   0% /var/volatile
+tmpfs                     2792         0      2792   0% /media/ram
+/dev/sda1             15437264   9110832   5542256  62% /home/root/mnt
+
+Nun einen D-Link USB zu Ethernet Adapter angesteckt:
+
+root@armv5te:/# usb 1-1: new high speed USB device using lpc-ehci and address 4
+
+usb 1-1: new high speed USB device using lpc-ehci and address 5
+lpc-ehci lpc-ehci.0: port 1 high speed
+lpc-ehci lpc-ehci.0: GetStatus port 1 status 38001205 POWER sig=se0 PE CONNECT
+usb 1-1: default language 0x0409
+usb 1-1: udev 5, busnum 1, minor = 4
+usb 1-1: New USB device found, idVendor=2001, idProduct=3c05
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: DUB-E100
+usb 1-1: Manufacturer: D-Link Corporation
+usb 1-1: SerialNumber: 000001
+device: '1-1': device_add
+bus: 'usb': add device 1-1
+PM: Adding info for usb:1-1
+usb 1-1: uevent
+bus: 'usb': driver_probe_device: matched device 1-1 with driver usb
+bus: 'usb': really_probe: probing driver usb with device 1-1
+usb 1-1: usb_probe_device
+usb 1-1: configuration #1 chosen from 1 choice
+usb 1-1: adding 1-1:1.0 (config #1, interface 0)
+device: '1-1:1.0': device_add
+bus: 'usb': add device 1-1:1.0
+PM: Adding info for usb:1-1:1.0
+
+Wie oeffnet man damit eine eth Schnittstelle?
+
+Kernel neu kompiliert mit Network support fuer USB. Einige neue Module in 
+
+root@armv5te:~# ls /lib/modules/2.6.33/kernel/drivers/net/usb/
+asix.ko  cdc_ether.ko  cdc_subset.ko  net1080.ko  usbnet.ko  zaurus.ko
+
+modprobe usbnet <--- keine Reaktion
+
+root@armv5te:~# modprobe asix
+eth0: register 'asix' at usb-lpc-ehci.0-1, ASIX AX88772 USB 2.0 Ethernet, 00:80:c8:39:38:0f
+usbcore: registered new interface driver asix
+
+root@armv5te:~# lsmod
+Module                  Size  Used by
+asix                   11159  - 
+usbnet                 12310  - 
+mii                     3396  - 
+
+Das DUB-E100 an das FH LAN anstecken.
+
+root@armv5te:~# ifconfig eth0 141.82.48.197 up
+eth0: link up, 100Mbps, full-duplex, lpa 0x45E1
+root@armv5te:~# eth0: link up, 100Mbps, full-duplex, lpa 0x45E1
+
+Ping zum rt10.informatik.fh-augsburg.de im Labor.
+
+root@armv5te:~# ping 141.82.48.190  
+PING 141.82.48.190 (141.82.48.190): 56 data bytes
+64 bytes from 141.82.48.190: seq=0 ttl=64 time=4.985 ms
+64 bytes from 141.82.48.190: seq=1 ttl=64 time=1.709 ms
+64 bytes from 141.82.48.190: seq=2 ttl=64 time=1.751 ms
+64 bytes from 141.82.48.190: seq=3 ttl=64 time=1.919 ms
+
+--- 141.82.48.190 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 1.709/2.591/4.985 ms
+
+root@armv5te:~# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:80:C8:39:38:0F  
+          inet addr:141.82.48.197  Bcast:141.82.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1214 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:68145 (66.5 KiB)  TX bytes:500 (500.0 B)
+
+* 2011-09-28 | USB-Ethernet Adapter mit Pegasus ADM8511 Chip (kleiner
+  blauer Adapter, sehr billig)
+
+  ADM8511 Pegasus II USB Ethernet Converter
+
+  Im Kernel drivers/net/usb "pegasus" aktivieren.
+
+root@armv5te:~# modprobe pegasus
+pegasus: v0.6.14 (2006/09/27), Pegasus/Pegasus II USB Ethernet driver
+pegasus 1-1:1.0: setup Pegasus II specific registers
+pegasus 1-1:1.0: eth0, ADMtek ADM8511 "Pegasus II" USB Ethernet, 00:00:4e:11:00:00
+usbcore: registered new interface driver pegasus
+
+root@armv5te:/etc/rcS.d# lsmod
+Module                  Size  Used by
+pegasus                16648  - 
+mii                     3396  - 
+
+root@armv5te:~# ifconfig eth0 141.82.48.197 up
+pegasus 1-1:1.0: update_eth_regs_async, status -22
+pegasus 1-1:1.0: update_eth_regs_async, status -22
+
+root@armv5te:~# ping 141.82.48.190    <--- rt10.informatik.fh-augsburg.de
+PING 141.82.48.190 (141.82.48.190): 56 data bytes
+64 bytes from 141.82.48.190: seq=0 ttl=64 time=7.859 ms
+64 bytes from 141.82.48.190: seq=1 ttl=64 time=1.881 ms
+64 bytes from 141.82.48.190: seq=2 ttl=64 time=2.428 ms
+...
+
+
+
+* GPIO (siehe Documentation/gpio.txt)
+
+  - Gibt es das debugfs? Dann muesste auch /sys/kernel/debug/gpio
+    da sein.
+
+  - Gibt es das sysfs Interface fuer GPIO? ("gpiolib" implementors 
+    framework)
+   
+       /sys/class/gpio/
+
+  - Anscheinend hat der 2.6.33 Kernel keine GPIO Konfig'parameter.
+    Habe nun led-class.ko aktiviert.  In make menuconfig kann man 
+    aber suchen nach GPIOLIB, GENERIC_GPIO und so weiter. Das scheint
+    nur ARCH_AT91 zu haben.
+
+    drivers/gpio/gpiolib.c
+
+
+* led-class.ko
+
+root@armv5te:~# modprobe led-class
+led_class: Unknown symbol leds_list_lock
+led_class: Unknown symbol led_trigger_remove
+led_class: Unknown symbol led_trigger_store
+led_class: Unknown symbol leds_list
+led_class: Unknown symbol led_trigger_set
+led_class: Unknown symbol led_trigger_show
+led_class: Unknown symbol led_trigger_set_default
+FATAL: Error inserting led_class (/lib/modules/2.6.33/kernel/drivers/leds/led-class.ko): Unknown symbol in module, or unknown parameter (see dmesg)
+
+
+
+* Paketverwaltung
+
+  Das ELDK verwendet RPM. Man kann sich Pakete hier mit wget holen:
+  ftp://ftp.denx.de/pub/eldk/5.0/updates
+
+  Mit "rpm -qa" bekommt man eine Liste aller installierten Pakete.
+
+  root@armv5te:/# rpm --version
+  rpm (RPM) 5.4.0
+
+  Die Informationen darueber muessen aus /var/lib/rpm kommen:
+
+root@armv5te:/var/lib/rpm# ls
+Arch          Filepaths     Os            Requirename  Version   __db.006
+Basenames     Group         Packagecolor  Seqno        __db.001  __db.007
+Conflictname  Installtid    Packages      Sha1header   __db.002  __db.008
+DB_CONFIG     Name          Providename   Sigmd5       __db.003  __db.009
+Dirnames      Nvra          Pubkeys       Sourcepkgid  __db.004  log
+Filedigests   Obsoletename  Release       Triggername  __db.005
+
+root@armv5te:/var/lib/rpm# du -sk
+21344   .
+
+
+
+* Web Server
+
+  - Wie kompiliert man lighttpd? (lighttpd-1.4.29). Geht das auf 
+    dem Target? 
+
+    Wie geht die Cross-Kompilierung? In einem Forum gesehen:
+
+    Verwende Cross Compiler 
+    /opt/eldk-5.0/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/.
+
+    hhoegl@gorilla:~/work/eplpc3131/lighttpd-1.4.29$ CC=arm-linux-gnueabi-gcc RANLIB=arm-linux-gnueabi-ranlib STRIP=arm-linux-gnueabi-strip LD=arm-linux-gnueabi-ld   ./configure --host=arm-linux-gnueabi --disable-static --enable-shared --without-zlib --without-bzip2
+
+Bei make kracht es leider (pcre) gibt es nicht:
+
+hhoegl@gorilla:~/lighttpd-1.4.29$ make
+make  all-recursive
+make[1]: Entering directory `/home/hhoegl/lighttpd-1.4.29'
+Making all in src
+make[2]: Entering directory `/home/hhoegl/lighttpd-1.4.29/src'
+make  all-am
+make[3]: Entering directory `/home/hhoegl/lighttpd-1.4.29/src'
+/bin/sh ../libtool  --tag=CC   --mode=compile arm-linux-gnueabi-gcc -DHAVE_CONFIG_H -DHAVE_VERSION_H -DLIBRARY_DIR="\"/usr/local/lib\"" -DSBIN_DIR="\"/usr/local/sbin\"" -I. -I..   -D_REENTRANT -D__EXTENSIONS__  -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES  -g -O2 -Wall -W -Wshadow -pedantic -std=gnu99 -MT mod_flv_streaming.lo -MD -MP -MF .deps/mod_flv_streaming.Tpo -c -o mod_flv_streaming.lo mod_flv_streaming.c
+libtool: compile:  arm-linux-gnueabi-gcc -DHAVE_CONFIG_H -DHAVE_VERSION_H -DLIBRARY_DIR=\"/usr/local/lib\" -DSBIN_DIR=\"/usr/local/sbin\" -I. -I.. -D_REENTRANT -D__EXTENSIONS__ -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -g -O2 -Wall -W -Wshadow -pedantic -std=gnu99 -MT mod_flv_streaming.lo -MD -MP -MF .deps/mod_flv_streaming.Tpo -c mod_flv_streaming.c  -fPIC -DPIC -o .libs/mod_flv_streaming.o
+In file included from base.h:24:0,
+                 from mod_flv_streaming.c:1:
+array.h:9:19: fatal error: pcre.h: No such file or directory
+compilation terminated.
+
+Deswegen nun PCRE cross-kompiliert:
+
+1. Pfade auf /opt/eldk-5.0/... gesetzt
+
+2. hhoegl@gorilla:~/pcre-8.13$ CC=arm-linux-gnueabi-gcc RANLIB=arm-linux-gnueabi-ranlib STRIP=arm-linux-gnueabi-strip LD=arm-linux-gnueabi-ld ./configure --host=arm-linux-gnueabi --enable-static 
+
+3. hhoegl@gorilla:~/pcre-8.13$ make
+
+4. sudo cp libpcre.a /opt/eldk-5.0/armv5te/sysroots/arm-linux-gnueabi/lib/
+
+Jetzt wieder lighttpd weiterkompilieren:
+
+- pcre.h in das lighttpd Verzeichnis kopiert. libpcre.a siehe oben.
+
+- make
+
+  Nun funktioniert die Cross Compilierung.
+
+ 
+* Sysfs untersuchen
+
+root@armv5te:/sys/devices/platform# ls -l
+total 0
+drwxr-xr-x 5 root root    0 Sep 26 00:01 lpc-ehci.0
+drwxr-xr-x 3 root root    0 Sep 26 00:01 lpc313x-wdt
+drwxr-xr-x 4 root root    0 Sep 26 00:01 lpc313x_mmc.0
+drwxr-xr-x 3 root root    0 Sep 26 00:01 lpc313x_nand.0
+drwxr-xr-x 4 root root    0 Sep 26 00:01 pnx-i2c.0
+drwxr-xr-x 4 root root    0 Sep 26 00:01 pnx-i2c.1
+drwxr-xr-x 2 root root    0 Sep 26 00:01 power
+drwxr-xr-x 3 root root    0 Sep 26 00:01 serial8250
+drwxr-xr-x 4 root root    0 Sep 26 00:01 serial8250.0
+drwxr-xr-x 5 root root    0 Sep 26 00:01 spi_lpc313x.0
+-rw-r--r-- 1 root root 4096 Sep 26 00:01 uevent
+
+
+root@armv5te:/sys/class/i2c-dev# ls -l
+total 0
+lrwxrwxrwx 1 root root 0 Sep 26 00:01 i2c-0 -> ../../devices/platform/pnx-i2c.0/i2c-0/i2c-dev/i2c-0
+lrwxrwxrwx 1 root root 0 Sep 26 00:01 i2c-1 -> ../../devices/platform/pnx-i2c.1/i2c-1/i2c-dev/i2c-1
+
+root@armv5te:/sys/class/i2c-adapter# ls -l
+total 0
+lrwxrwxrwx 1 root root 0 Sep 26 00:02 i2c-0 -> ../../devices/platform/pnx-i2c.0/i2c-0
+lrwxrwxrwx 1 root root 0 Sep 26 00:02 i2c-1 -> ../../devices/platform/pnx-i2c.1/i2c-1
+
+root@armv5te:/sys/class/spi_master# ls -l
+total 0
+lrwxrwxrwx 1 root root 0 Sep 25 23:56 spi0 -> ../../devices/platform/spi_lpc313x.0/spi_master/spi0
+
+* Aktiviere rcS/S40networking 
+
+  /etc/modules angelegt fuer "pegasus.ko" Modul (USB-zu-Ethernet)
+
+  ---
+  pegasus
+  ---
+
+  Wird in rcS.d/S20modutils.sh abgearbeitet.
+
+  An /etc/network/interfaces angehaengt (TODO Patch machen):
+
+    # Intranet Hochschule Augsburg
+    allow-hotplug eth0    
+    iface eth0 inet static                       
+	    address 141.82.48.197
+	    netmask 255.255.240.0
+	    network 141.82.48.0    
+	    broadcast 141.82.63.255
+	    gateway 141.82.63.1                                                    
+	    dns-nameservers 141.82.16.200                                          
+	    dns-search informatik.fh-augsburg.de
+
+  Die zwei Zeilen auskommentiert:
+
+  # Wired or wireless interfaces
+  # iface eth0 inet dhcp
+  # iface eth1 inet dhcp
+
+Muss noch eth0 auf "auto" setzen, damit "ifup -a" funktioniert. 
+So schaut nun die Netwerk Konfiguration aus:
+
+---
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+
+# The loopback interface
+auto lo
+iface lo inet loopback
+
+# Wireless interfaces
+iface wlan0 inet dhcp
+        wireless_mode managed
+        wireless_essid any
+        wpa-driver wext
+        wpa-conf /etc/wpa_supplicant.conf
+
+iface atml0 inet dhcp
+
+# Wired or wireless interfaces
+# iface eth0 inet dhcp
+# iface eth1 inet dhcp
+
+# Ethernet/RNDIS gadget (g_ether)
+# ... or on host side, usbnet and random hwaddr
+iface usb0 inet static
+        address 192.168.7.2
+        netmask 255.255.255.0
+        network 192.168.7.0
+        gateway 192.168.7.1
+
+# Bluetooth networking
+iface bnep0 inet dhcp
+
+# Intranet Hochschule Augsburg
+auto eth0
+# allow-hotplug eth0
+iface eth0 inet static
+        address 141.82.48.197
+        netmask 255.255.240.0
+        network 141.82.48.0
+        broadcast 141.82.63.255
+        gateway 141.82.63.1
+        dns-nameservers 141.82.16.200
+        dns-search informatik.fh-augsburg.de
+---
+
+Aktiviere DNS:
+
+root@armv5te:/# cat /etc/resolv.conf 
+search informatik.fh-augsburg.de
+nameserver 141.82.16.200
+
+root@armv5te:/# ping www.hs-augsburg.de
+PING www.hs-augsburg.de (141.82.25.17): 56 data bytes
+64 bytes from 141.82.25.17: seq=0 ttl=254 time=1.980 ms
+
+
+Aktiviere rc5.d/S10dropbear. dmesg berichtet beim Booten:
+
+---
+INIT: Entering runlevel: 5
+Starting Dropbear SSH server: Will output 1024 bit rsa secret key to '/etc/dropbear/dropbear_rsa_host_key'
+Generating key, this may take a while...
+Public key portion is:
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgmkiLi62Zx/jUFwWt2ARIhUhcHCxRggomDo8tIOXnzCO7Mb9/VdUL28i/5WpeVmNyJvplv1NJlcrdXNQI4qFFyh6fbGT3OJPrF2NUv3P/se+/5/T0MkWlDOZlxCCmFB3R1h2NDkwKUq2lm4tlZ2s0f5IpL1tTrn8t217fpHOtV6QPK0= root@armv5te
+Fingerprint: md5 af:0a:d9:9b:f2:ce:5d:9d:d2:6d:3b:1a:b5:4a:c1:0f
+dropbear.
+---
+
+SSH Verbindung von gorilla zum EPLPC3131:
+
+hhoegl@gorilla:~/work/eplpc3131$ ssh -p 22 root@141.82.48.197
+root@141.82.48.197's password: 
+root@armv5te:~# 
+
+SCP von gorilla zum EPLPC3131:
+
+hhoegl@gorilla:~/work/eplpc3131$ scp -P 22 lighttpd-1.4.29.tar.gz  root@141.82.48.197:/
+root@141.82.48.197's password: 
+lighttpd-1.4.29.tar.gz                                   100%  812KB 405.9KB/s   00:02  
+
+SSH von EPLPC zu gorilla:
+
+root@armv5te:/# ping gorilla.informatik.fh-augsburg.de
+PING gorilla.informatik.fh-augsburg.de (141.82.48.195): 56 data bytes
+64 bytes from 141.82.48.195: seq=0 ttl=64 time=2.053 ms
+64 bytes from 141.82.48.195: seq=1 ttl=64 time=1.902 ms
+...
+
+root@armv5te:/# ssh -p 8022 hhoegl@gorilla.informatik.fh-augsburg.de
+
+Host 'gorilla.informatik.fh-augsburg.de' is not in the trusted hosts file.
+(fingerprint md5 34:eb:d3:df:44:12:54:a9:5d:4c:49:fb:90:b4:1f:96)
+Do you want to continue connecting? (y/n) y
+hhoegl@gorilla.informatik.fh-augsburg.de's password: 
+Linux gorilla 2.6.26-2-686 #1 SMP Sun Jun 21 04:57:38 UTC 2009 i686
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Sep 28 07:39:23 2011 from p3ee2e93d.dip.t-dialin.net
+hhoegl@gorilla:~$
+
+
+
+
+* Reboot. Wieso bootet der Rechner nicht neu?
+
+root@armv5te:/etc/network# reboot
+
+Broadcast message from root@armv5te (ttyS0) (Sun Sep 25 22:23:40 2011):
+
+The system is going down for reboot NOW!
+INIT: Switching to runlevel: 6
+INIT: Sending processes the TERM signal
+INIT: Sending processes the Stopping Dropbear SSH server: no /usr/sbin/dropbear found; none killed
+Stopping syslogd/klogd: no syslogd found; none killed
+Error opening /dev/fb0: No such device or address
+Stopping tcf-agent: OK
+Stopping Connection Manager
+Deconfiguring network interfaces... ifdown: interface lo not configured
+done.
+Sending all processes the TERM signal...
+(hier passiert nichts mehr)
+
+Spaeter klappt es dann:
+
+    root@armv5te:~# reboot
+
+    Broadcast message from root@armv5te (ttyS0) (Sun Sep 25 22:44:50 2011):
+
+    The system is going down for reboot NOW!
+    INIT: Switching to runlevel: 6
+    INIT: Sending processes the TERM signal
+    INIT: Sending processes the KIStopping Dropbear SSH server: stopped /usr/sbin/dropbear (pid 537)
+    dropbear.
+    Stopping syslogd/klogd: no syslogd found; none killed
+    Error opening /dev/fb0: No such device or address
+    Stopping tcf-agent: OK
+    Stopping Connection Manager
+    S40networking start
+    Deconfiguring network interfaces... done.
+    S40networking end
+    Sending all processes the TERM signal...
+    Sending all processes the KILL signal...
+    Unmounting remote filesystems...
+    Stopping portmap daemon...
+    Deactivating swap...
+    Unmounting local filesystems...
+    Rebooting... Restarting system.
+    arch_reset: attempting watchdog reset
+
+    APEX Boot Loader 1.6.8 -- Copyright (c) 2004-2008 Marc Singer
+      compiled for Unspecified target on 2011.Aug.01-06:33:06
+
+	APEX comes with ABSOLUTELY NO WARRANTY.  It is free software and
+	you are welcome to redistribute it under certain circumstances.
+	For details, refer to the file COPYING in the program source.
+
+      apex => mem:0x11029000+0xe214   (57876 bytes)
+      env  => lnand:512k+256k         (bad-region)
+
+	Use the command 'help help' to get started.
+
+    # wait 10
+
+    apex> 
+
+
+* lighttpd installieren
+
+http://www.cyberciti.biz/tips/installing-and-configuring-lighttpd-webserver-howto.html
+
+- 
+  # addgroup lighttpd
+
+  addroup funktioniert, sieht /etc/groups.
+
+- Adduser ist auf dem ELDK nur ein minimales Programm (tinylogin), deshalb
+  funktioniert adduser nicht so, wie beschrieben.  Fuege einfach eine 
+  Zeile in /etc/passwd an:
+
+  lighttpd:*:101:101:lighttpd:/srv/www/htdocs:/usr/local/bin/lighttpd
+
+  Die ID 101 kommt aus /etc/groups.
+
+
+- /usr/local/lib angelegt, dann alle Module des Servers dahin kopiert:
+
+root@armv5te:~/lighttpd-1.4.29-arm-bin# ls /usr/local/lib/
+mod_access.la      mod_extforward.la     mod_secdownload.la
+mod_access.so      mod_extforward.so     mod_secdownload.so
+mod_accesslog.la   mod_fastcgi.la        mod_setenv.la
+mod_accesslog.so   mod_fastcgi.so        mod_setenv.so
+mod_alias.la       mod_flv_streaming.la  mod_simple_vhost.la
+mod_alias.so       mod_flv_streaming.so  mod_simple_vhost.so
+mod_auth.la        mod_indexfile.la      mod_ssi.la
+mod_auth.so        mod_indexfile.so      mod_ssi.so
+mod_cgi.la         mod_magnet.la         mod_staticfile.la
+mod_cgi.so         mod_magnet.so         mod_staticfile.so
+mod_cml.la         mod_mysql_vhost.la    mod_status.la
+mod_cml.so         mod_mysql_vhost.so    mod_status.so
+mod_compress.la    mod_proxy.la          mod_trigger_b4_dl.la
+mod_compress.so    mod_proxy.so          mod_trigger_b4_dl.so
+mod_dirlisting.la  mod_redirect.la       mod_userdir.la
+mod_dirlisting.so  mod_redirect.so       mod_userdir.so
+mod_evasive.la     mod_rewrite.la        mod_usertrack.la
+mod_evasive.so     mod_rewrite.so        mod_usertrack.so
+mod_evhost.la      mod_rrdtool.la        mod_webdav.la
+mod_evhost.so      mod_rrdtool.so        mod_webdav.so
+mod_expire.la      mod_scgi.la
+mod_expire.so      mod_scgi.so
+
+- /usr/local/bin/ angelegt und lighttpd Binary dahin kopiert.
+
+- Konfiguration angelegt (findet man in docs/ Verzeichnis des Quelltextes):
+
+  root@armv5te:~/lighttpd-1.4.29-arm-bin# ls /etc/lighttpd/
+  conf.d  lighttpd.conf  modules.conf  vhosts.d
+
+- Problem beim starten (hat mit IPv6 zu tun)
+  root@armv5te:~# lighttpd -f /etc/lighttpd/lighttpd.conf 
+  2011-09-25 22:45:17: (network.c.203) socket failed: Address family not supported by protocol 
+
+  Setze config Option auf
+  server.use-ipv6 = "disable"
+
+  root@armv5te:~# lighttpd -f /etc/lighttpd/lighttpd.conf
+2011-09-25 22:48:38: (network.c.770) server.network-backend has a unknown value: linux-sendfile
+
+  Auskommentieren:
+  #server.network-backend = "linux-sendfile" 
+
+  root@armv5te:~# lighttpd -f /etc/lighttpd/lighttpd.conf 
+  2011-09-25 22:50:15: (log.c.118) opening errorlog '/var/log/lighttpd/error.log' failed: No such file or directory
+
+  -> root@armv5te:~# mkdir /var/log/lighttpd
+  -> root@armv5te:~# chmod 777 /var/log/lighttpd/
+
+ Anmerkung: Nach einem Neuboot musste ich das Verzeichnis und die error.log
+ Datei neu anlegen, auch chmod neu eingeben. Das haengt sicher damit 
+ zusammen, dass die Logdateien in /var/volatile/log/... liegen, das ist 
+ ein "tmpfs" Filesystem.
+
+root@armv5te:~# lighttpd -f /etc/lighttpd/lighttpd.conf
+root@armv5te:~# ps
+ ...
+ 1414 ?        00:00:00 lighttpd
+ ...
+
+
+
+Nun laeuft also der Server!  
+
+    Wenn man mit einem Web-Browser von gorilla aus den Link http://141.82.48.197/
+    aufruft, dann sieht man die Seite /srv/www/htdocs/index.html
+
+root@armv5te:~# cat /srv/www/htdocs/index.html 
+<html>
+Hello, world!
+<html>
+
+* Idee: MMC/SD Karte partitionieren und formatieren mit Python Skript.
+     - libparted0-dev
+     - python-parted (src: pyparted)
+     - gnu-fdisk
+     - libparted
+     - fdisk.py
+  Siehe tools/
+
+* 2011-10-01 TODO Was ist eigentlich /media/ram? Diese Zeile sieht man
+mit "df":
+
+tmpfs                     2792         0      2792   0% /media/ram
+
+Aha: Das ist ein "ramfs", in das man temporaere Daten schreiben kann.
+
+Lit.:
+
+   http://www.thegeekstuff.com/2008/11/overview-of-ramfs-and-tmpfs-on-linux/
+
+
+* 2011-10-02 | Die MMC/SD Karte 
+
+EPLPC3131 Micro SD Karte mit 4GB
+
+Die BootIt Partition wird als erste angelegt, bekommt aber die Nummer
+zwei. Danach ext2 als Partition mit Nummer 1.
+
+                                GNU cfdisk 1.2.4
+
+                            USB Mass Storage Device
+         Disk: /dev/sdb   Disk type: msdos    Size: 4012900351B, 4013MB
+              Heads: 255   Sectors per track: 63   Cylinders: 487
+
+   Number   Flags  Part Type   Filesystem      Label              Size
+ ------------------------------------------------------------------------------
+  2                Primary     [BootIt]                           3.35MB 
+  1                Primary     ext2                               4008MB
+
+----
+
+Eine 1GB Karte, Ausgabe mit fdisk "p" Kommando:
+
+Disk /dev/sdb: 1 GB, 1003484160 bytes
+255 heads, 63 sectors/track, 122 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System 
+   /dev/sdb2               1           2        8032   df  BootIt
+   /dev/sdb1               3         122      979870   83  Linux
+
+
+Loeschen: d <RET> 1 <RET> d <RET> 2 <RET>
+
+Erste Partition anlegen (die ist _nicht_ ab Anfang)
+
+n  
+p
+2
+... (bis zum Ende)
+
+Command (m for help): p                                                   
+
+Disk /dev/sdb: 1 GB, 1003484160 bytes
+255 heads, 63 sectors/track, 122 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System 
+   /dev/sdb1               1         122      979933   83  Linux
+
+n
+p
+(0cyl)
+
+Command (m for help): p                                                   
+
+Disk /dev/sdb: 1 GB, 1003484160 bytes
+255 heads, 63 sectors/track, 122 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System 
+   /dev/sdb2               1           1           0   83  Linux
+   /dev/sdb1               2         122      979902   83  Linux
+
+Partition 2 auf "BootIt" (df) setzen:
+
+t
+2
+df
+
+* 2011-10-03 | Es gibt ein paar neue Boards (Platine V1.1)
+  Beim ersten Booten gibt es den Fehler:
+
+  serial8250: too much work for irq10
+  serial8250: too much work for irq10
+  ...
+
+  Nach einem Reset klappt der Bootvorgang. Was ist das?
+
+Herumspielen mit ELDK 5.0:
+
+Fehler:
+
+root@armv5te:/# tclsh
+tclsh: error while loading shared libraries: libtcl8.5.so: cannot open shared object file: No such file or directory
+
+TODO: screen fuer ARM crosskompilieren.
+
+/usr/bin untersucht:
+
+- /usr/bin/augparse (Teil von Augeas Configuration API), http://augeas.net/ 
+  /usr/bin/augtool
+
+- btrace - Java Tracing Tool http://kenai.com/projects/btrace
+
+- btrecord - recreate IO loads recorded by blktrace
+  btt
+
+- dbus 
+
+- LTT-NG (ltt-disarm, ...)
+
+- rsync
+
+...
+
+- zypper 
+
+  Zypper verfügt wie andere Kommandozeilenpaketverwalter über eine
+  integrierte, eigene Eingabeaufforderung (Shell). Als Paketdepots
+  werden YaST2 und RPM MetaData unterstützt. Paketquellen werden bei
+  Zypper Depot/Repository (bis openSUSE 10.3 Dienst/Service) genannt
+  und sind synchron zu denen in YaST, da Zypper ebenfalls auf die
+  libzypp zurückgreift. Zypper ist kompatibel zu rug und kann auch mit
+  Erweiterungen der Paketdepots wie Patches, Schemata/Pattern und
+  Produkten umgehen.
+
+
+Wenn man auf "init 1" in den Single-User Modus wechselt, bekommt man
+keine Shell:
+
+TODO:
+
+root@armv5te:/etc# init 1
+EXT2-fs (mmcblk0p1): error: ext2_lookup: deleted inode referenced: 73891
+INIT: Switching to runlevel: 1
+INIT: Sending processes the TERM signal
+INIT: Sending processes the Stopping Dropbear SSH server: stopped /usr/sbin/dropbear (pid 531)
+dropbear.
+Stopping syslogd/klogd: no syslogd found; none killed
+Error opening /dev/fb0: No such device or address
+Stopping tcf-agent: OK
+Stopping Connection Manager
+S40networking start
+Deconfiguring network interfaces... ifconfig: SIOCGIFFLAGS: No such device
+done.
+S40networking end
+Stopping portmap daemon...
+INIT: no more processes left in this runlevel
+(hier passiert nichts mehr)
+
+Bei dem neuen Board gibt es einen EXT2-fs Fehler:
+
+   EXT2-fs (mmcblk0p1): error: ext2_lookup: deleted inode referenced: 73891
+
+Ist das nur ein einmaliger Fehler oder tritt der oefter auf?  Haengt das mit
+der neuen Micro SD HC (class 10) zusammen? Meine SanDisk Karte 4G habe ich
+Benedit gegeben.
+
+
+* 2011-10-04 | Einfaches Modul gpio-test auf EP3131 kompilieren. 
+
+  - Dazu muss man die Kernel Quellen (oder nur die Header Dateien) 
+    auf die SD Karte schreiben. Der Link /lib/modules/2.6.33/build zeigt
+    auf Sourcen, z.b. in /usr/src/.
+
+root@armv5te:/lib/modules/2.6.33# ls -l
+total 84
+lrwxrwxrwx 1 root root    30 Sep 26 00:05 build -> /usr/src/linux-2.6.33-lpc313x/
+  - Folgende Dateien muessen vorhanden sein:
+
+    include/generated/autoconf.h
+    include/config/auto.conf
+    /usr/src/linux-2.6.33-lpc313x/Module.symvers
+    /usr/src/linux-2.6.33-lpc313x/scripts/mod/modpost
+    /usr/src/linux-2.6.33-lpc313x/scripts/mod/mk_elfconfig
+
+  - Tutorial:
+    http://www.cyberciti.biz/tips/build-linux-kernel-module-against-installed-kernel-source-tree.html
+
+  Wichtig: Der Link ~/work/eplpc3131/kernel/install/lib/modules/2.6.33/build zeigt
+  auf das Kernel Build Verzeichnis, das zur Zeit 
+
+     ~/eplpc-kernel/linux-2.6.33-lpc313x/
+
+  ist.
+
+  Native Kompilierung bricht jedoch ab:
+
+  root@armv5te:~/gpio-mod# time make
+  make -C /lib/modules/2.6.33/build M=/home/root/gpio-mod modules
+  make[1]: Entering directory `/usr/src/linux-2.6.33-lpc313x'
+  make[1]: Warning: File `.vmlinux.o.cmd' has modification time 1317202455 s in the future
+  make[2]: Warning: File `scripts/Makefile.lib' has modification time 1316469245 s in the future
+    CC [M]  /home/root/gpio-mod/gpio-mod.o
+    scripts/basic/fixdep: line 1: syntax error: unexpected "("
+    make[2]: *** [/home/root/gpio-mod/gpio-mod.o] Error 2
+    make[1]: *** [_module_/home/root/gpio-mod] Error 2
+    make[1]: Leaving directory `/usr/src/linux-2.6.33-lpc313x'
+    make: *** [modules] Error 2
+    Command exited with non-zero status 2
+    real    3m 57.13s
+    user    0m 16.38s
+    sys	0m 42.03s
+
+  Der grosse Zeitbedarf (> 3 Minuten) laesst native Kompilierung nicht
+  als Option erscheinen. Zumindest bei simplen Kernel-Modulen.
+
+  Ein "Hello World" in C benoetigt dagegen "nur" 16 Sekunden.
+
+
+* 2011-10-05 | EPLPC3131 ist als USB Device an einen Linux Hostrechner 
+  angeschlossen.
+
+root@armv5te:~# modprobe g_ether
+g_ether gadget: using random self ethernet address
+g_ether gadget: using random host ethernet address
+usb0: MAC 42:7c:ab:cc:41:ff
+usb0: HOST MAC 16:7e:c1:f1:35:5b
+g_ether gadget: Ethernet Gadget, version: Memorial Day 2008
+g_ether gadget: g_ether ready
+fsl-usb2-udc: bind to driver g_ether
+root@armv5te:~# g_ether gadget: high speed config #1: CDC Ethernet (ECM)
+
+EPLPC3131: root@armv5te:~# ifconfig usb0 192.168.1.1 up
+Host: sudo ifconfig usb0 192.168.1.2 up
+
+Danach hat man eine Netzwerkverbindung ueber ein USB Kabel, ueber die
+man z.B. crosskompilierte Programme auf das Target uebertragen kann, oder
+man muesste auch einen Remote-GDB darueber betreiben koennen. Ist die
+Verbindung wirklich high-speed?
+
+* 2011-10-05 
+  In /home/root/ die Datei .profile angelegt mit dem Inhalt:
+
+  alias m="less"
+
+  Wird beim Login als Root aufgerufen.
+
+
+* 2011-10-05 | Der Micron MT48H16M16LF (32 MByte, 4M x 16 x 4) waere als alternative
+  Bestueckung zum 8 MByte AMIC moeglich. Dazu muesste man nur noch auf den G1 Pin 
+  das A12 Signal des LPC legen. Siehe docs/256mb_mobile_sdram_y36n.pdf.
+
+
+* Date: Tue, 4 Oct 2011 11:48:41 +0200
+From: Hubert Hoegl <Hubert.Hoegl@hs-augsburg.de>
+To: sauter@embedded-projects.net
+Cc: Hubert.Hoegl@hs-augsburg.de
+Subject: Downloads von Kernel und Root-FS
+
+Hallo Benedikt,
+
+ich habe den aktuellen Kernel-Code und das Root Filesystem
+an diese Stelle getan:
+
+http://elk.informatik.fh-augsburg.de/pub/eplpc3131/
+
+Gruesse,
+
+Hubert
+
+* USB high-speed Regeln
+http://ics.nxp.com/support/documents/microcontrollers/pdf/tn07001.pdf
+http://www.atmel.com/dyn/resources/prod_documents/doc32122.pdf
+http://www.usb.org/developers/docs/hs_usb_pdg_r1_0.pdf
+
+* fdisk automatisieren:
+
+http://www.linuxforums.org/forum/programming-scripting/120613-need-script-fdisk-command.html
+
+---
+# cat a
+#!/bin/sh
+fdisk /dev/sda << EOF
+t
+1
+fb
+p
+q
+EOF
+# LC_ALL=en sh a
+---
+
+Ausgabe 
+
+---
+The number of cylinders for this disk is set to 60801.
+There is nothing wrong with that, but this is larger than 1024,
+and could in certain setups cause problems with:
+1) software that runs at boot time (e.g., old versions of LILO)
+2) booting and partitioning software from other OSs
+   (e.g., DOS FDISK, OS/2 FDISK)
+
+Command (m for help): Partition number (1-4): Hex code (type L to list codes): Changed system type of partition 1 to fb (Unknown)
+
+Command (m for help): 
+Disk /dev/sda: 500.1 GB, 500107862016 bytes
+255 heads, 63 sectors/track, 60801 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Disk identifier: 0x00046001
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1               1       60540   486287518+  fb  Unknown
+/dev/sda2           60541       60801     2096482+  82  Linux swap / Solaris
+---
+
+Anregung: Mark Nielsen, Using Sfdisk and Perl to fdisk a hard drive (mit Perl expect Modul)
+http://linuxgazette.net/issue46/nielsen.html
+
+Aha: Mit 'sfdisk' kann man Partitionen manipulieren:
+
+hhoegl@gorilla:~/work/eplpc3131$ sudo sfdisk
+sfdisk (util-linux-ng 2.13.1.1)Usage: sfdisk [options] device ...
+device: something like /dev/hda or /dev/sda
+useful options:
+    -s [or --show-size]: list size of a partition
+    -c [or --id]:        print or change partition Id
+    -l [or --list]:      list partitions of each device
+    -d [or --dump]:      idem, but in a format suitable for later input
+    -i [or --increment]: number cylinders etc. from 1 instead of from 0
+    -uS, -uB, -uC, -uM:  accept/report in units of sectors/blocks/cylinders/MB
+    -T [or --list-types]:list the known partition types
+    -D [or --DOS]:       for DOS-compatibility: waste a little space
+    -R [or --re-read]:   make kernel reread partition table
+    -N# :                change only the partition with number #
+    -n :                 do not actually write to disk
+    -O file :            save the sectors that will be overwritten to file
+    -I file :            restore these sectors again
+    -v [or --version]:   print version
+    -? [or --help]:      print this message
+dangerous options:
+    -g [or --show-geometry]: print the kernel's idea of the geometry
+    -G [or --show-pt-geometry]: print geometry guessed from the partition table
+    -x [or --show-extended]: also list extended partitions on output
+                             or expect descriptors for them on input
+    -L  [or --Linux]:      do not complain about things irrelevant for Linux
+    -q  [or --quiet]:      suppress warning messages
+    You can override the detected geometry using:
+    -C# [or --cylinders #]:set the number of cylinders to use
+    -H# [or --heads #]:    set the number of heads to use
+    -S# [or --sectors #]:  set the number of sectors to use
+You can disable all consistency checking with:
+    -f  [or --force]:      do what I say, even if it is stupid
+
+
+* 2011-10-05 
+  i2c 
+  - kernel/Documentation/i2c/dev-interface
+  - http://www.praxisbuch.net/embedded-linux/einfuehrung_iic.html
+
+
+* 2011-10-05 
+  spi
+  Documentation/spi/spidev 
+
+  "You'll have to modify the kernel source to add a "spidev" SPI device which
+  should cause udev (if you're running it) to create "/dev/spidevX.Y" where "X"
+  is the SPI bus and "Y" is the chip select on that bus(both specified in the
+  spidev SPI device).  Then you can write a userspace program that can access
+  the spi device using spi messages."
+
+* 2011-10-06 TODO Wie startet der Kernel fuer den 313x? Sollte die
+  Reihenfolge der Funktionen aufschreiben.  Vergleiche mit dem AVR32:
+  arch/avr32/boards/atngw100/. Darin ist z.B. setup.c. Das Board
+  Verzeichnis gibt es beim LPC (arch/arm/) nicht. Koennte/sollte man
+  das dazu bauen?
+
+  Beim 313x gibt es nur das hier:
+
+hhoegl@aspire1:~/eplpc-kernel/linux-2.6.33-lpc313x/arch/arm/mach-lpc313x$ ls
+built-in.o  ea313x.o   i2c.o    leds-pca9532.c   pm.c          time.o     wdt.o
+cgu.c       generic.c  include  leds-pca9532.o   pm.o          usb.c
+cgu.o       generic.o  irq.c    Makefile         pm_standby.o  usb.o
+dma.c       gpio.c     irq.o    Makefile.boot    pm_standby.S  val3153.c
+dma.o       gpio.o     Kconfig  modules.builtin  psu.c         val3154.c
+ea313x.c    i2c.c      leds.c   modules.order    time.c        wdt.c
+
+XXX To Do Was fehlt hier noch?
+
+ - ADC (User Manual Chapter 16)
+ - PWM (User Manual Chapter 25)
+
+
+* 2011-10-06 | Nochmal GPIO
+
+Tags machen:
+  - In das Verzeichni~/eplpc-kernel wechseln (darin ist linux-2.6.33-lpc313x/) 
+  - In list-of-files.txt sind alle Dateien von denen tags gemacht werden.
+  - ctags-exuberant -L list-of-files.txt
+  - In vim die Tags laden, z.B. mit 
+
+       :set tags=../../../../tags
+
+In arch/arm/mach-lpc313x/include/mach/ findet man:
+
+   board.h        dma.h           hardware.h  lpc315x_ad.h  timex.h
+   cgu.h          entry-macro.S   i2c.h       memory.h      uncompress.h
+   constants.h    event_router.h  io.h        registers.h   vmalloc.h
+   debug-macro.S  gpio.h          irqs.h      system.h
+
+In registers.h sind alle Register des LPC313x. 
+
+gpio.c:
+
+   lpx313x_gpio_func_mode(int gpio)
+   lpc313x_gpio_direction_output()
+   gpio_is_valid()
+
+LPC3131x User Manual, section 15 (GPIO)
+
+   - IOCONFIG module
+   - Normal, low, high, high-z (gesteuert ueber Mode0/1)
+   - Programmable GPIO pads: pull-down, pull-up (SYSCREG, section 26)
+   - Conforms to APB
+
+   - GPIO Pins: GPIO0-4, GPIO11-20 (entspricht Bits 0-14 in Mode Regs)
+   - LED2 (rot) --> GPIO3
+   -
+
+   - GPIO_PHYS = 0x13003000 (= IOCONFIG im Datenblatt S. 302)
+     IOCONF_GPIO = 0x1c0  (= OFFSET GPIO 0x1C0 im Datenblatt), das sollte an die Stelle (port)
+     kommen: 
+     
+        #define GPIO_M1_RESET(port)  __REG (GPIO_PHYS + (port) + 0x28)
+
+     Dann hat man noch den "Register Level" innerhalb jedes Function Blocks (das ist
+     0x28 in der vorherigen Zeile, das selektiert GPIO_M1_RESET. Also nicht nur der GPIO
+     block hat ein GPIO_M1_RESET, sondern auch I2C und so weiter.
+
+     In die Funktion lpx313x_gpio_func_mode(int gpio) [in gpio.c]  muesste also 
+     0x1c0 als gpio Parameter eingesetzt werden. Das ist das Makro IOCONF_GPIO
+     in mach/registers.h.
+
+     Interessant ist GPIO_PORT_MASK (0xFE0) und GPIO_PIN_MASK (0x1F) in lpx313x_gpio_func_mode(). 
+     Man kann anscheinend durch den Parameter IOCONF_GPIO, IOCONF_GPIO+1, ... die einzelnen
+     Pins ansteuern (theoretisch 0...31).  Aha, diese Macros lauten dann GPIO_GPIO0 und so weiter.
+     Diese Funktion setzt den Nicht-GPIO Modus fuer den jeweiligen Pin! (Modus1=0, Modus0=1).
+
+     Siehe den Code in prog/gpio-mod/. Das Kernel Modul gpio-mod.ko schaltet die LED nun an!
+     
+     Das neue Modul ist in kernel/install/lib/modules/2.6.33/extra/gpio-mod.ko installiert.
+
+* Asus USB WLAN Dongle WL-167G angesteckt
+
+usb 1-1: New USB device found, idVendor=0b05, idProduct=1706
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usb 1-1: Product: 802.11g WLAN Drive
+usb 1-1: Manufacturer: ASUS
+device: '1-1': device_add
+bus: 'usb': add device 1-1
+PM: Adding info for usb:1-1
+usb 1-1: uevent
+bus: 'usb': driver_probe_device: matched device 1-1 with driver usb
+bus: 'usb': really_probe: probing driver usb with device 1-1
+usb 1-1: usb_probe_device
+usb 1-1: configuration #1 chosen from 1 choice
+usb 1-1: adding 1-1:1.0 (config #1, interface 0)
+device: '1-1:1.0': device_add
+bus: 'usb': add device 1-1:1.0
+PM: Adding info for usb:1-1:1.0
+usb 1-1:1.0: uevent
+device: 'ep_81': device_add
+PM: Adding info for No Bus:ep_81
+device: 'ep_01': device_add
+PM: Adding info for No Bus:ep_01
+driver: '1-1': driver_bound: bound to device 'usb'
+bus: 'usb': really_probe: bound device 1-1 to driver usb
+device: 'ep_00': device_add
+...
+
+Auf dem x86 Host PC zeigt dmesg:
+
+[10265.224093] usb 1-3: new high speed USB device using ehci_hcd and address 8
+[10265.516345] usb 1-3: configuration #1 chosen from 1 choice
+[10265.798856] phy1: Selected rate control algorithm 'minstrel'
+[10265.802392] Registered led device: rt2500usb-phy1::radio
+[10265.802660] Registered led device: rt2500usb-phy1::quality
+[10265.803204] usbcore: registered new interface driver rt2500usb
+[10266.218243] ADDRCONF(NETDEV_UP): wlan1: link is not ready
+[10273.826592] wlan1: deauthenticating from 00:12:17:cc:dc:1a by local choice (reason=3)
+[10273.833035] wlan1: direct probe to AP 00:12:17:cc:dc:1a (try 1)
+[10273.855818] wlan1: direct probe responded
+[10273.855834] wlan1: authenticate with AP 00:12:17:cc:dc:1a (try 1)
+[10273.857537] wlan1: authenticated
+[10273.857621] wlan1: associate with AP 00:12:17:cc:dc:1a (try 1)
+[10273.859815] wlan1: RX AssocResp from 00:12:17:cc:dc:1a (capab=0x411 status=0 aid=5)
+[10273.859828] wlan1: associated
+[10273.866208] ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
+[10284.000084] wlan1: no IPv6 routers present
+
+lsusb zeigt:
+
+Bus 001 Device 008: ID 0b05:1706 ASUSTek Computer, Inc. WL-167G 802.11g Adapter [ralink]
+
+Konfiguration :
+
+   Drivers / Network / Wireless / Ralink driver support / RT2500USB
+
+   Dazu muss vorher unter "Networking Support" (auf der gleichen Ebene wie "Drivers") Wireless / cfg80211 
+   ausgewaehlt werden. Sonst sieht man die RT2500USB Option nicht.
+
+Diesen Treiber kann man nun auf dem EPLPC3131 laden:
+
+bus: 'usb': add driver rt2500usb
+bus: 'usb': driver_probe_device: matched device 1-1:1.0 with driver rt2500usb
+bus: 'usb': really_probe: probing driver rt2500usb with device 1-1:1.0
+rt2500usb 1-1:1.0: usb_probe_interface
+rt2500usb 1-1:1.0: usb_probe_interface - got id
+device: 'phy0': device_add
+PM: Adding info for No Bus:phy0
+phy0: Selected rate control algorithm 'minstrel'
+device: 'wlan0': device_add
+PM: Adding info for No Bus:wlan0
+device: 'rt2500usb-phy0::radio': device_add
+PM: Adding info for No Bus:rt2500usb-phy0::radio
+Registered led device: rt2500usb-phy0::radio
+device: 'rt2500usb-phy0::quality': device_add
+PM: Adding info for No Bus:rt2500usb-phy0::quality
+Registered led device: rt2500usb-phy0::quality
+driver: '1-1:1.0': driver_bound: bound to device 'rt2500usb'
+bus: 'usb': really_probe: bound device 1-1:1.0 to driver rt2500usb
+usbcore: registered new interface driver rt2500usb
+
+root@armv5te:~# ifup wlan0
+socket(PF_PACKET): Address family not supported by protocol
+udhcpc (v1.17.3) started
+Setting IP address 0.0.0.0 on wlan0
+udhcpc: socket: Address family not supported by protocol <=== was soll das??????
+
+
+root@armv5te:~# ifconfig wlan0 192.168.1.101 up
+...
+
+wlan0     Link encap:Ethernet  HWaddr 00:13:D4:29:89:56  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Zunaechst passiert sonst nichts.  Um in das Haus-DSL Netz zu kommen, muss noch
+WEP/WAP eingerichtet werden.
+
+Kommandouebersicht http://wirelessdefence.org/Contents/LinuxWirelessCommands.htm
+
+Brauche iwconfig.
+
+Wireless Tools cross kompiliert: root@armv5te:~/wireless_tools.29#
+
+root@armv5te:~/wireless_tools.29# ./iwconfig wlan0 mode managed essid "linksys" key 058F116EBB986F1EB01DF02829
+
+Der ping vom EPLPC3131 zum DSL Router zu Hause funktioniert:
+
+root@armv5te:~/wireless_tools.29# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1): 56 data bytes
+64 bytes from 192.168.1.1: seq=0 ttl=64 time=15.919 ms
+64 bytes from 192.168.1.1: seq=1 ttl=64 time=16.862 ms
+
+root@armv5te:~/wireless_tools.29# ifconfig
+
+wlan0     Link encap:Ethernet  HWaddr 00:13:D4:29:89:56  
+          inet addr:192.168.1.101  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:23 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:15 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:4110 (4.0 KiB)  TX bytes:1516 (1.4 KiB)
+
+root@armv5te:~/wireless_tools.29# ./iwconfig
+lo        no wireless extensions.
+
+wlan0     IEEE 802.11bg  ESSID:"linksys"  
+          Mode:Managed  Frequency:2.462 GHz  Access Point: 00:12:17:CC:DC:1A   
+          Bit Rate=24 Mb/s   Tx-Power=20 dBm   
+          Retry  long limit:7   RTS thr:off   Fragment thr:off
+          Encryption key:058F-116E-BB98-6F1E-B01D-F028-29
+          Power Management:on
+          Link Quality=67/70  Signal level=-43 dBm  
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+Ein dhcp Client waere schoen auf dem EPLPC!
+
+root@armv5te:~/wireless_tools.29# route add default gw 192.168.1.1
+
+Ping auf gorilla von zu Hause aus:
+
+root@armv5te:~/wireless_tools.29# ping 141.82.48.195
+PING 141.82.48.195 (141.82.48.195): 56 data bytes
+64 bytes from 141.82.48.195: seq=0 ttl=55 time=298.817 ms
+64 bytes from 141.82.48.195: seq=1 ttl=55 time=72.083 ms
+
+root@armv5te:~/wireless_tools.29# cat /etc/resolv.conf 
+domain hhoegl.com
+search hhoegl.com
+nameserver 217.0.43.145
+nameserver 217.0.43.129
+
+root@armv5te:~/wireless_tools.29# ping gorilla.informatik.fh-augsburg.de
+PING gorilla.informatik.fh-augsburg.de (141.82.48.195): 56 data bytes
+64 bytes from 141.82.48.195: seq=0 ttl=55 time=319.810 ms
+64 bytes from 141.82.48.195: seq=1 ttl=55 time=69.578 ms
+64 bytes from 141.82.48.195: seq=2 ttl=55 time=69.126 ms
+
+root@armv5te:~/wireless_tools.29# route -n
+...
+
+root@armv5te:~# lsmod
+Module                  Size  Used by
+rt2500usb              15604  0               <=== Asus WL-167G
+rt2x00usb               6358  1 rt2500usb
+rt2x00lib              20513  2 rt2500usb,rt2x00usb
+led_class               2291  1 rt2x00lib
+pegasus                16772  0 
+mii                     3416  1 pegasus
+
+* 2011-10-06 | dhcp-4.2.2/ crosskompilieren (brauche davon nur dhclient)
+
+Configure 
+
+hhoegl@aspire1:~/dhcp-4.2.2$ CC=arm-linux-gnueabi-gcc RANLIB=arm-linux-gnueabi STRIP=arm-linux-gnueabi-strip LD=arm-linux-gnueabi-ld ./configure --host==arm-linux-gnueabi
+
+Configure bricht ab mit 
+
+...
+checking for /dev/random... configure: error: cannot check for file existence when cross compiling
+(error)
+
+Loesung: Am besten ELDK 5 Quellen besorgen (Poky bzw. Yokto) und darin die noch
+fehlenden Tools enablen.
+
+
+* 2011-10-07 | Strommessung mit einem 0.1 Ohm Widerstand in der Stromzufuhr.
+  Messe den Spannungsabfall mit Multimeter (ca. 8.5 mV). Das heisst die
+  Stromaufnahme liegt bei etwa 85 mA. Das wuerde eine Leistungsaufnahme von
+  etwa 0.425 Watt ausmachen.
+
+  Wenn man den Python Interpreter startet und eine lange Zaehlschleife macht, 
+  dann steigt der Stromverbrauch auf etwa 100 mA an.
+
+  Mit dem Asus WL-167G USB WLAN Adapter liegt der Stromverbrauch bei etwa
+  90 bis 105 mA. Der Adapter braucht also anscheinend nur etwa 20mA Strom,
+  kann das sein? Allerdings war der Adapter nicht konfiguriert.
+
+
+* Mini-AB Buchsen
+
+Nochwas zu den USB Buchsen: Das USB OTG Kabel, das Du mir neulich
+gegeben hast, passt nur in die USB Buchsen auf dem zweiten (neueren) Board, das
+ich habe. Die haben oben eine gelbe Abdeckung. Das sind Mini-AB
+Buchsen.
+
+Die Buchsen auf dem ersten Board passen damit nicht zusammen. Das sind
+Mini-B Buchsen.
+
+http://www.hardware-bastelkiste.de/index.html?usb.html
+
+
+* python-on-a-chip crosskompilieren
+
+  Der Python 2.6.6 Interpreter im ELDK5.0 hat nicht die Module subprocess, 
+  cmd und fcntl. Die werden in ipm.py gebraucht. Moechte deshalb einen neuen
+  Python Interpreter 2.7.1 crosskompilieren (siehe unten).
+
+  CC=arm-linux-gnueabi-gcc RANLIB=arm-linux-gnueabi STRIP=arm-linux-gnueabi-strip LD=arm-linux-gnueabi-ld make PLATFORM=desktop
+
+  CC=arm-linux-gnueabi-gcc RANLIB=arm-linux-gnueabi STRIP=arm-linux-gnueabi-strip LD=arm-linux-gnueabi-ld make PLATFORM=desktop ipm
+
+
+* Python 2.7.1 crosskompilieren fuer ARM
+  http://randomsplat.com/id5-cross-compiling-python-for-embedded-linux.html
+
+  cd Python-2.7.1
+  ./configure
+  make python Parser/pgen
+  mv python hostpython
+  mv Parser/pgen Parser/hostpgen
+  make distclean
+
+  hhoegl@aspire1:~/Python-2.7.1$ patch -p1 < ../Python-2.7.1-xcompile.patch.txt
+
+  . ~/work/eplpc3131/set.sh
+
+  CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-g++ AR=arm-linux-gnueabi-ar RANLIB=arm-linux-gnueabi-ranlib ./configure --host=arm-linux-gnueabi --build=i686-pc-linux-gnu --prefix=/python 
+
+  make HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen BLDSHARED="arm-linux-gnueabi-gcc -shared" CROSS_COMPILE=arm-linux-gnueabi- CROSS_COMPILE_TARGET=yes
+
+  make  install HOSTPYTHON=./hostpython BLDSHARED="arm-linux-gnueabi-gcc -shared" CROSS_COMPILE=arm-linux-gnueabi- CROSS_COMPILE_TARGET=yes prefix=~/Python-2.7.1/_install
+
+  Auf dem Target:
+
+  Copy _install/ directory to device.
+
+  python lib/Python-2.7/test/test___all___.py
+
+  To speed up importing:
+
+  cd _install/lib/python2.7
+  zip -r -y python27.zip .
+
+  Delete libpythonxxx.a site-packages, lib-dynload, config and anything else
+  you do not require from the python27.zip file.
+
+  Copy the _install/bin/python to the /usr/bin directory on the target.
+  Copy the python26.zip file to the /usr/lib directory on the target.
+
+  Create a directory on the target called python2.6 in the /usr/lib directory
+  and copy the following directories to that directory:
+
+    ./lib/python2.6/config
+    ./lib/python2.6/lib-dynload
+    ./lib/python2.6/site-packages
+
+  Your directory structure on the target should be as follows:
+
+    /usr/lib # ls
+    python2.6  python26.zip
+    /python/lib/python2.6 # ls
+    config  lib-dynload  site-packages
+
+  Set the PYTHONHOME environment variable to /usr/ and you are ready to run
+  Python on the target.
+
+  root@armv5te:~# python  (dauert ca. 4 Sekunden)
+  Python 2.7.1 (r271:86832, Oct  7 2011, 18:32:13) 
+  [GCC 4.5.1] on linux2
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import cmd
+  >>> import fcntl
+  >>> import subprocess
+
+  Mit diesem Interpreter kann ich auf dem Target tatsaechlich  den 
+  Python-on-a-Chip Interpreter starten. Alle Module sind nun da, die
+  beim ELDK5 Python fehlen (siehe oben):
+
+  root@armv5te:~/python-on-a-chip-read-only/src/tools# python ipm.py -f ../platfor m/desktop/pmfeatures.py -d
+
+  Python-on-a-Chip is Copyright 2003, 2006, 2007, 2009, 2010 Dean Hall and others.
+  Python-on-a-Chip is licensed under the GNU LESSER GENERAL PUBLIC LICENSE V 2.1
+  PyMite is Copyright 2003, 2006, 2007, 2009, 2010 Dean Hall.
+  PyMite is licensed under the GNU GENERAL PUBLIC LICENSE V 2.
+  This software is offered with NO WARRANTY.  See LICENSE for details.
+  Type the Python code that you want to run on the target device.
+  If you see no prompt, type two consecutive returns to exit multiline mode.
+  Type Ctrl+C to interrupt and Ctrl+D to quit (or Ctrl+Z <enter> on Win32).
+  ipm> 
+
+  Wie kann man den Python-on-a-Chip Interpreter mit einem kleinen C 
+  Programm aufrufen (main.c)?
+
+
+* 2011-11-25 | Den AVR Tiny45 auf dem V1.2 Board ansprechen kann man nur,
+  wenn man an den Pin 2 des sechspoligen ISP Steckers eine 3,3V Spannung
+  legt, z.B. von der Wago Klemme. Im Schaltplan steht nur "+5", was kein 
+  gueltiges Label ist. Der Pin ist daher offen.
+
+  Vielleicht faellt dieses Problem nicht auf, wenn man den USBprog
+  verwendet. Mit Dragon, Atmel ISP mkII und JTAGICE mkII sollte es
+  auf Anhieb nicht funktionieren.
+
+  Mit dem Dragon ISP kann ich den Tiny45 dann so ansprechen (man braucht 
+  keine "-B XX" Option):
+
+     sudo avrdude -p t45 -P usb -c dragon_isp -t
+
+  Statt dragon_isp kann man auch jtagmkii_isp oder avrisp2 verwenden.
+
+
+
+* 2011-11-25 | Mein ~/.screenrc
+
+----
+# screenrc
+# H. Hoegl, <hh@hhoegl.org>, 2007-11-08
+
+# status line
+# caption always "%{bK}  | $LOGNAME | %{bK}%c | %{bK}%-Lw%{bK}%50>%{Kb}%n%f* %t%{-}%+Lw%<%{- Wk}"
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{= ky}$LOGNAME@%H%{= kg} %w%=%{= kr}%d.%m.%y %c"
+
+# The escape character is C-Z. The original C-A interferes
+# with Emacs.
+escape ^zz
+
+screen -t picocom  0 bash
+screen -t bash     1 bash
+screen -t bash     2 bash
+----
+
