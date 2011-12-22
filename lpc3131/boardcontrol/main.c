@@ -2,9 +2,9 @@
 // (C) Benedikt Sauter
 
 
-#define F_CPU 1000000L
  
 #include <avr/io.h>         
+#define F_CPU 1000000L
 #include <util/delay.h>         
 
 #define EN_1V2 PB4
@@ -18,11 +18,13 @@ int main (void) {
 
    // Reset to low
    PORTB = 0;
-   _delay_ms(10);
+
+   _delay_ms(100);
 
    // enable power
-   PORTB |= (1<<EN_1V2)|(1<<EN_1V8)|(1<<EN_3V3);
-
+   PORTB |= (1<<EN_1V2)|(1<<EN_1V8);
+   _delay_ms(100);
+   PORTB |= (1<<EN_3V3);
    // wait till power is ready
    _delay_ms(1000);
   
@@ -30,8 +32,7 @@ int main (void) {
    PORTB |= (1<<RESET);
 
  
-   while(1) {                
-   }                         
+   while(1);                
  
    return 0;                 
 }

@@ -539,11 +539,11 @@ if __name__ == "__main__":
         exit(0)
 
     # FIXME Must have a better way to detect if card is not inserted.
-    if not os.path.exists(DEV):
-        print "Device %s does not exist. Please insert a card." % DEV
+    if not os.path.exists(sw_dev):
+        print "Device %s does not exist. Please insert a card." % sw_dev
         exit(1)
     else:
-        print "SD card is device '%s' Please say YES" % DEV
+        print "SD card is device '%s' Please say YES" % sw_dev
 	name = raw_input('Please type YES ')
 	if name !="YES":
 	   exit(1)
