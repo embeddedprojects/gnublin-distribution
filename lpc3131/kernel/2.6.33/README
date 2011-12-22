@@ -1,0 +1,38 @@
+H. Hoegl, 2011-09-15 
+
+Variante 1
+----------
+
+1. Kernel holen von 
+
+   git clone git://git.lpclinux.com/linux-2.6.33-lpc313x
+
+   Version 093e9d2f7f730dee86d6734f7a66fc573bcd7027
+
+2. Patch anwenden:
+
+   cd <kernel-src-dir>
+   patch -p1 <   <path>/0001-gnublin.patch
+
+
+3. Konfiguration: cp 0001-config .config 
+
+
+
+Variante 2 (veraltet)
+---------------------
+
+1. Vanilla Kernel 2.6.33 holen und entpacken.
+
+   In linux-2.6.33/ gehen.
+
+2. NXP Patch anwenden
+
+   patch -p1 < ../work/eplpc3131/kernel/2.6.33/linux-2.6.33_lpc313x-v1.01.patch
+
+3. Patch fuer EPLPC3131 anwenden. Enhaelt Aenderung fuer MMC/SD card detection,
+   siehe Schaltplan.
+
+   patch -p4 < ~/work/eplpc3131/kernel/2.6.33/01-mmc-card-detect.patch 
+
+
