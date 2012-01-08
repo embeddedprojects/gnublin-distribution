@@ -95,6 +95,7 @@ sw_apex_path = DEFAULT_APEX
 sw_mke2 = None
 sw_chkext2 = None
 sw_root = None
+sw_kernel = None
 sw_cmdline = None
 sw_version = None
 sw_umount = None
@@ -117,6 +118,7 @@ def check_fdisk_version():
        hhoegl@aspire1:~$ /sbin/fdisk -v
        GNU Fdisk 1.2.4
     '''
+    check_root()
     global FDISK_TYPE
     cmd = "/sbin/fdisk -v"
     if sw_verbose:
@@ -149,6 +151,7 @@ def check_fdisk_version():
 def read_until_prompt(F):
     '''Read expect output until the next fdisk 'Command' prompt.
     '''
+    check_root()
     while 1:    
        i = F.expect('Command', timeout=None)
        if i == 0:
@@ -164,6 +167,7 @@ def check_fdisk_ng_partinfo(s):
     /dev/sdc1               3         246     1959929+  83  Linux
     /dev/sdc2               1           2       16033+  df  BootIt
     '''
+    check_root()
     L = re.split("\r", s, re.MULTILINE)
     R = []
     for line in L:
@@ -188,7 +192,7 @@ def check_fdisk_gnu_partinfo(s):
 
 def options():
     global sw_help, sw_dev, sw_delete, sw_verbose, sw_mkparts, sw_apex, \
-           sw_mke2, sw_apex_path, sw_info, sw_root, sw_cmdline, sw_version, \
+           sw_mke2, sw_apex_path, sw_info, sw_root, sw_kernel, sw_cmdline, sw_version, \
            sw_umount, sw_all, sw_fetch_kernel, sw_fetch_apex, \
            sw_fetch_rootfs, sw_tmpdir, sw_chkext2, sw_update
     try:
@@ -196,7 +200,7 @@ def options():
                             "hd:vpaeircut:", 
                             ["help", "device=", "delete", 
                              "verbose", "partitions", "apex", "ext2", 
-                             "apex-path=", "info", "root", "cmdline", 
+                             "apex-path=", "info", "root","kernel","cmdline", 
                              "version", "all", "fetch-apex", "fetch-kernel",
                              "fetch-rootfs", "tmpdir=", "chkext2", "update"])
         # opt = (L, L)
@@ -233,6 +237,8 @@ def options():
             sw_chkext2 = 1
         if o[0] in ['-r', '--root']:
             sw_root = 1
+        if o[0] in ['-r', '--kernel']:
+            sw_kernel = 1
         if o[0] in ['-c', '--cmdline']:
             sw_cmdline = 1
         if o[0] in ['-u']:
@@ -284,6 +290,10 @@ def usage():
        DEFAULT_ROOTFS, DEFAULT_KERNEL)
 #--apex-path=...        Pathname of apex bootloader (default '%s')
 
+def check_root():
+    # if not root...kick out
+    if not os.geteuid()==0:
+       sys.exit("\nOnly root can run this script\n")
 
 def verbose_print(s):
     if sw_verbose:
@@ -291,6 +301,7 @@ def verbose_print(s):
 
 
 def part_info():
+    check_root()
     F = run_fdisk()
     if sw_verbose:
        print F
@@ -315,6 +326,7 @@ def fdisk_info():
     '''Nice printout of part_info().
     FIXME: number of blocks for BootIt partition seems to be wrong. 
     '''
+    check_root()
     L = part_info()
     for x in L:
        if FDISK_TYPE == 2:
@@ -330,6 +342,7 @@ def fdisk_mkparts():
     # the description in http://www.lpclinux.com/LPC313x/LPC313xApexMci#Boot.
     # NOTE: 'w' quits fdisk program
 
+    check_root()
     F = run_fdisk() 
 
     if FDISK_TYPE == 1:
@@ -382,6 +395,7 @@ def fdisk_mkparts():
 
 
 def umount(p):
+    check_root()
     r = mountcheck(p)
     if sw_verbose:
         print "mountcheck: %s" % r
@@ -393,12 +407,14 @@ def umount(p):
 
 
 def check_ext2_partition():
+    check_root()
     umount(EXT2DEV)
     cmd = "e2fsck %s" % EXT2DEV
     os.system(cmd)
     
 
 def mke2():
+    check_root()
     umount(EXT2DEV)
     cmd = "mke2fs %s" % EXT2DEV
     print cmd
@@ -406,6 +422,7 @@ def mke2():
 
 
 def write_apex(path):
+    check_root()
     enter_temp_dir()
     cmd = "dd if=%s of=%s2 bs=512" % (path, sw_dev)
     print cmd
@@ -430,12 +447,55 @@ def untar_file(targz_filename):
        else:
            print "Directory '%s' exists. Archive is already unpacked." % dirname
 
+
+    
+def write_kernel(f):
+    '''Write kernel to SD card
+    
+       f - Name of the 'xxx.tar.gz' file.
+    '''
+    check_root()
+    enter_temp_dir()
+    untar_file(f)
+
+    # mount SD card
+    mountdir = "mnt"
+    if not os.path.exists(mountdir):
+        os.mkdir(mountdir)
+    cmd = "mount %s %s" % (EXT2DEV, mountdir)
+    print cmd
+    os.system(cmd)
+
+    dirname = string.split(f, '.')[0]     
+    if not os.path.exists(dirname):
+        cmd = "tar zxvf %s" % f
+    os.system(cmd)
+
+    dirname = string.split(f, '.')[0]     
+    cmd = "cp -rv lib %s" % (mountdir)
+    print cmd
+    os.system(cmd)
+
+    cmd = "cp -v zImage %s" % (mountdir)
+    print cmd
+    os.system(cmd)
+
+
+    # unmount SD card
+    cmd = "umount %s" % mountdir
+    print cmd
+    os.system(cmd)
+
+    leave_temp_dir()
+
+
     
 def write_rootfs(f):
     '''Write root filesystem to SD card
     
        f - Name of the 'xxx.tar.gz' file.
     '''
+    check_root()
     enter_temp_dir()
     untar_file(f)
 
@@ -642,6 +702,7 @@ def fetch_link(link):
 
 def fdisk_delete_partitions():
     '''Delete all partitions on SD card '''
+    check_root()
     partition_info = part_info()
     F = run_fdisk()
     for x in partition_info:
@@ -770,6 +831,10 @@ if __name__ == "__main__":
     if sw_root:
         write_rootfs(DEFAULT_ROOTFS)
 
+    if sw_kernel:
+        write_kernel(DEFAULT_KERNEL)
+
+
     if sw_umount:
         umount(EXT2DEV)
 
@@ -791,11 +856,13 @@ if __name__ == "__main__":
     if sw_all:
         fetch_apex()
         fetch_rootfs()
+        fetch_kernel()
         fdisk_delete_partitions()
         fdisk_mkparts()
         mke2()
         write_apex(sw_apex_path)
         write_rootfs(DEFAULT_ROOTFS)
+        write_kernel(DEFAULT_ROOTFS)
 
     if sw_cmdline:
         cmdline()
