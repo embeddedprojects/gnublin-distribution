@@ -25,9 +25,23 @@ The homepage of the Gnublin Board is
  
     http://gnublin.org
 
+History
+-------
+
+2011-12-22 
+   added check_fdisk_version()
+
 
 To Do
 -----
+
+ - Python module python-pexpect must be installed (check?).
+
+ - Auto check for newer versions of gnublin-card.py.
+
+ - Check for newer versions of the downloadable files.
+
+ - Add sha256 check to all downloadable files.
 
  - Introduce dotfiles for status information.
 
@@ -45,21 +59,21 @@ To Do
 
    See also the sfdisk output.
 
- - Maybe create the temporary directory always in a persons home dir.
-
 Hubert Hoegl, 2011 <Hubert.Hoegl@hs-augsburg.de>
 """
 
-VERSION = "0.2 (2011-11-30T00:25)"
+VERSION = "6 (2011-12-22T11:12)"
 
 DEV = '/dev/sdb'  # default SD card device
 # starting fdisk in GNU mode avoids "Warning:" messages 
-FDISK = '/sbin/fdisk --gnu-fdisk'
-DEFAULT_APEX = './apex.bin'
-DEFAULT_KERNEL = 'kernel-7'
+FDISK = '/sbin/fdisk'
+FDISK_TYPE = None  # 2: GNU Fdisk, 1: util-linux-ng
+DEFAULT_APEX = 'apex.bin'
+DEFAULT_KERNEL = 'kernel.tar.gz'
 DEFAULT_ROOTFS = 'rootfs.tar.gz'
 TMPDIR = 'gnublin-tmp'
 WEBDIR = "http://www.gnublin.org/downloads/"
+RSYNC_ROOTFS_DIR = "elk.informatik.fh-augsburg.de:/srv/rtlabor/eplpc3131/rootfs-git/rootfs"
 
 import getopt
 import os
@@ -70,6 +84,7 @@ import sys
 import time
 
 sw_dev = DEV
+sw_tmpdir = TMPDIR
 sw_info = None
 sw_help = None
 sw_delete = None
@@ -78,6 +93,7 @@ sw_mkparts = None
 sw_apex = None
 sw_apex_path = DEFAULT_APEX
 sw_mke2 = None
+sw_chkext2 = None
 sw_root = None
 sw_cmdline = None
 sw_version = None
@@ -86,6 +102,48 @@ sw_all = None
 sw_fetch_kernel = None
 sw_fetch_apex = None
 sw_fetch_rootfs = None   
+sw_update = None
+
+
+def check_fdisk_version():
+    ''' 
+    The version output of GNU fdisk is (Debian):
+
+       hhoegl@aspire1:~$ /sbin/fdisk -v
+       fdisk (util-linux-ng 2.13.1.1)
+
+    or, on Ubuntu
+
+       hhoegl@aspire1:~$ /sbin/fdisk -v
+       GNU Fdisk 1.2.4
+    '''
+    global FDISK_TYPE
+    cmd = "/sbin/fdisk -v"
+    if sw_verbose:
+        print "check_fdisk_version:", cmd
+    child = pexpect.spawn (cmd)
+    child.expect('\r\n')
+    #alternative: child.expect(pexpect.EOF, timeout=None)
+    version = child.before
+
+    mobj = re.match("fdisk \(util-linux-ng (.*)\)", version)
+    if mobj:
+        rev = mobj.group(1)
+        FDISK_TYPE = 1
+
+    mobj = re.match("GNU Fdisk (.*)", version)
+    if mobj: 
+        rev = mobj.group(1)
+        FDISK_TYPE = 2
+
+    if sw_verbose:
+        print "check_fdisk_version: type=%d, version=%s" % (FDISK_TYPE, rev)
+
+    if FDISK_TYPE == None:
+        print "Unknown fdisk version: %s" % version
+        return 0
+    else:
+        return 1
 
 
 def read_until_prompt(F):
@@ -100,7 +158,24 @@ def read_until_prompt(F):
     return F.before
 
 
-def check_expect_output(s):
+def check_fdisk_ng_partinfo(s):
+    '''
+       Device Boot      Start         End      Blocks   Id  System
+    /dev/sdc1               3         246     1959929+  83  Linux
+    /dev/sdc2               1           2       16033+  df  BootIt
+    '''
+    L = re.split("\r", s, re.MULTILINE)
+    R = []
+    for line in L:
+        line2 = string.split(line, "\n")
+        for x in line2:
+            mobj = re.match("\s*(/dev/[a-z]+)(\d+)\s*(\d+)\s*(\d+)\s*", x)
+            if mobj:
+                R.append(mobj.groups())
+    return R
+ 
+
+def check_fdisk_gnu_partinfo(s):
     L = re.split("\r\n", s, re.MULTILINE)
     R = []
     for line in L:
@@ -114,15 +189,16 @@ def check_expect_output(s):
 def options():
     global sw_help, sw_dev, sw_delete, sw_verbose, sw_mkparts, sw_apex, \
            sw_mke2, sw_apex_path, sw_info, sw_root, sw_cmdline, sw_version, \
-           sw_umount, sw_all, sw_fetch_kernel, sw_fetch_apex, sw_fetch_rootfs
+           sw_umount, sw_all, sw_fetch_kernel, sw_fetch_apex, \
+           sw_fetch_rootfs, sw_tmpdir, sw_chkext2, sw_update
     try:
         opt = getopt.getopt(sys.argv[1:],
-                            "hd:vpaeircu", 
+                            "hd:vpaeircut:", 
                             ["help", "device=", "delete", 
                              "verbose", "partitions", "apex", "ext2", 
                              "apex-path=", "info", "root", "cmdline", 
                              "version", "all", "fetch-apex", "fetch-kernel",
-                             "fetch-rootfs"])
+                             "fetch-rootfs", "tmpdir=", "chkext2", "update"])
         # opt = (L, L)
     except getopt.error, why:
         print why
@@ -141,16 +217,20 @@ def options():
         if o[0] in ['-d', '--device']:
             sw_dev = o[1]
             print "device = %s" % sw_dev
+        if o[0] in ['-t', '--tmpdir']:
+            sw_tmpdir = o[1]
         if o[0] in ['--delete']:
             sw_delete = 1
         if o[0] in ['-p', '--partitions']:
             sw_mkparts = 1
         if o[0] in ['-a', '--apex']:
             sw_apex = 1
-        if o[0] in ['--apex-path']:
-            sw_apex_path = o[1]
+        #if o[0] in ['--apex-path']:
+        #    sw_apex_path = o[1]
         if o[0] in ['-e', '--ext2']:
             sw_mke2 = 1
+        if o[0] in ['-e', '--chkext2']:
+            sw_chkext2 = 1
         if o[0] in ['-r', '--root']:
             sw_root = 1
         if o[0] in ['-c', '--cmdline']:
@@ -167,33 +247,42 @@ def options():
             sw_fetch_kernel = 1
         if o[0] in ['--fetch-rootfs']:
             sw_fetch_rootfs = 1
+        if o[0] in ['--update']:
+            sw_update = 1
     return opt[1]
 
 
 def usage():
     print """%s [opts]
+!!! Check the device name of your SD card. If it is      
+!!! different from the default device %s then set it    
+!!! with the -d/--device option.                       
+!!!                                                      
+!!! It may be neccessary to run this tool as user root:  
+!!!       sudo python gnublin-card.py [opts]             
+
 -h, --help             This usage text
 --version              Print program version: %s
 -c, --cmdline          Run tool interactively (commandline)
 -i, --info             Print device info 
--d, --device=<device>  Device, default %s
+-d, --device=<device>  Device, default '%s'
+-t, --tmpdir=<dir>     Temporary directory, default '%s'
 -v, --verbose          Be verbose
 --delete               Delete all partitions
 -p, --partitions       Make partitions
 -e, --ext2             run mke2fs on sd card root partition
---apex-path=...        Pathname of apex bootloader (default %s)
+--chkext2              Check sd card root partition 
 -a, --apex             Write apex bootloader
 -r, --root             Write root fs to ext2 partition
 -u                     Unmount ext2 partition
---fetch-apex           Fetch apex bootloader from server
---fetch-rootfs         Fetch root filesystem from server
---fetch-kernel         Fetch kernel from server (optional!)
+--fetch-apex           Fetch apex bootloader from server (%s)
+--fetch-rootfs         Fetch root filesystem from server (%s)
+--fetch-kernel         Fetch kernel from server (optional) (%s)
 --all                  Run all steps to create a Gnublin Micro SD card
-
-It may be neccessary to run this tool as user root:
-
-          sudo python gnublin-card.py [opts]
-""" % (sys.argv[0], VERSION, DEV, sw_apex_path)
+--update               Check for newer versions of this script
+""" % (sys.argv[0], sw_dev, VERSION, sw_dev, sw_tmpdir, sw_apex_path,\
+       DEFAULT_ROOTFS, DEFAULT_KERNEL)
+#--apex-path=...        Pathname of apex bootloader (default '%s')
 
 
 def verbose_print(s):
@@ -203,12 +292,20 @@ def verbose_print(s):
 
 def part_info():
     F = run_fdisk()
+    if sw_verbose:
+       print F
     msg = read_until_prompt(F)
 
+    if sw_verbose:
+       print 'p'
     F.sendline('p')
     msg = read_until_prompt(F)
-    pi = check_expect_output(msg)
-
+    if FDISK_TYPE == 2:
+        pi = check_fdisk_gnu_partinfo(msg)
+    if FDISK_TYPE == 1:
+        pi = check_fdisk_ng_partinfo(msg)
+    if sw_verbose:
+       print 'q'
     F.sendline('q')
     F.expect(pexpect.EOF)  
     return pi
@@ -220,7 +317,10 @@ def fdisk_info():
     '''
     L = part_info()
     for x in L:
-       print x[0]+x[1], "-->", x[6], "(%s blocks)" % x[4]
+       if FDISK_TYPE == 2:
+           print x[0]+x[1], "-->", x[6], "(%s blocks)" % x[4]
+       if FDISK_TYPE == 1:
+           print x[0]+x[1], x[2], x[3]
 
 
 def fdisk_mkparts():
@@ -232,28 +332,51 @@ def fdisk_mkparts():
 
     F = run_fdisk() 
 
-    print "make partition no. 1 (Linux)"
-    F.sendline('n')   # new partition
-    F.sendline('p')   # primary
-    F.sendline('ext2')  # default ext2
-    F.sendline('no')  # create filesystem on partition 
-    F.sendline('3')   # start cylinder
-    F.sendline(' ')   # end at default last cylinder
+    if FDISK_TYPE == 1:
+        print "make partition no. 1 (Linux)"
+        F.sendline('n')   # new partition
+        F.sendline('p')   # primary
+        F.sendline('1')  # default ext2
+        F.sendline('3')   # start cylinder
+        F.sendline(' ')   # end at default last cylinder
 
-    # make bootit partition no. 2, cyl 1 to cyl 2
-    print "make partition no. 2 (Bootit)"
-    F.sendline('n')
-    F.sendline('p')
-    F.sendline('ext2')  # default ext2 (change later to "BootIt")
-    F.sendline('no')    # filesystem on partition 
-    F.sendline(' ')     # default start cylinder 0
-    F.sendline(' ')     # default end cylinder 2
+        # make bootit partition no. 2, cyl 1 to cyl 2
+        print "make partition no. 2 (Bootit)"
+        F.sendline('n')
+        F.sendline('p')
+        F.sendline('2')  # default ext2 (change later to "BootIt")
+        F.sendline(' ')     # default start cylinder 1
+        F.sendline(' ')     # default end cylinder 2
 
-    F.sendline('t')
-    F.sendline('2')
-    F.sendline('df')
+        F.sendline('t')
+        F.sendline('2')
+        F.sendline('df')
 
-    F.sendline('w')   # write quits fdisk
+        F.sendline('w')   # write quits fdisk
+
+    if FDISK_TYPE == 2:
+        print "make partition no. 1 (Linux)"
+        F.sendline('n')   # new partition
+        F.sendline('p')   # primary
+        F.sendline('ext2')  # default ext2
+        F.sendline('no')  # create filesystem on partition 
+        F.sendline('3')   # start cylinder
+        F.sendline(' ')   # end at default last cylinder
+
+        # make bootit partition no. 2, cyl 1 to cyl 2
+        print "make partition no. 2 (Bootit)"
+        F.sendline('n')
+        F.sendline('p')
+        F.sendline('ext2')  # default ext2 (change later to "BootIt")
+        F.sendline('no')    # filesystem on partition 
+        F.sendline(' ')     # default start cylinder 0
+        F.sendline(' ')     # default end cylinder 2
+
+        F.sendline('t')
+        F.sendline('2')
+        F.sendline('df')
+
+        F.sendline('w')   # write quits fdisk
 
     F.expect(pexpect.EOF)  # wait for child exited
 
@@ -264,24 +387,30 @@ def umount(p):
         print "mountcheck: %s" % r
     if r:
         umount(r)
-    cmd = "sudo umount %s" % p
+    cmd = "umount %s" % p
     print cmd
     os.system(cmd)
 
 
+def check_ext2_partition():
+    umount(EXT2DEV)
+    cmd = "e2fsck %s" % EXT2DEV
+    os.system(cmd)
+    
+
 def mke2():
     umount(EXT2DEV)
-    cmd = "sudo mke2fs %s" % EXT2DEV
+    cmd = "mke2fs %s" % EXT2DEV
     print cmd
     os.system(cmd)
 
 
 def write_apex(path):
     enter_temp_dir()
-    cmd = "sudo dd if=%s of=%s2 bs=512" % (path, sw_dev)
+    cmd = "dd if=%s of=%s2 bs=512" % (path, sw_dev)
     print cmd
     os.system(cmd)
-    cmd = "sudo sync"
+    cmd = "sync"
     print cmd
     os.system(cmd)
     leave_temp_dir()
@@ -378,6 +507,8 @@ def cmd_exec(s):
        write_rootfs(DEFAULT_ROOTFS)
    elif s in [ '9', 'sd-info']:
        fdisk_info()
+   elif s in ['10', 'sd-check']:
+       check_ext2_partition() 
    elif s in [ 'u', 'sd-umount']:
        umount(EXT2DEV)
    else:
@@ -400,53 +531,53 @@ sd-create-partitions  5   make sd card partitions BootIt and ext2
 sd-mke2fs             6   create ext2 filesystem on sd card
 sd-write-apex         7   write apex to sd card BootIt partition
 sd-write-rootfs       8   write root filesystem to sd card 'ext2' partition
-sd_info               9   list sd card partitions
+sd-info               9   list sd card partitions
 sd-umount             u   unmount ext2 sd card partition
-   ''' % (DEFAULT_APEX, DEFAULT_ROOTFS, DEFAULT_KERNEL)
+   ''' % (sw_apex_path, DEFAULT_ROOTFS, DEFAULT_KERNEL)
 
 
 def enter_temp_dir():
-    '''First check if we are in a directory named TMPDIR. If yes,
+    '''First check if we are in a directory named sw_tmpdir. If yes,
        stay there. If not, create this directory and cd to it.
     '''
     curdir = os.getcwd()
-    if os.path.basename(curdir) == TMPDIR:
+    if os.path.basename(curdir) == sw_tmpdir:
        return
 
-    if not os.path.exists(TMPDIR):
-        print "creating temporary directory %s" % TMPDIR
-        os.mkdir(TMPDIR)
-        print "entering %s" % TMPDIR
-        os.chdir(TMPDIR)
+    if not os.path.exists(sw_tmpdir):
+        print "creating temporary directory %s" % sw_tmpdir
+        os.mkdir(sw_tmpdir)
+        print "entering %s" % sw_tmpdir
+        os.chdir(sw_tmpdir)
     else:
-        print "directory %s already exists." % TMPDIR
-        print "entering %s" % TMPDIR
-        os.chdir(TMPDIR)
+        print "directory %s already exists." % sw_tmpdir
+        print "entering %s" % sw_tmpdir
+        os.chdir(sw_tmpdir)
 
 
 def leave_temp_dir():
     curdir = os.getcwd()
-    if os.path.basename(curdir) == TMPDIR:
+    if os.path.basename(curdir) == sw_tmpdir:
         return
-    print "leaving %s" % TMPDIR
+    print "leaving %s" % sw_tmpdir
     os.chdir("..") 
 
 
 def fetch_apex_simple():
     import urllib
-    urllib.urlretrieve ("%s/apex/apex.bin"%WEBDIR, "apex.bin")
+    urllib.urlretrieve ("%s/apex/%s"% (WEBDIR,sw_apex_path), "%s"%sw_apex_path)
 
    
 def fetch_apex():
     enter_temp_dir()
-    if os.path.exists(DEFAULT_APEX):
-        print "%s already exists" % DEFAULT_APEX
+    if os.path.exists(sw_apex_path):
+        print "%s already exists" % sw_apex_path
     else:
-        fetch_link("%s/apex/%s"%(WEBDIR, DEFAULT_APEX))
+        fetch_link("%s/apex/%s"%(WEBDIR, sw_apex_path))
     leave_temp_dir()
 
 
-def fetch_rootfs():
+def fetch_rootfs_archive():
     enter_temp_dir()
     if os.path.exists(DEFAULT_ROOTFS):
         print "%s already exists" % DEFAULT_ROOTFS
@@ -455,13 +586,27 @@ def fetch_rootfs():
     leave_temp_dir()
 
 
+def fetch_rootfs_gitrepo():
+    enter_temp_dir()
+    cmd = "rsync -zav --delete --exclude='.git*' -e \"ssh -p 2222\" hhoegl@%s  ." % RSYNC_ROOTFS_DIR
+    if sw_verbose:
+        print "fetch_rootfs_gitrepo: %s" % cmd
+    os.system(cmd)
+    leave_temp_dir()
+    
+
+def fetch_rootfs():
+    fetch_rootfs_archive()
+    # fetch_rootfs_gitrepo()
+
+
 def fetch_kernel():
-    kernel_archive = "%s.tar.gz" % DEFAULT_KERNEL
+    kernel_archive = "%s" % DEFAULT_KERNEL
     enter_temp_dir()
     if os.path.exists(kernel_archive):
         print "%s already exists" % kernel_archive
     else:
-        fetch_link("%s/kernel-2.6.33/bin/%s" % (WEBDIR, kernel_archive))
+        fetch_link("%s/kernel-2.6.33/%s" % (WEBDIR, kernel_archive))
     leave_temp_dir()
 
 
@@ -508,7 +653,10 @@ def fdisk_delete_partitions():
    
 
 def run_fdisk():
-    cmd = 'sudo %s %s' % (FDISK, sw_dev)
+    if FDISK_TYPE == 2:
+        cmd = '%s --gnu-fdisk %s' % (FDISK, sw_dev)
+    if FDISK_TYPE == 1:
+        cmd = '%s %s' % (FDISK, sw_dev)
     if sw_verbose:
         print "run_fdisk: %s" % cmd
     return pexpect.spawn (cmd)
@@ -529,8 +677,56 @@ def mountcheck(dev):
     #pprint.pprint(d)
 
 
-if __name__ == "__main__":
+def check_update():
+    '''check for newer versions of this script. 
 
+       VERSION = "6 (2011-12-22T10:35)"
+    '''
+    enter_temp_dir()
+    fetch_link("%s/gnublin-card.py" % WEBDIR)
+    v = get_version_from_file("gnublin-card.py")
+    if v:
+        revcount, revdate = v
+    v = match_version_line("VERSION = \"%s\"" % VERSION) 
+    if v:
+        (myrevcount, myrevdate) = v
+    if myrevcount < revcount:
+        print "Use newer %s/gnublin-card.py (rev %d)." % (sw_tmpdir, revcount)
+    else:
+        print "no update"
+    leave_temp_dir
+
+
+def get_version_from_file(file):
+    '''
+    Match the line
+
+         VERSION = "6 (2011-12-22T10:35)"
+
+    Return a tuple (revcount, revdate). Return None if the version string
+    could not be found.
+    '''
+    fobj = open(file, "r")
+    for line in fobj:
+        t = match_version_line(line)
+        if t:
+            fobj.close()
+            return t 
+    return None
+
+
+def match_version_line(line):
+    ''' Return a tuple (revcount, revdate) or None.
+    '''
+    mobj = re.match('VERSION = \"(\d+)\s+\((.*)\)\"', line)
+    if mobj:
+        a, b = mobj.groups()
+        return int(a), b
+    else:
+        return None
+
+
+if __name__ == "__main__":
     options()
     EXT2DEV = sw_dev+'1'
 
@@ -538,18 +734,23 @@ if __name__ == "__main__":
         print VERSION
         exit(0)
 
-    # FIXME Must have a better way to detect if card is not inserted.
+    r = check_fdisk_version()
+    if not r:
+        exit(1)
+
+    # FIXME Must have a better way to detect if card is not inserted or 
+    # if card has other device.
     if not os.path.exists(sw_dev):
         print "Device %s does not exist. Please insert a card." % sw_dev
         exit(1)
-    else:
-        print "SD card is device '%s' Please say YES" % sw_dev
-	name = raw_input('Please type YES ')
-	if name !="YES":
-	   exit(1)
-	
 
-	
+    if sw_info or sw_delete or sw_mkparts or sw_mke2 or sw_apex or \
+       sw_root or sw_umount or sw_chkext2 or sw_all:
+        print "SD card is device '%s' Please say YES" % sw_dev
+        yesno = raw_input('Please type YES: ')
+        if yesno <> "YES":
+            print "program aborted."
+            exit(1)
 
     if sw_info:
         fdisk_info()
@@ -581,6 +782,12 @@ if __name__ == "__main__":
     if sw_fetch_kernel:
         fetch_kernel()
 
+    if sw_chkext2:
+        check_ext2_partition()
+
+    if sw_update:
+        check_update()
+
     if sw_all:
         fetch_apex()
         fetch_rootfs()
@@ -592,6 +799,5 @@ if __name__ == "__main__":
 
     if sw_cmdline:
         cmdline()
-
-
     
+# vim: et sw=4 ts=4
