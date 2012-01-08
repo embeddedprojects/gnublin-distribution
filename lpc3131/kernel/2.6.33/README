@@ -1,0 +1,61 @@
+Autor: Hubert Hoegl (Gast)
+Datum: 04.01.2012 15:13
+
+Hallo,
+
+ich habe heute mal an meinen Aenderungen herumgebastelt und drei Patches
+daraus gemacht. Sie sind unter
+http://elk.informatik.fh-augsburg.de/pub/eplpc3131....
+Damit sollte nun folgendes klappen:
+
+1. Kernel holen von
+   git://git.lpclinux.com/linux-2.6.33-lpc313x (Version
+...a66fc573bcd7027)
+
+2. Meine drei Patches anwenden
+   patch -p1 < 001-mmc-card-detect.patch
+   patch -p1 < 002-gpiolib.patch
+   patch -p1 < 003-usb-panic.patch
+
+3. Dann die zwei von Euch anwenden:
+   patch -p1 < adc-registers.patch
+   patch -p1 < 0006_lpc313x_ADC_PWM.patch
+
+4. Konfiguration config-adcpwm in .config kopieren (ist da wo auch
+   die Patches sind).
+
+5. Kompilieren
+   make zImage
+   make modules
+   make modules_install INSTALL_MOD_PATH=<Pfad>
+
+Ich kann es kaum glauben, GPIO ueber sysfs scheint zu klappen (habe
+es mit input.sh von
+http://elk.informatik.fh-augsburg.de/pub/eplpc3131...
+schnell ausprobiert)
+
+der USB Host geht auch:
+
+root@armv5te:~# lsusb
+Bus 001 Device 002: ID 07a6:8511 ADMtek, Inc. ADM8511 Pegasus II
+Ethernet
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+und dann kann ich auch die beiden neuen Module laden:
+
+root@armv5te:~# modprobe lpc313x_pwm
+[lpc313x pwm] pwm frequency: 1464 Hz
+[lpc313x pwm] driver loaded with major 253
+[lpc313x pwm] >> $ mknod /dev/lpc313x_pwm c 253 0
+root@armv5te:~#
+
+root@armv5te:~# modprobe lpc313x_adc
+[lpc313x adc] driver loaded with major 252
+[lpc313x adc] >> $ mknod /dev/lpc313x_adc c 252 0
+
+Na das ist ja echt erst mal Spitze, Schade dass Weihnachten schon
+vorbei ist! Vielen Dank an die Treiberschreiber!
+
+Gruesse,
+
+Hubert
