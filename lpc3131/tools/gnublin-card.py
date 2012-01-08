@@ -62,7 +62,7 @@ To Do
 Hubert Hoegl, 2011 <Hubert.Hoegl@hs-augsburg.de>
 """
 
-VERSION = "6 (2011-12-22T11:12)"
+VERSION = "7 (2012-01-08T10:06)"
 
 DEV = '/dev/sdb'  # default SD card device
 # starting fdisk in GNU mode avoids "Warning:" messages 
@@ -480,7 +480,6 @@ def write_kernel(f):
     print cmd
     os.system(cmd)
 
-
     # unmount SD card
     cmd = "umount %s" % mountdir
     print cmd
@@ -862,7 +861,7 @@ if __name__ == "__main__":
         mke2()
         write_apex(sw_apex_path)
         write_rootfs(DEFAULT_ROOTFS)
-        write_kernel(DEFAULT_ROOTFS)
+        write_kernel(DEFAULT_KERNEL)
 
     if sw_cmdline:
         cmdline()
