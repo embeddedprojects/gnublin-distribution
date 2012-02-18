@@ -613,7 +613,7 @@ diff -Nupr -X linux-2.6.33-lpc313x/Documentation/dontdiff -x modules.builtin -x 
 +/* gpio defines (by group) */
  
 +#define BASE_GPIO_GPIO 0
-+#define NUM_GPIO_GPIO 15
++#define NUM_GPIO_GPIO 19
 +#define GPIO_GPIO1  (BASE_GPIO_GPIO + 0)
 +#define GPIO_GPIO0  (BASE_GPIO_GPIO + 1)
 +#define GPIO_GPIO2  (BASE_GPIO_GPIO + 2)

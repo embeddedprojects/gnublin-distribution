@@ -7369,7 +7369,7 @@ index 0000000..6decaa0
 +				ret = 0;
 +			break;
 +		case IOCONF_GPIO:
-+			if (pin_no > 14)
++			if (pin_no > 18)
 +				ret = 0;
 +			break;
 +		case IOCONF_UART:
