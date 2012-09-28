@@ -1,7 +1,7 @@
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/Kconfig gnublin-linux-2.6.33/drivers/Kconfig
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/Kconfig	2012-01-03 12:43:33.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/Kconfig	2012-01-03 09:44:39.000000000 +0100
-@@ -4,6 +4,8 @@ source "drivers/base/Kconfig"
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/Kconfig ../linux-2.6.33-lpc313x/drivers/Kconfig
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/Kconfig	2012-09-24 16:57:24.535902997 +0200
++++ ../linux-2.6.33-lpc313x/drivers/Kconfig	2012-09-25 10:08:00.406992034 +0200
+@@ -4,6 +4,8 @@
  
  source "drivers/connector/Kconfig"
  
@@ -10,152 +10,9 @@ diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/Kconfig gnublin-linux-
  source "drivers/mtd/Kconfig"
  
  source "drivers/of/Kconfig"
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/Makefile gnublin-linux-2.6.33/drivers/Makefile
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/Makefile	2012-01-03 12:43:33.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/Makefile	2012-01-03 09:47:18.000000000 +0100
-@@ -17,6 +17,9 @@ obj-$(CONFIG_SFI)		+= sfi/
- obj-$(CONFIG_PNP)		+= pnp/
- obj-$(CONFIG_ARM_AMBA)		+= amba/
- 
-+
-+obj-$(CONFIG_LPC313x_ADC)	+= lpc313x_io/
-+
- obj-$(CONFIG_XEN)		+= xen/
- 
- # regulators early, since some subsystems rely on them to initialize
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/Kconfig gnublin-linux-2.6.33/drivers/lpc313x_io/Kconfig
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/Kconfig	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/Kconfig	2012-01-03 09:58:54.000000000 +0100
-@@ -0,0 +1,18 @@
-+menuconfig NEW_LPC313x_IO
-+	bool "NxP lpc313x IO drivers (ADC, PWM, ...)"
-+	help
-+	  Say Y to enable support for lpc313x series MCU's on-chip peripherials like AD-converter and Pulse Width Modulator..
-+
-+if NEW_LPC313x_IO
-+
-+config LPC313x_ADC
-+	tristate "lpc313x ADC support"
-+	help
-+	  Say Y to enable the ADC driver, when built as a module, the module will be called "lpc313x_adc".
-+	  
-+config LPC313x_PWM
-+	tristate "lpc313x PWM support"
-+	help
-+	   Say Y to enable the PWM driver, when built as a moule, the module will be called "lpc313x_pwm".
-+
-+endif
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/Makefile gnublin-linux-2.6.33/drivers/lpc313x_io/Makefile
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/Makefile	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/Makefile	2012-01-03 09:59:22.000000000 +0100
-@@ -0,0 +1,5 @@
-+
-+# LPC3131x ADC
-+obj-$(CONFIG_LPC313x_ADC)			+= adc/lpc313x_adc.o
-+
-+obj-$(CONFIG_LPC313x_PWM)			+= pwm/lpc313x_pwm.o
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/README_ADC gnublin-linux-2.6.33/drivers/lpc313x_io/README_ADC
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/README_ADC	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/README_ADC	2011-12-26 23:05:56.000000000 +0100
-@@ -0,0 +1,79 @@
-+The /device-node based configuration consists of a 16bit-value. A single nibble controls a specific 
-+part of the configuration, so it's easy to calculate the 16bit-word without paper+pencil.
-+
-+These are the single nibbles:
-+	0x3210
-+	  ||||
-+	  |||+-- CHANNEL
-+	  ||+--- RESOLUTION / CONFIG
-+	  |+---- POWERSAVE / AVERAGING
-+	  +----- STATUS
-+
-+CHANNEL: select ADC-channel
-+	BIT-NR	3210
-+		xx||
-+		  |+---- 0x0001 CH_SELECT0
-+		  +----- 0x0002 CH_SELECT1
-+
-+	BIT-NR	1 0 | CHANNEL
-+	------------+--------
-+		0 0 | channel 0 (default)
-+		0 1 | channel 1
-+		1 0 | channel 2 (not available on gnublin board)
-+		1 1 | channel 3
-+
-+RESOLUTION / CONFIG: select resolution (4bit, 8bit, 10bit), other configuration
-+	BIT-NR  3210
-+		|x||
-+		| |+---- 0x0010 RES_SELECT0
-+		| +----- 0x0020 RES_SELECT1
-+                |
-+		+------- 0x0080 DEBUG (if set, the driver will be verbose)
-+
-+	BIT-NR	1 0 | Resolution
-+	------------+-----------
-+		0 0 | 10bit (default)
-+		0 1 | 8bit
-+		1 0 | 4bit
-+
-+POWERSAVE / AVERAGING :
-+	BIT-NR	3210
-+		||||
-+		|||+---- 0x0100 POWERSAVE_SELECT0
-+		||+----- 0x0200 POWERSAVE_SELECT1
-+		|+------ 0x0400 AVERAGING_MODE0
-+		+------- 0x0800 AVERAGING_MODE1
-+
-+	BIT 	1 0 | Powersave Mode
-+	------------+--------
-+		0 0 | powersaving off, adc always on
-+		0 1 | auto on/off for adc, only on when needed, takes more time, saves power (default)
-+		1 0 | adc always off, results are always waste
-+
-+	BIT 	3 2 | Averaging Mode
-+	------------+---------------
-+		0 0 | averaging off, single shot ad conversion
-+		0 1 | averaging on, build average from 10 conversions
-+		1 0 | averaging on, build average from 75 conversions
-+		1 1 | averaging on, build average from 150 conversions
-+
-+
-+
-+STATUS: if any of these 4 bits is set, the driver will print it's status via printk to "dmesg".
-+all other configuration bits are DON'T CARE in this case, no operation/configuration
-+will be performed.
-+	
-+
-+
-+          
-+        
-+      
-+
-+
-+
-+
-+
-+
-+
-+
-+
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/TODO gnublin-linux-2.6.33/drivers/lpc313x_io/TODO
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/TODO	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/TODO	2012-01-03 13:51:25.000000000 +0100
-@@ -0,0 +1,12 @@
-+a list of all TODOs for the adc and pwm driver for lpc313x:
-+
-+
-+BOTH:
-+	* find bugs, add capabilities
-+
-+ADC:
-+	* figure out how to add our device to devtmpfs, so that we don't need to create the dev-node by hand
-+	* it's slow, improve speed
-+
-+PWM:
-+	* figure out how to add our device to devtmpfs
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.c gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.c
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.c	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.c	2012-01-03 13:36:48.000000000 +0100
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc313x_adc.c ../linux-2.6.33-lpc313x/drivers/lpc313x_io/adc/lpc313x_adc.c
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc313x_adc.c	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/adc/lpc313x_adc.c	2012-09-25 10:08:00.410992514 +0200
 @@ -0,0 +1,368 @@
 +/* 
 + * lpc313x_adc.c
@@ -525,9 +382,9 @@ diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x
 +MODULE_AUTHOR(DRIVER_AUTHOR);
 +MODULE_DESCRIPTION(DRIVER_DESC);
 +MODULE_SUPPORTED_DEVICE("lpc313x adc on gnublin");
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.h gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.h
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.h	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x_adc.h	2012-01-03 10:32:40.000000000 +0100
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc313x_adc.h ../linux-2.6.33-lpc313x/drivers/lpc313x_io/adc/lpc313x_adc.h
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc313x_adc.h	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/adc/lpc313x_adc.h	2012-09-25 10:08:00.410992514 +0200
 @@ -0,0 +1,98 @@
 +/* 
 + * lpc3131_adc.h
@@ -627,9 +484,40 @@ diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/adc/lpc313x
 +//static int lpc313x_adc_powersave_off(void);
 +
 +#endif // __GNUBLIN_IO_H__
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.c gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.c
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.c	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.c	2012-01-03 13:25:07.000000000 +0100
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/Kconfig ../linux-2.6.33-lpc313x/drivers/lpc313x_io/Kconfig
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/Kconfig	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/Kconfig	2012-09-25 10:08:00.406992034 +0200
+@@ -0,0 +1,18 @@
++menuconfig NEW_LPC313x_IO
++	bool "NxP lpc313x IO drivers (ADC, PWM, ...)"
++	help
++	  Say Y to enable support for lpc313x series MCU's on-chip peripherials like AD-converter and Pulse Width Modulator..
++
++if NEW_LPC313x_IO
++
++config LPC313x_ADC
++	tristate "lpc313x ADC support"
++	help
++	  Say Y to enable the ADC driver, when built as a module, the module will be called "lpc313x_adc".
++	  
++config LPC313x_PWM
++	tristate "lpc313x PWM support"
++	help
++	   Say Y to enable the PWM driver, when built as a moule, the module will be called "lpc313x_pwm".
++
++endif
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/Makefile ../linux-2.6.33-lpc313x/drivers/lpc313x_io/Makefile
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/Makefile	2012-09-25 10:08:00.406992034 +0200
+@@ -0,0 +1,5 @@
++
++# LPC3131x ADC
++obj-$(CONFIG_LPC313x_ADC)			+= adc/lpc313x_adc.o
++
++obj-$(CONFIG_LPC313x_PWM)			+= pwm/lpc313x_pwm.o
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/pwm/lpc313x_pwm.c ../linux-2.6.33-lpc313x/drivers/lpc313x_io/pwm/lpc313x_pwm.c
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/pwm/lpc313x_pwm.c	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/pwm/lpc313x_pwm.c	2012-09-25 10:08:00.410992514 +0200
 @@ -0,0 +1,136 @@
 +/*  pwm-module.c
 + *
@@ -767,9 +655,9 @@ diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x
 +MODULE_AUTHOR(PWM_AUTHOR);  
 +MODULE_DESCRIPTION(PWM_DESCRIPTION);    
 + 
-diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.h gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.h
---- kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.h	1970-01-01 01:00:00.000000000 +0100
-+++ gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x_pwm.h	2012-01-03 13:16:07.000000000 +0100
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/pwm/lpc313x_pwm.h ../linux-2.6.33-lpc313x/drivers/lpc313x_io/pwm/lpc313x_pwm.h
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/pwm/lpc313x_pwm.h	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/pwm/lpc313x_pwm.h	2012-09-25 10:08:00.410992514 +0200
 @@ -0,0 +1,42 @@
 +#ifndef __LPC313x_PWM_H__
 +#define __LPC313x_PWM_H__
@@ -813,4 +701,116 @@ diff -uprNB kernel_unchanged/gnublin-linux-2.6.33/drivers/lpc313x_io/pwm/lpc313x
 +
 +
 +#endif // __LPC313x_PWM_H__
-\ No newline at end of file
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/README_ADC ../linux-2.6.33-lpc313x/drivers/lpc313x_io/README_ADC
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/README_ADC	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/README_ADC	2012-09-25 10:08:00.410992514 +0200
+@@ -0,0 +1,79 @@
++The /device-node based configuration consists of a 16bit-value. A single nibble controls a specific 
++part of the configuration, so it's easy to calculate the 16bit-word without paper+pencil.
++
++These are the single nibbles:
++	0x3210
++	  ||||
++	  |||+-- CHANNEL
++	  ||+--- RESOLUTION / CONFIG
++	  |+---- POWERSAVE / AVERAGING
++	  +----- STATUS
++
++CHANNEL: select ADC-channel
++	BIT-NR	3210
++		xx||
++		  |+---- 0x0001 CH_SELECT0
++		  +----- 0x0002 CH_SELECT1
++
++	BIT-NR	1 0 | CHANNEL
++	------------+--------
++		0 0 | channel 0 (default)
++		0 1 | channel 1
++		1 0 | channel 2 (not available on gnublin board)
++		1 1 | channel 3
++
++RESOLUTION / CONFIG: select resolution (4bit, 8bit, 10bit), other configuration
++	BIT-NR  3210
++		|x||
++		| |+---- 0x0010 RES_SELECT0
++		| +----- 0x0020 RES_SELECT1
++                |
++		+------- 0x0080 DEBUG (if set, the driver will be verbose)
++
++	BIT-NR	1 0 | Resolution
++	------------+-----------
++		0 0 | 10bit (default)
++		0 1 | 8bit
++		1 0 | 4bit
++
++POWERSAVE / AVERAGING :
++	BIT-NR	3210
++		||||
++		|||+---- 0x0100 POWERSAVE_SELECT0
++		||+----- 0x0200 POWERSAVE_SELECT1
++		|+------ 0x0400 AVERAGING_MODE0
++		+------- 0x0800 AVERAGING_MODE1
++
++	BIT 	1 0 | Powersave Mode
++	------------+--------
++		0 0 | powersaving off, adc always on
++		0 1 | auto on/off for adc, only on when needed, takes more time, saves power (default)
++		1 0 | adc always off, results are always waste
++
++	BIT 	3 2 | Averaging Mode
++	------------+---------------
++		0 0 | averaging off, single shot ad conversion
++		0 1 | averaging on, build average from 10 conversions
++		1 0 | averaging on, build average from 75 conversions
++		1 1 | averaging on, build average from 150 conversions
++
++
++
++STATUS: if any of these 4 bits is set, the driver will print it's status via printk to "dmesg".
++all other configuration bits are DON'T CARE in this case, no operation/configuration
++will be performed.
++	
++
++
++          
++        
++      
++
++
++
++
++
++
++
++
++
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/TODO ../linux-2.6.33-lpc313x/drivers/lpc313x_io/TODO
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/TODO	1970-01-01 01:00:00.000000000 +0100
++++ ../linux-2.6.33-lpc313x/drivers/lpc313x_io/TODO	2012-09-25 10:08:00.410992514 +0200
+@@ -0,0 +1,12 @@
++a list of all TODOs for the adc and pwm driver for lpc313x:
++
++
++BOTH:
++	* find bugs, add capabilities
++
++ADC:
++	* figure out how to add our device to devtmpfs, so that we don't need to create the dev-node by hand
++	* it's slow, improve speed
++
++PWM:
++	* figure out how to add our device to devtmpfs
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/Makefile ../linux-2.6.33-lpc313x/drivers/Makefile
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/Makefile	2012-09-24 16:57:25.019902978 +0200
++++ ../linux-2.6.33-lpc313x/drivers/Makefile	2012-09-25 10:08:00.406992034 +0200
+@@ -17,6 +17,9 @@
+ obj-$(CONFIG_PNP)		+= pnp/
+ obj-$(CONFIG_ARM_AMBA)		+= amba/
+ 
++
++obj-$(CONFIG_LPC313x_ADC)	+= lpc313x_io/
++
+ obj-$(CONFIG_XEN)		+= xen/
+ 
+ # regulators early, since some subsystems rely on them to initialize

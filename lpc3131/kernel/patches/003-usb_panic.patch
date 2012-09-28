@@ -1,7 +1,7 @@
-diff -Nupr -X linux-2.6.33-lpc313x/Documentation/dontdiff -x modules.builtin -x hash -x '*.gzip' linux-2.6.33-lpc313x/arch/arm/mach-lpc313x/usb.c gnublin-linux-2.6.33/arch/arm/mach-lpc313x/usb.c
---- linux-2.6.33-lpc313x/arch/arm/mach-lpc313x/usb.c	2012-01-04 10:35:17.000000000 +0100
-+++ gnublin-linux-2.6.33/arch/arm/mach-lpc313x/usb.c	2012-01-02 23:30:14.000000000 +0100
-@@ -257,20 +257,23 @@ int __init usbotg_init(void)
+diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/arch/arm/mach-lpc313x/usb.c ../linux-2.6.33-lpc313x/arch/arm/mach-lpc313x/usb.c
+--- ../linux-2.6.33-lpc313x_state_01_gnublinV1/arch/arm/mach-lpc313x/usb.c	2012-09-24 16:57:28.363902836 +0200
++++ ../linux-2.6.33-lpc313x/arch/arm/mach-lpc313x/usb.c	2012-09-25 10:04:17.479006190 +0200
+@@ -257,20 +257,23 @@
  
  #if defined(CONFIG_MACH_EA313X) || defined(CONFIG_MACH_EA3152)
  		/* set thw I2SRX_WS0 pin as GPIO_IN for vbus overcurrent flag */
@@ -26,4 +26,3 @@ diff -Nupr -X linux-2.6.33-lpc313x/Documentation/dontdiff -x modules.builtin -x 
  		
  #else
  		printk(KERN_ERR "Unable to register USB host. Check USB_ID jumper!!!!!\n");
-
