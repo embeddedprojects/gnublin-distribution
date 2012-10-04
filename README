@@ -1,2 +1,5 @@
 lpc3131
-    first version of a gnublin board
+   Containing a lot of informations like datasheets, example applications with source code,
+   the original lpc313x Kernel, root filesystems etc.
+
+
