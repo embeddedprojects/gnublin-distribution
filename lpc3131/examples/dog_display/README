@@ -1,0 +1,90 @@
+Before using this application please export an environment variable. It's for specifiying the used GPIO PIN.
+The GPIO PIN is connected to the display's RS PIN(COMMAND=LOW, DATA=HIGH).
+
+Of course the gpio pin has to aviable on sysfs (/sys/class/gpio/).
+
+  echo [pinnumber] >/sys/class/gpio/export
+  echo out > /sys/class/gpio/gpio[pinnumber]/direction
+  echo 0 > /sys/class/gpio/gpio[pinnumber]/value
+
+
+
+You can also start the start1.sh with:
+'''''''''''''''''''''''''''''''''''''''
+. ./start1.sh
+
+OR "app2.sh" (which do also initiate the gpio pin)
+
+
+
+
+
+Using the options of this application:
+```````````````````````````````````````
+1. ./application -w "[string]"  				----> Writes a string onto the display at offset.
+
+2. ./application -o							    ----> Set the cursor to position(address).
+
+3. ./application -s                             ----> Shifts the display and rotates addresses.
+
+4. ./application -w "[string]" -o[offset]       ----> Writes a string to an offset from address.
+
+5. ./application -s [(+/-)value] -w "[string]"  ----> First writes a string to address and after that shifts the display.
+
+6. ./application -n                             ----> This option will reset and clear the display!!! The address won't be ressettet. 
+
+7. ./application -a 							----> Change auto increment of cursor to auto decrement (Only for this command)
+
+
+
+Display offset and address:
+```````````````````````````
+
+The following drawing shows only a simplified order of the display.
+
+Each field corresponds to an address(position). After reset the cursor stands at for example at position 01.
+You can change the position of the cursor with the -o option. After each write operation the position off cursor is automatically increased.
+
+ ---------------------------------------------------------------
+|		|		|		|		|		|		|		|		|
+|	01	|	02	|	03	|	04	|	05	|	06	|	07	|	08	|
+|		|		|		|		|		|		|		|		|
+|---------------------------------------------------------------|
+|		|		|		|		|		|		|		|		|
+|	09	|	10	|	11	|	12	|	13	|	14	|	15	|	16	|
+|		|		|		|		|		|		|		|		|
+|		|		|		|		|		|		|		|		|
+ ---------------------------------------------------------------
+
+The real addresses are:
+First field of first line is at position 128.  (-o 128)
+First field of second line is at position 192. (-o 192)
+
+
+
+
+Display Shift:
+```````````````
+You can shift the display with -s option. A postive value (e.g. +4) shifts the display four times to the right. A negative value (e.g. -4) shifts the display
+four times to the left.
+The following drawing shows what happen, if above drawing will be shifted one time to the left.
+
+ ---------------------------------------------------------------
+|		|		|		|		|		|		|		|		|
+|	00	|	01	|	02	|	03	|	04	|	05	|	06	|	07	|
+|		|		|		|		|		|		|		|		|
+|---------------------------------------------------------------|
+|		|		|		|		|		|		|		|		|
+|	08	|	09	|	11	|	11	|	12	|	13	|	14	|	15	|
+|		|		|		|		|		|		|		|		|
+|		|		|		|		|		|		|		|		|
+ ---------------------------------------------------------------
+
+
+You can see that, the offset addresses has changed (e.g. field one of first line has no address 00).
+
+
+If you are sending a string to display which is longer than 16 fields, than the overlaping string won't be displayed.In order to correct this, you can shift the display to the left until the rest of the string is displayed.
+
+
+
