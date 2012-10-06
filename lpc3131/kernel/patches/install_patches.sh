@@ -7,8 +7,5 @@ for i in ./../patches/0* ;do
 echo $i
 patch -Np2 < $i
 
-cd -
-
-
 done
-
+cd -

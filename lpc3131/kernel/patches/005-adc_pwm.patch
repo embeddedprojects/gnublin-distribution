@@ -208,7 +208,7 @@ diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc3
 +
 +
 +/** called when module loaded */
-+int init_module(void) {
++static int __init mod_init(void) {
 +	adc_resolution = 10;	
 +	adc_channel = 0;
 +	adc_powersave = ADC_POWERSAVE_AUTO;
@@ -239,7 +239,7 @@ diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc3
 +}
 +
 +/** called when module unloaded */
-+void cleanup_module(void) {
++static void __exit mod_exit(void) {
 +	lpc313x_deinit_adc();
 +	unregister_chrdev(Major, DEVICE_NAME);
 +	printk(KERN_INFO "[lpc313x adc] DRIVER UNLOADED\n");
@@ -375,8 +375,8 @@ diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc3
 +}
 +*/
 +
-+module_init(init_module);
-+module_exit(cleanup_module);
++module_init(mod_init);
++module_exit(mod_exit);
 +
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR(DRIVER_AUTHOR);
@@ -469,8 +469,8 @@ diff -Nur ../linux-2.6.33-lpc313x_state_01_gnublinV1/drivers/lpc313x_io/adc/lpc3
 +
 +
 +#ifndef __ADC_DRV_C__
-+int init_module(void);
-+void cleanup_module(void);
++//static int __init mod_init(void);
++//static void __exit mod_exit(void);
 +static int device_open(struct inode *, struct file *);
 +static int device_release(struct inode *, struct file *);
 +static ssize_t device_read(struct file *, char *, size_t, loff_t *);

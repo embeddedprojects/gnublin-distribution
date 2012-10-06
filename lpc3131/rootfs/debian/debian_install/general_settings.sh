@@ -1,15 +1,14 @@
 #!/bin/bash
 # Author: Ingmar Klein (ingmar.klein@hs-augsburg.de)
-# Additional part of the main script 'build_debian_system.sh', that contains all the general settings
-# Created in scope of the "Embedded Linux" lecture, held by Professor Hubert Hoegl, at the University of Applied Sciences Augsburg, 2012
+# Edit: Benedikt Niedermayr
 
 
-# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html )
-# for more details.
+# pre build script for installing the rootfilesystem inclusive the GNUBLIN kernel.
+# It contains some very important settings.
 
+cur_path=$(pwd)
 
-
+nameserver_addr="192.168.2.1" # "141.82.48.1" (YOU NEED TO EDIT THIS!)
 
 # where to get the standard kernel #kernel_pkg_path="${HOME}/gnublin/built_kernels"
 std_kernel_pkg_path="$cur_path/debian_process"                                    
@@ -26,7 +25,15 @@ std_kernel_pkg_name="linux-2.6.33.tar.gz" # standard kernel file name
 default_kernel_pkg_name="linux-2.6.33-lpc313x"
 
 
-cur_path=$(pwd)
+#Kernel build variables
+export ARCH=arm
+export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
+export PATH=$PATH:/home/brenson/gnublin-buildroot-git/buildroot-2011.11/output/host/usr/bin
+
+
+
+
+
 
 
 if [ ! -d "$cur_path/debian_process" ]
@@ -38,22 +45,28 @@ fi
 
 if [ ! -e "$cur_path/debian_process/linux-2.6.33.tar.gz" ]
 then
+        #Copy std. kernel to installation folder
 	cp -rp $cur_path/../../../kernel/$default_kernel_pkg_name $cur_path/debian_process
 	cp -rp $cur_path/../../../kernel/patches $cur_path/debian_process
 	
-    cd $cur_path/debian_process/patches/
+        #install patches on it
+	cd $cur_path/debian_process/patches/
 	source install_patches.sh
 	cd -
 	
 	cd $cur_path/debian_process/$default_kernel_pkg_name/
-	
+	cp -p config_backup .config
 	#############FEHLER: DA WARSCHEINLICH NOCH KEIN KERNEL ZIMAGE VORHANDEN################
-    #gnublin_toolchain
-	#make zImage
 	
+
+	#gnublin kernel build process
+	
+	make zImage
+	make modules
+	make modules_install INSTALL_MOD_PATH=$cur_path/debian_process/$default_kernel_pkg_name
+        
 	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name *
-	
-    cd $cur_path
+	cd $cur_path
 	#cp -rpv $cur_path/$std_kernel_pkg_name $cur_path/debian_process
 fi
 
@@ -108,7 +121,7 @@ create_disk="no" # create a bootable SD-card after building the rootfs?
 ##### CONFIGURATION SETTINGS: #####
 ###################################
 
-nameserver_addr="192.168.2.1" # "141.82.48.1" (YOU NEED TO EDIT THIS!)
+
 
 use_ramzswap="no" # set if you want to use a compressed SWAP space in RAM (can potentionally improve performance)
 

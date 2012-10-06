@@ -998,7 +998,7 @@ else
 	fn_my_echo "Looking for the ${short_description} locally (offline)."	
 	if [ -d ${file_path} ]
 	then
-		if [ -e ${file_path}/${file_name} ]
+		if [ -e "${file_path}/${file_name}" ]
 		then
 			fn_my_echo "Now copying local file '${file_path}/${file_name}' to '${output_dir}/tmp'."
 			cp ${file_path}/${file_name} ${output_dir}/tmp
