@@ -12,6 +12,7 @@ trap cleanup INT
 source general_settings.sh # Including settings through an additional file
 source build_functions.sh # functions called by this main build script
 
+
 #########################
 ###### Main script ######
 #########################
@@ -48,6 +49,8 @@ disable_mnt_tmpfs # disable all entries in /etc/init.d trying to mount temporary
 
 do_post_debootstrap_config # do some further system configuration
 
+###Hier den Kernel ins rootfs einfügen(vor compress!)
+
 compress_debian_rootfs # compress the resulting rootfs
 
 if [ "${create_disk}" = "yes" ]
@@ -56,7 +59,7 @@ then
 	finalize_disk # copy the bootloader, rootfs and kernel to the SD-card
 fi
 
-#tar xzvf "${output_dir}/${output_filename}.tar.${tar_format}" -C /media/d3bb4f51-bf46-43b6-8948-7daf946ee77f/
+#tar -xzvpf "${output_dir}/${output_filename}.tar.${tar_format}" -C "${output_dir}"
 #cp -rp /home/brenson/Arbeitsfläche/Projekte/Terrarien_steuerung/Gnublin_rfs/debian_filesystem/Gnublin_Debian/Temperatur_steuerung /home/brenson/Arbeitsfläche/Projekte/Terrarien_steuerung/Gnublin_rfs/debian_filesystem/Gnublin_Debian/own /media/d3bb4f51-bf46-43b6-8948-7daf946ee77f/root/
 
 #cp /media/d3bb4f51-bf46-43b6-8948-7daf946ee77f/linux-2.6.33/arch/arm/boot/zImage /media/d3bb4f51-bf46-43b6-8948-7daf946ee77f/

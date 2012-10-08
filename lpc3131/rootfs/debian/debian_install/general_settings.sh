@@ -55,12 +55,11 @@ then
 	cd -
 	
 	cd $cur_path/debian_process/$default_kernel_pkg_name/
-	cp -p config_backup .config
-	#############FEHLER: DA WARSCHEINLICH NOCH KEIN KERNEL ZIMAGE VORHANDEN################
+	cp -v $cur_path/debian_process/patches/config_backup $cur_path/debian_process/$default_kernel_pkg_name/.config
+
 	
 
-	#gnublin kernel build process
-	
+	#gnublin kernel build process	
 	make zImage
 	make modules
 	make modules_install INSTALL_MOD_PATH=$cur_path/debian_process/$default_kernel_pkg_name
@@ -69,7 +68,6 @@ then
 	cd $cur_path
 	#cp -rpv $cur_path/$std_kernel_pkg_name $cur_path/debian_process
 fi
-
 
 
 
@@ -139,4 +137,4 @@ i2c_hwclock_addr="0x68" # hardware address of the RTC (if one is connected)
 
 rtc_kernel_module_name="rtc-ds1307" # kernel module name of the hardware RTC (if one is connected)
 
-additional_packages="makedev i2c-tools module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm rsync bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools python rsyslog whois time ruby procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl fakeroot ftp gettext git subversion lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh wpasupplicant libpcsclite1 libnl1" # IMPORTANT NOTE: All package names need to be seperated by a single space
+additional_packages="makedev i2c-tools module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm rsync bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools python rsyslog whois time ruby procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl fakeroot ftp gettext git subversion lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh wpasupplicant libpcsclite1 libnl1 nfs-common nfs-kernel-server" # IMPORTANT NOTE: All package names need to be seperated by a single space
