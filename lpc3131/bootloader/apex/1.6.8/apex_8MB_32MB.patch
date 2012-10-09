@@ -1,0 +1,341 @@
+Binärdateien test/apex.bin and work_1.6.8/apex.bin sind verschieden.
+diff -Nur test/.config work_1.6.8/.config
+--- test/.config	2012-10-09 10:37:22.705783110 +0200
++++ work_1.6.8/.config	2012-10-09 10:55:17.897831875 +0200
+@@ -1,7 +1,7 @@
+ #
+ # Automatically generated make config: don't edit
+ # Linux kernel version: KERNELVERSION
+-# Wed Sep 28 23:22:07 2011
++# Tue Oct  9 10:55:17 2012
+ #
+ CONFIG_ARM=y
+ CONFIG_CPU_ARMV5=y
+@@ -53,10 +53,12 @@
+ # Platform Setup
+ #
+ CONFIG_OSC_FREQ=12000000
+-CONFIG_PLL_180=y
+-# CONFIG_PLL_270 is not set
++# CONFIG_PLL_180 is not set
++CONFIG_PLL_270=y
+ CONFIG_DYNAMIC_CLOCKS=y
+ # CONFIG_USB_BOOT is not set
++CONFIG_RAM_SIZE_8MB=y
++# CONFIG_RAM_SIZE_32MB is not set
+ 
+ #
+ # Commands
+diff -Nur test/.config.old work_1.6.8/.config.old
+--- test/.config.old	1970-01-01 01:00:00.000000000 +0100
++++ work_1.6.8/.config.old	2012-10-09 10:32:07.345768805 +0200
+@@ -0,0 +1,142 @@
++#
++# Automatically generated make config: don't edit
++# Linux kernel version: KERNELVERSION
++# Tue Oct  9 10:32:07 2012
++#
++CONFIG_ARM=y
++CONFIG_CPU_ARMV5=y
++CONFIG_CPU_ARM9=y
++CONFIG_CPU_ARM926T=y
++# CONFIG_ARCH_LH7952X is not set
++# CONFIG_ARCH_LH7A40X is not set
++# CONFIG_ARCH_IXP42X is not set
++# CONFIG_ARCH_S3C2410 is not set
++# CONFIG_ARCH_MX3 is not set
++# CONFIG_ARCH_ORION5X is not set
++CONFIG_ARCH_LPC313X=y
++# CONFIG_EXPERIMENTAL is not set
++# CONFIG_SMALL is not set
++
++#
++# General Setup
++#
++CONFIG_TARGET_DESCRIPTION="Embedded Projects EPLPC3131"
++CONFIG_CROSS_COMPILE="arm-linux-gnueabi-"
++CONFIG_AEABI=y
++# CONFIG_DRIVER_LONG_LONG_SIZE is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++# CONFIG_CC_OPTIMIZE_FOR_SPEED is not set
++# CONFIG_CC_NO_OPTIMIZATION is not set
++# CONFIG_STARTUP_UART is not set
++# CONFIG_DEBUG_LL is not set
++CONFIG_SPINNER=y
++CONFIG_ATAG=y
++# CONFIG_MMU is not set
++CONFIG_DISABLE_MMU_AT_BOOT=y
++CONFIG_SDRAMBOOT_REPORT=y
++CONFIG_STACK_SIZE=0x1000
++# CONFIG_BOOTSTRAP_MEMTEST is not set
++CONFIG_ATAG_PHYS=0x30000100
++CONFIG_ARCH_NUMBER=9998
++CONFIG_APEX_VMA=0x11029000
++CONFIG_KERNEL_LMA=0x30008000
++# CONFIG_USE_RAMDISK is not set
++CONFIG_MACH="lpc313x"
++# CONFIG_MACH_VAL3153 is not set
++# CONFIG_MACH_VAL3154 is not set
++# CONFIG_MACH_EA313x_V1 is not set
++# CONFIG_MACH_EA313x_V2 is not set
++# CONFIG_MACH_EA3152 is not set
++CONFIG_MACH_EPLPC3131_V1=y
++
++#
++# Platform Setup
++#
++CONFIG_OSC_FREQ=12000000
++# CONFIG_PLL_180 is not set
++CONFIG_PLL_270=y
++CONFIG_DYNAMIC_CLOCKS=y
++# CONFIG_USB_BOOT is not set
++CONFIG_RAM_SIZE_8MB=y
++# CONFIG_RAM_SIZE_32MB is not set
++
++#
++# Commands
++#
++CONFIG_ALLHELP=y
++CONFIG_ALPHABETIZE_COMMANDS=y
++CONFIG_PARTIAL_MATCHES=y
++CONFIG_DEL_IS_BS=y
++CONFIG_ANSI_KEYS=y
++CONFIG_COMMAND_HISTORY=y
++CONFIG_COMMAND_EDITING=y
++# CONFIG_TIME_COMMANDS is not set
++CONFIG_CMD_ALIAS=y
++CONFIG_CMD_CHECKSUM=y
++CONFIG_CMD_COPY=y
++CONFIG_CMD_COMPARE=y
++CONFIG_CMD_DRVINFO=y
++CONFIG_CMD_DUMP=y
++CONFIG_CMD_ENV=y
++CONFIG_CMD_IMAGE=y
++CONFIG_CMD_IMAGE_APEX=y
++# CONFIG_CMD_IMAGE_UBOOT is not set
++CONFIG_CMD_IMAGE_SHOW=y
++CONFIG_CMD_SETENV=y
++CONFIG_CMD_ERASE=y
++CONFIG_CMD_FILL=y
++CONFIG_CMD_GO=y
++CONFIG_CMD_INFO=y
++# CONFIG_CMD_PARSE is not set
++# CONFIG_CMD_PAUSE is not set
++# CONFIG_CMD_FLASHUSAGE is not set
++CONFIG_CMD_WAIT=y
++CONFIG_CMD_XRECEIVE=y
++# CONFIG_CMD_MEMLIMIT is not set
++# CONFIG_CMD_MEMSCAN is not set
++# CONFIG_CMD_MEMTEST is not set
++# CONFIG_CRC32_LSB is not set
++
++#
++# Generic Drivers
++#
++# CONFIG_DRIVER_FAT is not set
++CONFIG_DRIVER_EXT2=y
++CONFIG_DRIVER_EXT2_BLOCKDEVICE="mmc"
++# CONFIG_DRIVER_JFFS2 is not set
++# CONFIG_DRIVER_FIS is not set
++# CONFIG_DRIVER_ONENAND is not set
++CONFIG_USES_PATHNAME_PARSER=y
++
++#
++# Environment
++#
++CONFIG_ENV=y
++CONFIG_ENV_MUTABLE=y
++CONFIG_ENV_REGION="lnand:512k+256k"
++CONFIG_ENV_SAVEATONCE=y
++CONFIG_ENV_SIZE=16384
++CONFIG_ENV_CHECK_LEN=1024
++# CONFIG_VARIATIONS is not set
++CONFIG_NO_BOOTSTRAP=y
++# CONFIG_NOR_BOOT is not set
++# CONFIG_NAND_BOOT is not set
++# CONFIG_ONENAND_BOOT is not set
++# CONFIG_COMPANION_EVT1_BOOT is not set
++# CONFIG_COMPANION_EVT2_BOOT is not set
++# CONFIG_ENV_STARTUP_PREFIX_P is not set
++
++#
++# Regions
++#
++CONFIG_ENV_REGION_KERNEL="lnand:768k+2m"
++
++#
++# Overrides
++#
++CONFIG_ENV_DEFAULT_CMDLINE_OVERRIDE=y
++CONFIG_ENV_DEFAULT_CMDLINE="console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait"
++CONFIG_ENV_DEFAULT_STARTUP_OVERRIDE=y
++CONFIG_ENV_DEFAULT_STARTUP="wait 2; copy ext2://1/zImage 0x30008000; boot"
++CONFIG_RELOCATE_SIMPLE=y
++CONFIG_ALIASES=y
+diff -Nur test/include/config/auto.conf work_1.6.8/include/config/auto.conf
+--- test/include/config/auto.conf	2012-10-09 10:49:54.197817193 +0200
++++ work_1.6.8/include/config/auto.conf	2012-10-09 10:55:36.509832719 +0200
+@@ -1,7 +1,7 @@
+ #
+ # Automatically generated make config: don't edit
+ # Linux kernel version: KERNELVERSION
+-# Tue Oct  9 10:49:54 2012
++# Tue Oct  9 10:55:36 2012
+ #
+ CONFIG_ALIASES=y
+ CONFIG_ALLHELP=y
+@@ -48,6 +48,7 @@
+ CONFIG_MACH_EPLPC3131_V1=y
+ CONFIG_CMD_ALIAS=y
+ CONFIG_ENV_DEFAULT_STARTUP_OVERRIDE=y
++CONFIG_RAM_SIZE_8MB=y
+ CONFIG_CMD_ERASE=y
+ CONFIG_ENV_DEFAULT_CMDLINE="console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait"
+ CONFIG_CPU_ARMV5=y
+@@ -60,7 +61,7 @@
+ CONFIG_DISABLE_MMU_AT_BOOT=y
+ CONFIG_ALPHABETIZE_COMMANDS=y
+ CONFIG_ENV_DEFAULT_STARTUP="wait 2; copy ext2://1/zImage 0x30008000; boot"
+-CONFIG_PLL_180=y
++CONFIG_PLL_270=y
+ CONFIG_ARM=y
+ CONFIG_ENV_CHECK_LEN=1024
+ CONFIG_SDRAMBOOT_REPORT=y
+diff -Nur test/include/linux/autoconf.h work_1.6.8/include/linux/autoconf.h
+--- test/include/linux/autoconf.h	2012-10-09 10:49:54.197817193 +0200
++++ work_1.6.8/include/linux/autoconf.h	2012-10-09 10:55:36.509832719 +0200
+@@ -1,7 +1,7 @@
+ /*
+  * Automatically generated C config: don't edit
+  * Linux kernel version: KERNELVERSION
+- * Tue Oct  9 10:49:54 2012
++ * Tue Oct  9 10:55:36 2012
+  */
+ #define AUTOCONF_INCLUDED
+ #define CONFIG_ALIASES 1
+@@ -49,6 +49,7 @@
+ #define CONFIG_MACH_EPLPC3131_V1 1
+ #define CONFIG_CMD_ALIAS 1
+ #define CONFIG_ENV_DEFAULT_STARTUP_OVERRIDE 1
++#define CONFIG_RAM_SIZE_8MB 1
+ #define CONFIG_CMD_ERASE 1
+ #define CONFIG_ENV_DEFAULT_CMDLINE "console=ttyS0,115200n8 root=/dev/mmcblk0p1 rw rootwait"
+ #define CONFIG_CPU_ARMV5 1
+@@ -61,7 +62,7 @@
+ #define CONFIG_DISABLE_MMU_AT_BOOT 1
+ #define CONFIG_ALPHABETIZE_COMMANDS 1
+ #define CONFIG_ENV_DEFAULT_STARTUP "wait 2; copy ext2://1/zImage 0x30008000; boot"
+-#define CONFIG_PLL_180 1
++#define CONFIG_PLL_270 1
+ #define CONFIG_ARM 1
+ #define CONFIG_ENV_CHECK_LEN 1024
+ #define CONFIG_SDRAMBOOT_REPORT 1
+Binärdateien test/src/arch-arm/rom/apex.bin and work_1.6.8/src/arch-arm/rom/apex.bin sind verschieden.
+diff -Nur test/src/mach-lpc313x/initialize.c work_1.6.8/src/mach-lpc313x/initialize.c
+--- test/src/mach-lpc313x/initialize.c	2012-10-09 10:37:11.161782585 +0200
++++ work_1.6.8/src/mach-lpc313x/initialize.c	2012-10-09 11:04:17.117856330 +0200
+@@ -65,8 +65,11 @@
+ #endif
+ 
+ 
++#if defined(CONFIG_RAM_SIZE_8MB)
+ #define SDRAM_CHIP_MODE   _SBF(13, 0x23)
+-
++#else
++#define SDRAM_CHIP_MODE   _SBF(12, 0x23)
++#endif
+ const CGU_HPLL_SETUP_T const g_pll = CUR_PLL_SET;
+ 
+ void __naked __section (.bootstrap.early) bootstrap_early (void)
+@@ -234,15 +237,26 @@
+   
+   /* SDRAM */
+   MPMC_DYRDCFG    = MPMC_SDRAMC_RDCFG_CMDDELAY_STG;
+-#if defined(CONFIG_MACH_EPLPC3131_V1)
++  
++  
++
++#if defined(CONFIG_MACH_EPLPC3131_V1) && defined(CONFIG_RAM_SIZE_8MB)
+   /* FIXME: At this point I must use SDRAMC_16HP_32Mx16_4B_R13_C10.
+      In my view the correct value would be SDRAMC_16LP_4Mx16_4B_R12_C8,
+      but it does not work.
+   */
+-  MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
+-#else
+-  MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
++      MPMC_DYCONFIG   =   SDRAMC_16HP_32Mx16_4B_R13_C10;
++      
++  #elif defined(CONFIG_MACH_EPLPC3131_V1) && defined(CONFIG_RAM_SIZE_32MB)
++
++     MPMC_DYCONFIG   =    SDRAMC_16HP_16Mx16_4B_R13_C9;
++
++#else 
++      MPMC_DYCONFIG   =   SDRAMC_16HP_32Mx16_4B_R13_C10
+ #endif
++
++
++
+   MPMC_DYRASCAS   = MPMC_SDRAMC_RASCAS_RAS2 | MPMC_SDRAMC_RASCAS_CAS2;
+   /* min 20ns program 1 so that atleast 2 HCLKs are used */
+   MPMC_DYTRP    = NS_TO_MPMCCLK(20, HCLK);
+@@ -272,10 +286,12 @@
+   /* set mode register by reading the address */
+   __REG (EXT_SDRAM_PHYS + SDRAM_CHIP_MODE);
+ 
+-#if defined(CONFIG_MACH_EPLPC3131_V1)
+-	MPMC_DYCONFIG   = SDRAMC_16LP_4Mx16_4B_R12_C8;
++#if defined(CONFIG_MACH_EPLPC3131_V1) && defined(CONFIG_RAM_SIZE_8MB)
++       MPMC_DYCONFIG   =   SDRAMC_16LP_4Mx16_4B_R12_C8;     
++#elif defined(CONFIG_MACH_EPLPC3131_V1) && defined(CONFIG_RAM_SIZE_32MB)
++     MPMC_DYCONFIG   =    SDRAMC_16HP_16Mx16_4B_R13_C9;  
+ #else
+-  MPMC_DYCONFIG   = SDRAMC_16HP_32Mx16_4B_R13_C10;
++  MPMC_DYCONFIG   =  SDRAMC_16HP_32Mx16_4B_R13_C10;
+ #endif
+ 
+   /* select normal operating mode */
+diff -Nur test/src/mach-lpc313x/Kconfig work_1.6.8/src/mach-lpc313x/Kconfig
+--- test/src/mach-lpc313x/Kconfig	2012-10-09 10:37:11.161782585 +0200
++++ work_1.6.8/src/mach-lpc313x/Kconfig	2012-10-09 11:13:02.273880151 +0200
+@@ -37,6 +37,7 @@
+ config MACH_EPLPC3131_V1
+ 		bool "Embedded Projects GmbH LPC3131"
+ 
++
+ endchoice
+ 
+ 
+@@ -61,6 +62,7 @@
+ 	  This frequency is garunteed only for LPC314x series with core
+ 	  voltage set to 1.3v. 
+ 
++
+ endchoice
+ 
+ config DYNAMIC_CLOCKS
+@@ -186,6 +188,25 @@
+ 
+ endchoice
+ 
++
++choice
++	prompt "Choose RAM size"
++	default RAM_SIZE_8MB 
++	help
++	    With this Option you can choose the correct size of your RAM. 
++
++config  RAM_SIZE_8MB
++	bool "8MB RAM"
++
++config  RAM_SIZE_32MB
++	bool "32MB RAM"
++
++endchoice
++
++
++
++
++
+ endmenu
+ 
+ config MACH
