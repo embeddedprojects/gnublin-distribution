@@ -11,7 +11,7 @@
 trap cleanup INT
 source general_settings.sh # Including settings through an additional file
 source build_functions.sh # functions called by this main build script
-
+#exit 0
 
 #########################
 ###### Main script ######

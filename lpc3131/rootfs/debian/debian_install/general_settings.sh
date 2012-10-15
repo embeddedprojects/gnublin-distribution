@@ -8,7 +8,7 @@
 
 cur_path=$(pwd)
 
-nameserver_addr="192.168.2.1" # "141.82.48.1" (YOU NEED TO EDIT THIS!)
+nameserver_addr="192.168.2.1"  #"8.8.8.8" # "141.82.48.1" (YOU NEED TO EDIT THIS!)
 
 # where to get the standard kernel #kernel_pkg_path="${HOME}/gnublin/built_kernels"
 std_kernel_pkg_path="$cur_path/debian_process"                                    
@@ -24,7 +24,12 @@ std_kernel_pkg_name="linux-2.6.33.tar.gz" # standard kernel file name
 #Kernel package name before compression
 default_kernel_pkg_name="linux-2.6.33-lpc313x"
 
+git_name_kernel="gnublin-develop-kernel"
 
+
+add_packages_max="samba php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors"
+
+add_packages_base="i2c-tools"
 #Kernel build variables
 export ARCH=arm
 export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
@@ -45,28 +50,35 @@ fi
 
 if [ ! -e "$cur_path/debian_process/linux-2.6.33.tar.gz" ]
 then
-        #Copy std. kernel to installation folder
-	cp -rp $cur_path/../../../kernel/$default_kernel_pkg_name $cur_path/debian_process
-	cp -rp $cur_path/../../../kernel/patches $cur_path/debian_process
+       
+	#Get kernel from repository 
+	git clone https://code.google.com/p/gnublin-develop-kernel/
 	
-        #install patches on it
-	cd $cur_path/debian_process/patches/
-	source install_patches.sh
-	cd -
+	#Move Kernel to kernel directory
+	mv $cur_path/$git_name_kernel/$default_kernel_pkg_name $cur_path/../../../kernel/$default_kernel_pkg_name
 	
-	cd $cur_path/debian_process/$default_kernel_pkg_name/
-	cp -v $cur_path/debian_process/patches/config_backup $cur_path/debian_process/$default_kernel_pkg_name/.config
+	
+	#Copy std. kernel to installation folder
+	cp -rpv $cur_path/../../../kernel/$default_kernel_pkg_name $cur_path/debian_process
 
+	#Change to kernel directory
+	cd $cur_path/debian_process/$default_kernel_pkg_name/
+	cp -v $cur_path/debian_process/$default_kernel_pkg_name/.config $ur_path/debian_process/patches/config_backup
 	
 
 	#gnublin kernel build process	
 	make zImage
 	make modules
 	make modules_install INSTALL_MOD_PATH=$cur_path/debian_process/$default_kernel_pkg_name
-        
+       
+
+	 
 	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name *
+	
+	#cleaning all
+	rm -r $cur_path/$git_name_kernel
+	rm -r $cur_path/debian_process/$default_kernel_pkg_name
 	cd $cur_path
-	#cp -rpv $cur_path/$std_kernel_pkg_name $cur_path/debian_process
 fi
 
 
@@ -137,4 +149,6 @@ i2c_hwclock_addr="0x68" # hardware address of the RTC (if one is connected)
 
 rtc_kernel_module_name="rtc-ds1307" # kernel module name of the hardware RTC (if one is connected)
 
-additional_packages="makedev i2c-tools module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm rsync bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools python rsyslog whois time ruby procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl fakeroot ftp gettext git subversion lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh wpasupplicant libpcsclite1 libnl1 nfs-common nfs-kernel-server" # IMPORTANT NOTE: All package names need to be seperated by a single space
+additional_packages="makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm rsync bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools python rsyslog whois time ruby procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl fakeroot ftp gettext git subversion firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh wpasupplicant libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd" # IMPORTANT NOTE: All package names need to be seperated by a single space
+
+

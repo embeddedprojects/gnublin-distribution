@@ -216,6 +216,12 @@ mknod /dev/sda b 8 0	# SCSI storage device
 mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
+mknod /dev/spi0 c 153 0
+mknod /dev/video0 c 81 0
+mknod /dev/ttyACM0 c 166 0
+mknod /dev/pca9555 c 89 1
+
+
 ln -s /dev/rtc0 /dev/rtc
 
 cat <<END > /etc/network/interfaces
