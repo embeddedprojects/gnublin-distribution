@@ -44,7 +44,7 @@ int main (int argc, char **argv) {
     } 
     /* slave address is not in buffer */
     buffer[0] = 0x07;  /* command byte: write config regs */ 
-    buffer[1] = 0x00;  /* port0 all outputs */
+    buffer[1] = 0x00;  /* port1 all outputs */
     err = write(fd, buffer, 2);
     if (err != 2) { 
         printf("write: error %d\n", err); 
@@ -53,15 +53,15 @@ int main (int argc, char **argv) {
 
     n = 0;
     while (1) {
-			buffer[0] = 0x02;  /* command byte: write output regs */ 
-			buffer[1] = 0x00;  /* port0 data  */
+			buffer[0] = 0x03;  /* command byte: write output regs */ 
+			buffer[1] = 0x01;  /* port1 data  */
       if (write(fd, buffer, 2) != 2) { 
          printf("write error 0"); 
          return -1; 
       } 
       usleep(100000);
-			buffer[0] = 0x02;  /* command byte: write output regs */ 
-			buffer[1] = 0xff;  /* port0 data  */
+			buffer[0] = 0x03;  /* command byte: write output regs */ 
+			buffer[1] = 0xff;  /* port1 data  */
       if (write(fd, buffer, 2) != 2) { 
          printf("write error 1"); 
          return -1; 

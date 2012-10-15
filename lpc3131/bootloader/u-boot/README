@@ -1,0 +1,25 @@
+ 
+How To Install and use u-boot:
+
+
+    cd bootloader
+
+    tar xvjf u-boot-2009.11.tar.bz2 
+
+    mv u-boot-2009.11 work_2009.11
+ 
+    cd ../patches
+ 
+    tar xjvf u-boot-2009.11_lpc313x-v1.01.patch.tar.bz2
+
+    cd ../bootloader 
+
+    cd work_2009.11 
+
+    patch -p1 < ../../patches/u-boot-2009.11_lpc313x-v1.01.patch       (Please Note: command -p1 = -p"ONE" not small L)
+
+    . ./set.sh                                                         (Please Note: Detailed Instructions about this Command can be found at http://wiki.gnublin.org/index.php/C/C%2B%2B_Entwicklungsumgebung_installieren )
+
+    make EA3131_config 
+
+    make
