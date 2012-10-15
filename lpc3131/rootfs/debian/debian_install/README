@@ -1,10 +1,12 @@
 Gnublin_Debian
 ==============
 
-Scripts to automatically create a Debian rootfs image and/or a complete, bootable SD-card.
+Scripts to automatically create a Debian rootfs image.
 
 Author: Ingmar Klein (ingmar.klein@hs-augsburg.de)
-Created in scope of the "Embedded Linux" lecture, held by Professor Hubert Hoegl, at the University of Applied Sciences Augsburg, 2012
+Edited by Benedikt Niedermayr (niedermayr@embedded-projects.net)
+
+
 
 This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html )

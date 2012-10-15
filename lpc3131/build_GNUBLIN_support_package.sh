@@ -8,9 +8,7 @@
 distro_version="-max"    				#paste "-min" if you want to build a minimal version of debian.
 									    #
 
-  #---> NUR minimal full und bootloader rest unter variables
-
-
+ 
 #############
 # Variables #
 #############
@@ -21,14 +19,7 @@ kernel_name=linux-$kernel_version-lpc313x
 kernel_path=$root_path/kernel/$kernel_name
 debian_build_path=$root_path/rootfs/debian/debian_install
 debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
-
-
-#########################
-#Kernel build variables #
-#########################
-#export ARCH=arm
-#export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
-#export PATH=$PATH:/home/brenson/gnublin-buildroot-git/buildroot-2011.11/output/host/usr/bin
+bootloader_install_dir=$root_path/bootloader/apex/1.6.8/
 
 
 ##########################################################
@@ -38,9 +29,11 @@ if [ "$1" = "clean" ]
 then
 	rm -r $root_path/kernel/$kernel_name
 	rm -r $debian_installed_files_path
+	rm -r $bootloader_install_dir/apex-1.6.8
+	rm -r $toolchain_path/armv5te
 	exit 0
 fi
-# Nameserver address 8.8.8.8
+
 
 
 
@@ -55,21 +48,25 @@ fi
 # Now the complete board support package will be built.
 
 
-#########################################################################
-# 1st Stage: Bootloader anhand von config bauen (8MB oder 32MB version) #
-#########################################################################
+#############################################
+# 1st Stage:Build toolchain and bootloader  #
+#############################################
+source $root_path/toolchain/build_toolchain.sh
+source $root_path/kernel/set.sh
+source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
+
+
 
 ######################################
 # 2nd Stage: Kernel and rootfs build # 
 ######################################
 
-#source $root_path/toolchain/build_toolchain.sh
-#source $root_path/kernel/set.sh
-#source bootloader
-
-source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 # Including settings through an additional file
+# Including settings through an additional file
+source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
 source $root_path/kernel/build_kernel.sh
+
 mv $root_path/kernel/set.sh $kernel_path
+
 source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
 
 

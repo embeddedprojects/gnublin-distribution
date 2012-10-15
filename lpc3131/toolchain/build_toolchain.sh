@@ -52,6 +52,6 @@ echo     "	 P1=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te
 
 	 export ARCH=arm 
 	 export CROSS_COMPILE=arm-linux-gnueabi-
-	 export PATH=\$P1:\$P2:\$PATH " > $kernel_path/set.sh
+	 export PATH=\$P1:\$P2:\$PATH " > $root_path/kernel/set.sh
 
 fi
