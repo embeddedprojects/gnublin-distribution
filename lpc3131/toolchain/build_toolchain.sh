@@ -39,13 +39,13 @@ fi
 
 #Creating the source-path-script, also known as set.sh
 
-if [ ! -e "$kernel_path/set.sh" ]
+if [ ! -e "$root_path/kernel/set.sh" ]
 
 then
 #Create the set.sh file
 
-touch $kernel_path/set.sh
-chmod +x $kernel_path/set.sh
+touch $root_path/kernel/set.sh
+chmod +x $root_path/kernel/set.sh
 
 echo     "	 P1=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/
 	 P2=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/bin/armv5te-linux-gnueabi/
