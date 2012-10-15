@@ -26,9 +26,9 @@ debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_proce
 #########################
 #Kernel build variables #
 #########################
-export ARCH=arm
-export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
-export PATH=$PATH:/home/brenson/gnublin-buildroot-git/buildroot-2011.11/output/host/usr/bin
+#export ARCH=arm
+#export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
+#export PATH=$PATH:/home/brenson/gnublin-buildroot-git/buildroot-2011.11/output/host/usr/bin
 
 
 ##########################################################
@@ -62,8 +62,14 @@ fi
 ######################################
 # 2nd Stage: Kernel and rootfs build # 
 ######################################
+
+#source $root_path/toolchain/build_toolchain.sh
+#source $root_path/kernel/set.sh
+#source bootloader
+
 source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 # Including settings through an additional file
 source $root_path/kernel/build_kernel.sh
+mv $root_path/kernel/set.sh $kernel_path
 source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
 
 
