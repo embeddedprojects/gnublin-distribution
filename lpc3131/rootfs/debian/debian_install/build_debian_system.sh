@@ -9,8 +9,8 @@
 # warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
 
 trap cleanup INT
-source general_settings.sh # Including settings through an additional file
-source build_functions.sh # functions called by this main build script
+source general_settings.sh "$1" # Including settings through an additional file
+source build_functions.sh  # functions called by this main build script
 #exit 0
 
 #########################

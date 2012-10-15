@@ -27,9 +27,22 @@ default_kernel_pkg_name="linux-2.6.33-lpc313x"
 git_name_kernel="gnublin-develop-kernel"
 
 
-add_packages_max="samba php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors"
+add_packages_max="samba php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd rsync ruby git fakeroot"
 
-add_packages_base="i2c-tools"
+add_packages_base="i2c-tools makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools wpasupplicant python rsyslog whois time procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl ftp gettext subversion"
+
+
+#check for min or max installation.
+if [ "$1" = "-min" ]
+then
+	additional_packages="$add_packages_base"
+	#echo "minimal distribution choosen" >>
+else
+	additional_packages="$add_packages_base $add_packages_max"
+fi
+
+echo "$additional_packages"
+#exit 0
 #Kernel build variables
 export ARCH=arm
 export CROSS_COMPILE=arm-unknown-linux-uclibcgnueabi-
@@ -149,6 +162,6 @@ i2c_hwclock_addr="0x68" # hardware address of the RTC (if one is connected)
 
 rtc_kernel_module_name="rtc-ds1307" # kernel module name of the hardware RTC (if one is connected)
 
-additional_packages="makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm rsync bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools python rsyslog whois time ruby procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl fakeroot ftp gettext git subversion firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh wpasupplicant libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd" # IMPORTANT NOTE: All package names need to be seperated by a single space
+
 
 
