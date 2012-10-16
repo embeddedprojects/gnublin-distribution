@@ -32,7 +32,7 @@ then
 
 		#Move Kernel to kernel directory
 		mv $cur_path/$git_name_kernel/$default_kernel_pkg_name $cur_path/../../../kernel/$default_kernel_pkg_name
-	
+		rm -r $cur_path/$git_name_kernel
 	fi
 	
 	#Copy std. kernel to installation folder

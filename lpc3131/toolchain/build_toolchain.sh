@@ -1,4 +1,4 @@
-#! /bin/bash 
+#!/bin/bash 
 
 # This script installs the eldk-toolchain automaticly.
 

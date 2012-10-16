@@ -14,6 +14,7 @@ distro_version="-min"    				#paste "-min" if you want to build a minimal versio
 #############
 root_path=$(pwd)
 toolchain_path=$root_path/toolchain
+cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
 kernel_version=2.6.33
 kernel_name=linux-$kernel_version-lpc313x
 kernel_path=$root_path/kernel/$kernel_name
@@ -53,9 +54,20 @@ fi
 # 1st Stage:Build toolchain and bootloader  #
 #############################################
 source $root_path/toolchain/build_toolchain.sh
-source $root_path/kernel/set.sh
-source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
+#source $root_path/kernel/set.sh
 
+
+
+export PATH=$cross_compiler_path:$PATH
+export ARCH=arm
+export CROSS_COMPILE=arm-linux-gnueabi-
+
+echo "$ARCH"
+echo "$CROSS_COMPILE"
+echo "$PATH"
+
+source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
+exit 0
 
 
 ######################################
