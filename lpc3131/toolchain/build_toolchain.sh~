@@ -5,11 +5,27 @@
 #Check if there is a previuos installation of eldk on your computer
 eldk_version=$(ls /opt/ | grep eldk)
 
+
+#check if the output of ls | grep is not empty
+if [ "$eldk_version" -lt  3 ]
+then
+
+eldk_version="NotFound"
+
+fi
+
+
 if [ -d "/opt/$eldk_version" ]
 then
 
 #Create only a softlink to your installation
 ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 
+
+
+elif [ -d "$toolchain_path/armv5te" ]
+then
+#echo if you have already installed the toolchain in your toolchain directory
+echo "Toolchain already installed!"
 
 
 else
