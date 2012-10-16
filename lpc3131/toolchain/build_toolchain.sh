@@ -5,7 +5,7 @@
 #Check if there is a previuos installation of eldk on your computer
 eldk_version=$(ls /opt/ | grep eldk)
 
-if [ ! -d "/opt/$eldk_version" ]
+if [ -d "/opt/$eldk_version" ]
 then
 
 #Create only a softlink to your installation
