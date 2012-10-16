@@ -19,7 +19,7 @@ kernel_name=linux-$kernel_version-lpc313x
 kernel_path=$root_path/kernel/$kernel_name
 debian_build_path=$root_path/rootfs/debian/debian_install
 debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
-bootloader_install_dir=$root_path/bootloader/apex/1.6.8/
+bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 
 
 ##########################################################
@@ -31,6 +31,7 @@ then
 	rm -r $debian_installed_files_path
 	rm -r $bootloader_install_dir/apex-1.6.8
 	rm -r $toolchain_path/armv5te
+	rm -r $root_path/kernel/set.sh
 	exit 0
 fi
 
@@ -64,6 +65,10 @@ source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
 # Including settings through an additional file
 source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
 source $root_path/kernel/build_kernel.sh
+
+exit 0
+
+
 
 mv $root_path/kernel/set.sh $kernel_path
 
