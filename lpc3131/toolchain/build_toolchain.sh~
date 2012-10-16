@@ -5,13 +5,6 @@
 #Check if there is a previuos installation of eldk on your computer
 eldk_version=$(ls /opt/ | grep eldk)
 
-if [ ${#eldk_version} <= 3  ]
-then
-
-eldk_version="NotFound"
-
-fi
-
 if [ -d "/opt/$eldk_version" ]
 then
 
