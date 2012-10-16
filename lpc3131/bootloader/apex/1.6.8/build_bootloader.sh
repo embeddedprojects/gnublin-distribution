@@ -2,7 +2,7 @@
 
 #this script compiles the apex bootloader
 
-tar zxvf  $bootloader_install_dir/apex-1.6.8.tar.gz 
+tar zxvf  $bootloader_install_dir/apex-1.6.8.tar.gz -C $bootloader_install_dir/
 cd $bootloader_install_dir/apex-1.6.8
 
 

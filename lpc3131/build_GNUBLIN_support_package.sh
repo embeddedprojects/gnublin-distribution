@@ -5,7 +5,7 @@
 
 
 # Parameters 
-distro_version="-max"    				#paste "-min" if you want to build a minimal version of debian.
+distro_version="-min"    				#paste "-min" if you want to build a minimal version of debian.
 									    #
 
  
