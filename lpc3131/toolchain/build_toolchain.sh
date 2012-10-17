@@ -47,13 +47,15 @@ fi
     cd /media/eldk-iso
  
 #Start the installation
-    ./install.sh -d $toolchain_path -s -i qte armv5te 
+    ./install.sh -s -i qte armv5te 
 
 
 #Remove temp directories of the installation
     cd $root_path 
     umount /media/eldk-iso 
     rmdir /media/eldk-iso  
+
+
 fi
 
 
