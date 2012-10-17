@@ -1,4 +1,4 @@
-#! /bin/bash 
+#!/bin/bash 
 
 # This script installs the eldk-toolchain automaticly.
 
@@ -7,7 +7,7 @@ eldk_version=$(ls /opt/ | grep eldk)
 
 
 #check if the output of ls | grep is not empty
-if [ "$eldk_version" -lt  3 ]
+if [ ${#eldk_version} -lt  3 ]
 then
 
 eldk_version="NotFound"
@@ -39,7 +39,7 @@ else
 
 # Mount the iso file
     mount -o loop /tmp/armv5te-qte-5.0.iso /media/eldk-iso 
-    cd eldk-iso
+    cd /media/eldk-iso
  
 #Start the installation
     ./install.sh -d $toolchain_path -s -i qte armv5te 
@@ -48,7 +48,7 @@ else
 #Remove temp directories of the installation
     cd .. 
     umount /media/eldk-iso 
-    rmdir eldk-iso/  
+    rmdir /media/eldk-iso  
 fi
 
 
@@ -62,6 +62,7 @@ then
 
 touch $root_path/kernel/set.sh
 chmod +x $root_path/kernel/set.sh
+
 
 echo     "	 P1=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/
 	 P2=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/bin/armv5te-linux-gnueabi/

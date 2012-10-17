@@ -30,15 +30,20 @@ echo "Toolchain already installed!"
 
 else
 #Install the toolchain
-    cd /tmp 
+    mkdir $root_path/Downloads
+    cd $root_path/Downloads 
 
-#Downloading the ELDK 5.0 iso
+#Downloading the ELDK 5.0 iso if you dont have it
+if [ ! -f "$root_path/Downloads/armv5te-qte-5.0.iso" ]
+then
     wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso 
+fi
+
     cd /media 
     mkdir eldk-iso 
 
 # Mount the iso file
-    mount -o loop /tmp/armv5te-qte-5.0.iso /media/eldk-iso 
+    mount -o loop $root_path/Downloads/armv5te-qte-5.0.iso /media/eldk-iso 
     cd /media/eldk-iso
  
 #Start the installation
@@ -46,7 +51,7 @@ else
 
 
 #Remove temp directories of the installation
-    cd .. 
+    cd $root_path 
     umount /media/eldk-iso 
     rmdir /media/eldk-iso  
 fi
