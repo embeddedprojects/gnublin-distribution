@@ -49,7 +49,11 @@ fi
 #Start the installation
     ./install.sh -s -i qte armv5te 
 
-
+if [ ! -h "$toolchain_path/armv5te" ]
+then
+#Create a softlink after installation
+    ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te
+fi
 #Remove temp directories of the installation
     cd $root_path 
     umount /media/eldk-iso 
