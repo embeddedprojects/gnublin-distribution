@@ -30,7 +30,12 @@ echo "Toolchain already installed!"
 
 else
 #Install the toolchain
+
+if [ ! -d "$root_path/Downloads" ]
+then
     mkdir $root_path/Downloads
+fi
+
     cd $root_path/Downloads 
 
 #Downloading the ELDK 5.0 iso if you dont have it
