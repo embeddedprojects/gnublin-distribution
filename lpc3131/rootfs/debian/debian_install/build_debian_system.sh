@@ -52,7 +52,7 @@ do_post_debootstrap_config # do some further system configuration
 ######################################################
 ###Hier den Kernel ins rootfs einfügen(vor compress!)#
 ######################################################
-cp $root_path/kernel/$kernel_name/arch/arm/boot/zImage $root_path/kernel/$kernel_name
+
 compress_debian_rootfs # compress the resulting rootfs
 
 if [ "${create_disk}" = "yes" ]

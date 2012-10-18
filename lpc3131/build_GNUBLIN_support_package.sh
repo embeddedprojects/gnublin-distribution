@@ -5,7 +5,7 @@
 
 
 # Parameters 
-distro_version="-min"    				#paste "-min" if you want to build a minimal version of debian.
+distro_version="-max"    				#paste "-min" if you want to build a minimal version of debian.
 									    #
 
  
@@ -35,6 +35,13 @@ then
 	rm -r $bootloader_install_dir/apex-1.6.8
 	rm -r $toolchain_path/armv5te
 	rm -r $root_path/kernel/set.sh
+	
+	# Uninstall also the toolchain	
+	if [ "$2" = "all" ]
+	then	
+		rm -r "/opt/eldk-*"
+		rm -r "$root_path/Downloads"
+	fi
 	exit 0
 fi
 
@@ -69,7 +76,7 @@ echo "$CROSS_COMPILE"
 echo "$PATH"
 
 source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
-exit 0
+
 
 
 ######################################
@@ -80,10 +87,10 @@ exit 0
 source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
 source $root_path/kernel/build_kernel.sh
 
-exit 0
 
+#exit 0
 
-
+# Move set.sh file into the kernel
 mv $root_path/kernel/set.sh $kernel_path
 
 source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
@@ -92,6 +99,12 @@ source $root_path/rootfs/debian/debian_install/build_debian_system.sh
 exit 0
 # 2.Copy some important support files into the rootfs
 #   (e.g. example applications(im home ordner),debian packages---->add to packages list???)
+
+### Uninstall unimportant files out of the rootfs.
+### (Avahi, samba, Documentation, ARCH, )
+### Use a script which does that but at the first start of the BOARD and after that deinstall it!!!
+
+
 
 #--->pre-compiled (examples??)
 
