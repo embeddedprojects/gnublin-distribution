@@ -6,6 +6,9 @@
 # before this.
 
 
+echo "         #############################################" >> $logfile_build
+echo "         #         3rd Stage: Build kernel           #" >> $logfile_build 
+echo "         #############################################" >> $logfile_build	
 
 
 # This is the root directory for building the rootfs
@@ -23,12 +26,13 @@ if [ ! -d "$cur_path/debian_process" ]
 then
 	mkdir $cur_path/debian_process
 	
-	echo "installation folder $cur_path/debian_process created"
+	echo "$build_time Installation folder $cur_path/debian_process created" >> $logfile_build
 fi
 
 if [ ! -d "$root_path/Downloads" ]
 then
 	mkdir $root_path/Downloads
+	echo "$build_time Download folder $root_path/Downloads created" >> $logfile_build
 fi
 
 # Start installing and compiling the Kernel
@@ -39,7 +43,7 @@ then
 	then
 		cd $root_path/Downloads	
 		#Get kernel from repository 
-		git clone https://code.google.com/p/gnublin-develop-kernel/
+		git clone https://code.google.com/p/gnublin-develop-kernel && echo "$build_time Kernel downloaded successfully" >> $logfile_build
 
 		#Move Kernel to kernel directory
 		mv $root_path/Downloads/$git_name_kernel/$kernel_name $root_path/kernel/$kernel_name
@@ -55,14 +59,14 @@ then
 	
 
 	#gnublin kernel build process	
-	make zImage
-	make modules
-	make modules_install INSTALL_MOD_PATH=$root_path/kernel/$kernel_name
+	make zImage || echo "$build_time Error while compiling the kernel" >> $logfile_build
+	make modules || echo "$build_time Error while compiling the kernel modules" >> $logfile_build
+	make modules_install INSTALL_MOD_PATH=$root_path/kernel/$kernel_name || echo "$build_time Error while installing the kernel modules" >> $logfile_build
        
 	
 	cp $root_path/kernel/$kernel_name/arch/arm/boot/zImage $root_path/kernel/$kernel_name/zImage
 	# Create the tar.gz file for debian build
-	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name *
+	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name * || echo "$build_time Error while compressing the kernel" >> $logfile_build
 	
 	#cleaning all
 	#rm -r $root_path/Downloads/$git_name_kernel

@@ -12,6 +12,7 @@ distro_version="-max"    				#paste "-min" if you want to build a minimal versio
 #############
 # Variables #
 #############
+build_time="$(date '+%D %H:%M:%S') ->"
 root_path=$(pwd)
 toolchain_path=$root_path/toolchain
 cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
@@ -35,6 +36,7 @@ then
 	rm -r $toolchain_path/armv5te
 	rm -r $root_path/kernel/set.sh
 	
+
 	# Uninstall also the toolchain	
 	if [ "$2" = "all" ]
 	then	
@@ -56,48 +58,68 @@ fi
 
 # Building Stages
 # Now the complete board support package will be built.
+rm -r $logfile_build
 
 
 #############################################
 # 1st Stage:Build toolchain                 #
 #############################################
+if [ ! -e $root_path/.toolchain_done ]
+then
+	source $root_path/toolchain/build_toolchain.sh
+	touch $root_path/.toolchain_done
+fi
 
-source $root_path/toolchain/build_toolchain.sh
+
 
 #############################################
 # 2nd Stage:Build bootlader                 #
 #############################################
-source $root_path/kernel/set.sh
-source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
-
+if [ ! -e $root_path/.bootloader_done ]
+then
+	source $root_path/kernel/set.sh
+	source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
+	touch $root_path/.bootloader_done
+fi
 
 
 ######################################
 # 3rd Stage: Kernel build		     # 
 ######################################
+if [ ! -e $root_path/.kernel_done ]
+then
+	# Including settings through an additional file
+	source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
+	source $root_path/kernel/build_kernel.sh
 
-# Including settings through an additional file
-source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
-source $root_path/kernel/build_kernel.sh
+	# Move set.sh file into the kernel
+	cp $root_path/kernel/set.sh $kernel_path
+	touch $root_path/.kernel_done
+fi
 
-# Move set.sh file into the kernel
-mv $root_path/kernel/set.sh $kernel_path
-source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
 
+######################################
+# 4rd Stage: rootfs build		     # 
+######################################
+if [ ! -e $root_path/.rootfs_done ]
+then
+	source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
+	touch $root_path/.rootfs_done
+fi
 
 
 
 
 
 ######################################
-# 4th Stage: Rootfs completion  add  # 
+# 5th Stage: Rootfs completion  add  # 
 ######################################
 # 2.Copy some important support files into the rootfs
 #   (e.g. example applications(im home ordner),debian packages---->add to packages list???)
 
 
 ######################################
-# 5th Stage: Rootfs completion remove# 
+# 6th Stage: Rootfs completion remove# 
 ######################################
 
 ### Uninstall unimportant files out of the rootfs.
