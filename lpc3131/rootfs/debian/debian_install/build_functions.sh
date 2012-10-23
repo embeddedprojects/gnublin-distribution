@@ -88,7 +88,7 @@ Trying to install it now!"
 If your host system is not Ubuntu 10.XX based, this could lead to errors. Please check!"
 			else
 				fn_my_echo "Exiting now!"
-				exit 7
+				exit 14
 			fi
 		fi
 	fi
@@ -206,6 +206,8 @@ apt-get update
 mkdir -p /dev/bus/usb/001/
 for k in {0..9}; do mknod /dev/bus/usb/001/0\${k} c 189 \${k}; done;
 for l in {10..31}; do mknod /dev/bus/usb/001/0\${l} c 189 \${l}; done;
+mknod /dev/i2c-0 c 89 0
+mknod /dev/i2c-1 c 89 1
 mknod /dev/ttyS0 c 4 64	# for the serial console
 mknod /dev/rtc0 c 254 0
 mknod /dev/ramzswap0 b 254 0
@@ -237,7 +239,7 @@ echo \"127.0.0.1 gnublin-debian\" >> /etc/hosts 2>>/deboostrap_stg2_errors.txt
 echo \"nameserver ${nameserver_addr}\" > /etc/resolv.conf 2>>/deboostrap_stg2_errors.txt
 
 cat <<END > /etc/rc.local 2>>/deboostrap_stg2_errors.txt
-#!/bin/sh -e
+#!/bin/sh 
 #
 # rc.local
 #
@@ -256,6 +258,8 @@ then
 fi
 /setup.sh 2>/setup_log.txt && rm /setup.sh
 
+## Additional script for cleaning the rootfs from unused .deb packages -BN ##
+/opt/first_boot.sh
 exit 0
 END
 exit" 2>${output_dir}/chroot_1_log.txt
@@ -340,7 +344,7 @@ if [ "${use_ramzswap}" = "yes" ]
 then
 	echo "#!/bin/sh
 cat <<END > /etc/rc.local 2>>/ramzswap_setup_errors.txt
-#!/bin/sh -e
+#!/bin/sh
 #
 # rc.local
 #
@@ -354,7 +358,9 @@ cat <<END > /etc/rc.local 2>>/ramzswap_setup_errors.txt
 # By default this script does nothing.
 
 modprobe ${ramzswap_kernel_module_name} num_devices=1 disksize_kb=${ramzswap_size_kb}
-swapon -p 100 /dev/ramzswap0
+#swapon -p 100 /dev/ramzswap0
+## Additional script for cleaning the rootfs from unused .deb packages -BN ##
+/opt/first_boot.sh
 exit 0
 END
 
@@ -550,6 +556,19 @@ fi
 mount ${output_dir}/${output_filename}.img ${output_dir}/mnt_debootstrap -o loop
 if [ "$?" = "0" ]
 then
+    ####################################################
+	## 				GNUBLIN SUPPORT PACKAGE			  ##	
+	##           Remove and add some files        -BN ##
+	####################################################
+	rm -r ${output_dir}/mnt_debootstrap/arch
+	rm -r ${output_dir}/mnt_debootstrap/Documentation
+	
+	cp -v $root_path/rootfs/debian/debian_install/first_boot.sh ${output_dir}/mnt_debootstrap/opt/first_boot.sh || exit 0
+	chmod +x ${output_dir}/mnt_debootstrap/opt/first_boot.sh
+	echo "$build_time Script for first boot copied to ${output_dir}/mnt_debootstrap/opt/first_boot.sh" >> $logfile_build
+	
+	
+
 	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
 	cd ${output_dir}/mnt_debootstrap
 	if [ "${tar_format}" = "bz2" ]
@@ -573,6 +592,7 @@ fi
 
 umount ${output_dir}/mnt_debootstrap
 sleep 10
+sync
 mount | grep ${output_dir}/mnt_debootstrap > /dev/null
 if [ ! "$?" = "0" ] && [ "${clean_tmp_files}" = "yes" ]
 then

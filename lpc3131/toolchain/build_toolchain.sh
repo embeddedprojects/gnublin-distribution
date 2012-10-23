@@ -5,11 +5,11 @@
 #Check if there is a previuos installation of eldk on your computer
 eldk_version=$(ls /opt/ | grep eldk)
 
-echo ""
-echo ""
-echo "         #############################################" >> $logfile_build
-echo "         #         First Stage: Build toolchain      #" >> $logfile_build 
-echo "         #############################################" >> $logfile_build	
+echo " " >> $logfile_build
+echo " " >> $logfile_build
+echo "#############################################" >> $logfile_build
+echo "#         First Stage: Build toolchain      #" >> $logfile_build 
+echo "#############################################" >> $logfile_build	
 
 #check if the output of ls | grep is not empty
 if [ ${#eldk_version} -lt  3 ]
@@ -24,8 +24,8 @@ if [ -d "/opt/$eldk_version" ]
 then
 
 	#Create only a softlink to your installation
-	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 
-	echo "$build_time A link to installed toolchain created in $toolchain_path." >> $logfile_build
+	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 2>>$logfile_build || exit 0
+	
 
 elif [ -d "$toolchain_path/armv5te" ]
 then
@@ -38,7 +38,7 @@ else
 
 	if [ ! -d "$root_path/Downloads" ]
 	then
-    	mkdir $root_path/Downloads
+    	mkdir $root_path/Downloads 
 	fi
 
     cd $root_path/Downloads 
@@ -46,28 +46,30 @@ else
 	#Downloading the ELDK 5.0 iso if you dont have it
 	if [ ! -f "$root_path/Downloads/armv5te-qte-5.0.iso" ]
 	then
-    	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso || echo "$build_time Error while downloading the toolchain." >> $logfile_build 
+    	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso || exit 0 
 	fi
 
    	cd /media 
     mkdir eldk-iso 
 
 	# Mount the iso file
-    mount -o loop $root_path/Downloads/armv5te-qte-5.0.iso /media/eldk-iso || echo "$build_time Error while mounting the iso file." >> $logfile_build
+    mount -o loop $root_path/Downloads/armv5te-qte-5.0.iso /media/eldk-iso 2>>$logfile_build || exit 0
+	echo "$build_time Folder /media/eldk-iso mounted successfully." >> $logfile_build
     cd /media/eldk-iso
  
 	#Start the installation
-    ./install.sh -s -i qte armv5te || echo "$build_time Error while installing." >> $logfile_build
+    ./install.sh -s -i qte armv5te 2>>$logfile_build
 
 	if [ ! -h "$toolchain_path/armv5te" ]
 	then
 		eldk_version=$(ls /opt/ | grep eldk)
 		#Create a softlink after installation
-    	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te || echo "$build_time A link to installed toolchain created in $toolchain_path." >> $logfile_build
+    	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 2>>$logfile_build
 	fi
 	#Remove temp directories of the installation
     cd $root_path 
-    umount /media/eldk-iso || echo "$build_time Error while unmounting the iso" >> $logfile_build
+    umount /media/eldk-iso 2>>$logfile_build || exit 0
+	echo "$build_time Folder /media/eldk-iso unmounted successfully." >> $logfile_build
     rmdir /media/eldk-iso  
 
 

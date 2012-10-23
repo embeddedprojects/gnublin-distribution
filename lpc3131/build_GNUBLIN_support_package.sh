@@ -5,10 +5,11 @@
 
 
 # Parameters 
-distro_version="-max"    				#paste "-min" if you want to build a minimal version of debian.
-									    #
+distro_version="max"    								#paste "-min" if you want to build a minimal version of debian.
+tmp=$(cat /etc/lsb-release | grep DISTRIB_RELEASE)    #check for current OS Version
+host_os_version=${tmp:16:2}
 
- 
+
 #############
 # Variables #
 #############
@@ -24,19 +25,33 @@ debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_proce
 bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 logfile_build=$root_path/install.log
 
+# Including settings through an additional file
+source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"
+
+
+
+
+
+
+
+
+
 
 ##########################################################
 # Only cleaning the whole board-support-package and exit #
 ##########################################################
 if [ "$1" = "clean" ]
 then
-	rm -r $root_path/kernel/$kernel_name
-	rm -r $debian_installed_files_path
-	rm -r $bootloader_install_dir/apex-1.6.8
-	rm -r $toolchain_path/armv5te
-	rm -r $root_path/kernel/set.sh
-	
-
+	rm -r $root_path/kernel/$kernel_name 2>/dev/null
+	rm -r $debian_installed_files_path 2>/dev/null
+	rm -r $bootloader_install_dir/apex-1.6.8 2>/dev/null
+	rm -r $toolchain_path/armv5te 2>/dev/null
+	rm -r $root_path/kernel/set.sh 2>/dev/null
+	rm -r $root_path/.stamp* 2>/dev/null
+	rm -r $root_path/tools/gnublin-installer/apex.bin 2>/dev/null
+	rm -r $root_path/tools/gnublin-installer/zImage	2>/dev/null
+	rm -r $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 2>/dev/null
+	echo "Successfully cleaned!"
 	# Uninstall also the toolchain	
 	if [ "$2" = "all" ]
 	then	
@@ -47,13 +62,7 @@ then
 fi
 
 
-
-
-# Deciding Stage : In this stage all required/selected adons 
-# will be added to the build process. 
-
-
-
+ 
 
 
 # Building Stages
@@ -64,77 +73,88 @@ rm -r $logfile_build
 #############################################
 # 1st Stage:Build toolchain                 #
 #############################################
-if [ ! -e $root_path/.toolchain_done ]
+if [ ! -e $root_path/.stamp_toolchain ]
 then
 	source $root_path/toolchain/build_toolchain.sh
-	touch $root_path/.toolchain_done
+	touch $root_path/.stamp_toolchain
 fi
+
+
+
+
+# Always set PATH environment but first after building toolchain#
+source $root_path/kernel/set.sh
 
 
 
 #############################################
 # 2nd Stage:Build bootlader                 #
 #############################################
-if [ ! -e $root_path/.bootloader_done ]
+if [ ! -e $root_path/.stamp_bootloader ]
 then
-	source $root_path/kernel/set.sh
+	
 	source $root_path/bootloader/apex/1.6.8/build_bootloader.sh
-	touch $root_path/.bootloader_done
+	touch $root_path/.stamp_bootloader
 fi
 
 
 ######################################
 # 3rd Stage: Kernel build		     # 
 ######################################
-if [ ! -e $root_path/.kernel_done ]
+if [ ! -e $root_path/.stamp_kernel ]
 then
-	# Including settings through an additional file
-	source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"	 
+		 
 	source $root_path/kernel/build_kernel.sh
 
 	# Move set.sh file into the kernel
 	cp $root_path/kernel/set.sh $kernel_path
-	touch $root_path/.kernel_done
+	touch $root_path/.stamp_kernel
 fi
 
 
 ######################################
 # 4rd Stage: rootfs build		     # 
 ######################################
-if [ ! -e $root_path/.rootfs_done ]
+if [ ! -e $root_path/.stamp_rootfs ]
 then
-	source $root_path/rootfs/debian/debian_install/build_debian_system.sh 
-	touch $root_path/.rootfs_done
+	source $debian_build_path/build_debian_system.sh 
+	touch $root_path/.stamp_rootfs
+fi
+
+######################################
+# 5th Stage: Rootfs completion       # 
+######################################
+# 2.Copy some important support files into the rootfs
+#   (e.g. example applications(im home ordner),debian packages---->add to packages list???)
+if [ ! -e $root_path/.stamp_rootfs_post ]
+then
+	
+	compress_debian_rootfs || exit 0 # compress the resulting rootfs
+	
+	# Copy the most important files #
+	# It's not necessary but better for the user #	
+	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/tools/gnublin-installer/
+	cp $kernel_path/arch/arm/boot/zImage $root_path/tools/gnublin-installer/
+	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/tools/gnublin-installer/
+	
+
+	# Create stamp #
+	touch $root_path/.stamp_rootfs_post
 fi
 
 
 
 
-
-######################################
-# 5th Stage: Rootfs completion  add  # 
-######################################
-# 2.Copy some important support files into the rootfs
-#   (e.g. example applications(im home ordner),debian packages---->add to packages list???)
-
-
-######################################
-# 6th Stage: Rootfs completion remove# 
-######################################
-
-### Uninstall unimportant files out of the rootfs.
-### (Avahi, samba, Documentation, ARCH, )
-### Use a script which does that but at the first start of the BOARD and after that deinstall it!!!
-
-
-
-
-######################################
-# 6th Stage: Built Support package   # 
-######################################
-# --> Build support folder
-#   (e.g. for how-to files,examles,source_code)
-# --> Alles wenn möglich für den Gnblin installer komform machen!
+## Start Gnublin Installer ##
+cd $root_path/tools/gnublin-installer/
+if [ $host_os_version -ge 12 ]
+then
+	$root_path/tools/gnublin-installer/gnublin-installer-neu || $root_path/tools/gnublin-installer/gnublin-installer-alt
+	
+else
+	$root_path/tools/gnublin-installer/gnublin-installer-alt
+	
+fi
 
 
 
@@ -143,7 +163,9 @@ fi
 ######################################
 # --> User rights im Wiki nicht hier!!!
 # --> Auf die CD einen Ordner mit einem Abbild dieser Struktur + alles fertig ordner(für die Oma)
-
+# --> Build support folder
+#   (e.g. for how-to files,examles,source_code)
+# --> Alles wenn möglich für den Gnblin installer komform machen!
 
 
 
