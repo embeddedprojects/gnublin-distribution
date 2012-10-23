@@ -46,7 +46,8 @@ then
 		#Get kernel from repository 
 		git clone https://code.google.com/p/gnublin-develop-kernel || exit 0
 		echo "$build_time Repository cloned correctly " >> $logfile_build
-
+	
+		
 		#Move Kernel to kernel directory
 		mv $root_path/Downloads/$git_name_kernel/$kernel_name $root_path/kernel/$kernel_name || exit 0
 		rm -r $root_path/Downloads/$git_name_kernel
@@ -56,9 +57,10 @@ then
 	#Copy std. kernel to installation folder
 	#cp -rp $root_path/kernel/$kernel_name $cur_path/debian_process
 
-	#Change to kernel directory
+	#Change to kernel directory and copy .config
 	cd $root_path/kernel/$kernel_name
-	#cp $cur_path/debian_process/$kernel_name/.config $cur_path/debian_process/config_backup
+	cp $root_path/kernel/$kernel_name/config_backup $root_path/kernel/$kernel_name/.config || exit 0
+	echo "$build_time Kernelconfig copied correctly!" >> $logfile_build
 	
 
 	#gnublin kernel build process	

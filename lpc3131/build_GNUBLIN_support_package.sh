@@ -3,7 +3,6 @@
 # Board support package building script
 
 
-
 # Parameters 
 distro_version="max"    								#paste "-min" if you want to build a minimal version of debian.
 tmp=$(cat /etc/lsb-release | grep DISTRIB_RELEASE)    #check for current OS Version
@@ -31,7 +30,13 @@ source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_vers
 
 
 
+user=$(whoami)
 
+if [ "$user" != "root" ]
+then
+	echo "You have to be root in order to start the build process!"
+	exit 0
+fi
 
 
 
@@ -55,10 +60,17 @@ then
 	# Uninstall also the toolchain	
 	if [ "$2" = "all" ]
 	then	
-		rm -r "/opt/eldk-*"
+		echo "This step will delete your toolchain installed at /opt/eldk-*"
+		echo "continue?(y/n)"
+		read desicion
+		
+		if [ "$desicion" = "y" ]
+		then		
+		rm -r "/opt/eldk-5.0"
 		rm -r "$root_path/Downloads"
+		fi
 	fi
-	exit 0
+	exit 1
 fi
 
 
@@ -156,6 +168,7 @@ else
 	
 fi
 
+exit 1
 
 
 ######################################
