@@ -3,7 +3,7 @@
 # This script installs the eldk-toolchain automaticly.
 
 #Check if there is a previuos installation of eldk on your computer
-eldk_version=$(ls /opt/ | grep eldk)
+export eldk_version=$(ls /opt/ | grep eldk)
 
 echo " " >> $logfile_build
 echo " " >> $logfile_build
@@ -15,7 +15,7 @@ echo "#############################################" >> $logfile_build
 if [ ${#eldk_version} -lt  3 ]
 then
 
-	eldk_version="NotFound"
+	export eldk_version="NotFound"
 	
 fi
 
@@ -42,18 +42,38 @@ else
 	fi
 
     cd $root_path/Downloads 
-
+	
+	
+	
 	#Downloading the ELDK 5.0 iso if you dont have it
 	if [ ! -f "$root_path/Downloads/armv5te-qte-5.0.iso" ]
 	then
     	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso || exit 0 
 	fi
+	
 
-   	cd /media 
+	# Calculate Checksum # 
+	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/iso.sha256
+	sha256sum armv5te-qte-5.0.iso > $root_path/Downloads/armv5te-qte-5.0.sha256
+	export diff_tmp=$(diff $root_path/Downloads/armv5te-qte-5.0.sha256 $root_path/Downloads/iso.sha256)	
+	
+	#echo "testvar===>$diff_tmp"
+	if [ -n "$diff_tmp"  ]
+	then 
+		 echo "$build_time Checksum error in armv5te-qte-5.0.iso." >> $logfile_build
+		 exit 0	
+		 rm $root_path/Downloads/armv5te-qte-5.0.sha256
+	fi
+		 echo "$build_time Checksum of armv5te-qte-5.0.iso is correct." >> $logfile_build
+		 echo "$build_time ==>File downloaded correctly" >> $logfile_build
+		 rm $root_path/Downloads/armv5te-qte-5.0.sha256
+
+	
+	cd /media 
     mkdir eldk-iso 
 
 	# Mount the iso file
-    mount -o loop $root_path/Downloads/armv5te-qte-5.0.iso /media/eldk-iso 2>>$logfile_build || exit 0
+    mount -o loop $root_path/Downloads/armv5te-qte-5.0.iso /media/eldk-iso || exit 0
 	echo "$build_time Folder /media/eldk-iso mounted successfully." >> $logfile_build
     cd /media/eldk-iso
  
@@ -85,7 +105,7 @@ then
 	echo "$build_time Create a new set.sh file" >> $logfile_build	
 	
 	touch $root_path/kernel/set.sh
-	chmod +x $root_path/kernel/set.sh
+	chmod 0777 $root_path/kernel/set.sh
 
 
 	echo     "	 P1=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/

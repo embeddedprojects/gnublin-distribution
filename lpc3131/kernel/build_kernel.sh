@@ -69,13 +69,13 @@ then
 	make zImage || exit 0
 	echo "$build_time Kernel compiled successfully" >> $logfile_build	
 	make modules || exit 0
-	echo "$build_time Kernel compiled successfully" >> $logfile_build
+	echo "$build_time Modules compiled successfully" >> $logfile_build
 	make modules_install INSTALL_MOD_PATH=$root_path/kernel/$kernel_name || exit 0
     echo "$build_time Kernel installed correctly" >> $logfile_build   
 	
 	cp $root_path/kernel/$kernel_name/arch/arm/boot/zImage $root_path/kernel/$kernel_name/zImage || exit 0
 	# Create the tar.gz file for debian build
 	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name * || exit 0
-	echo "$build_time Kernel installed correctly" >> $logfile_build
+	echo "$build_time Kernel compressed correctly" >> $logfile_build
 	cd $cur_path
 fi

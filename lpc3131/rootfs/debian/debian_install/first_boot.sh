@@ -2,8 +2,12 @@
 #! /bin/sh
 
 
+
 if [ ! -f /opt/.success  ]
 then
+
+echo "This is your first boot. Some applications will now be configured. This may take some time!"
+echo "After this process the system is going down for reboot!..."
 
 touch /opt/tmp.txt
 
@@ -53,7 +57,7 @@ then
         /ramzswap_setup.sh 2>/ramzswap_setup_log.txt && rm /ramzswap_setup.sh
 fi
 /setup.sh 2>/setup_log.txt && rm /setup.sh
-
+swapon /swapfile
 exit 0" > /etc/rc.local
 
 echo "Everything done successfull!"

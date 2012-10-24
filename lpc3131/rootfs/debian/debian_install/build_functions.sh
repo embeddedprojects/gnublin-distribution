@@ -260,6 +260,8 @@ fi
 
 ## Additional script for cleaning the rootfs from unused .deb packages -BN ##
 /opt/first_boot.sh
+mkswap swapfile
+reboot
 exit 0
 END
 exit" 2>${output_dir}/chroot_1_log.txt
@@ -296,8 +298,8 @@ cat <<END > /etc/fstab 2>>/deboostrap_stg2_errors.txt
 # /etc/fstab: static file system information.
 #
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-/dev/root	/	ext3	noatime,errors=remount-ro	0	1
-/dev/mmcblk0p3	none	swap	defaults	0	0
+/dev/root	/	$filesystem_vers	noatime,errors=remount-ro	0	1
+#/dev/mmcblk0p3	none	swap	defaults	0	0
 END
 
 update-rc.d -f mountoverflowtmp remove 2>>/deboostrap_stg2_errors.txt
@@ -361,6 +363,8 @@ modprobe ${ramzswap_kernel_module_name} num_devices=1 disksize_kb=${ramzswap_siz
 #swapon -p 100 /dev/ramzswap0
 ## Additional script for cleaning the rootfs from unused .deb packages -BN ##
 /opt/first_boot.sh
+mkswap swapfile
+reboot
 exit 0
 END
 
@@ -556,17 +560,15 @@ fi
 mount ${output_dir}/${output_filename}.img ${output_dir}/mnt_debootstrap -o loop
 if [ "$?" = "0" ]
 then
-    ####################################################
-	## 				GNUBLIN SUPPORT PACKAGE			  ##	
-	##           Remove and add some files        -BN ##
+    ######################################################
+    ######################################################
+	### 				GNUBLIN SUPPORT PACKAGE		   ###	
+	###           Remove and add some files        -BN ###
+	######################################################
+    ######################################################
+	source $debian_build_path/completion.sh
+	
 	####################################################
-	rm -r ${output_dir}/mnt_debootstrap/arch
-	rm -r ${output_dir}/mnt_debootstrap/Documentation
-	
-	cp -v $root_path/rootfs/debian/debian_install/first_boot.sh ${output_dir}/mnt_debootstrap/opt/first_boot.sh || exit 0
-	chmod +x ${output_dir}/mnt_debootstrap/opt/first_boot.sh
-	echo "$build_time Script for first boot copied to ${output_dir}/mnt_debootstrap/opt/first_boot.sh" >> $logfile_build
-	
 	
 
 	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
