@@ -1,0 +1,13 @@
+ 
+ 
+#############################################
+#         First Stage: Build toolchain      #
+#############################################
+10/25/12 12:00:26 -> Checksum of armv5te-qte-5.0.iso is correct.
+10/25/12 12:00:26 -> ==>File downloaded correctly
+10/25/12 12:00:26 -> Folder /media/eldk-iso mounted successfully.
+*** Installing ./targets/armv5te/eldk-eglibc-i686-arm-toolchain-qte-5.0.tar.bz2
+10/25/12 12:00:26 -> Folder /media/eldk-iso unmounted successfully.
+10/25/12 12:00:26 -> Create a new set.sh file
+Packages to install: i2c-tools makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools wpasupplicant python rsyslog whois time procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl ftp gettext subversion php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd rsync ruby git fakeroot libjpeg62-dev
+You have already installed libncurses5-dev

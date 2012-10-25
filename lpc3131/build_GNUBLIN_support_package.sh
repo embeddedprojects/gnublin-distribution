@@ -24,7 +24,7 @@ export debian_build_path=$root_path/rootfs/debian/debian_install
 export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
 export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 export logfile_build=$root_path/install.log
-
+export eldk_name="eldk-5.0"
 
 # Including settings through an additional file
 source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"
@@ -35,20 +35,20 @@ source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_vers
 
 
 # Get sure that root starts this script #
-user=$(whoami)
-
-if [ "$user" != "root" ]
-then
-	echo "You have to be root in order to start the build process!"
-	exit 0
-fi
+export user=$(whoami)
+env
+#if [ "$user" != "root" ]
+#then
+#	echo "You have to be root in order to start the build process!"
+#	exit 0
+#fi
 
 
 # Install libncurses for using make menuconfig #
 dpkg -l | grep libncurses5-dev >/dev/null
 if [ "$?" != 0 ]
 then
-	apt-get install libncurses5-dev
+	su -m -p -c "apt-get install libncurses5-dev"
 else
 	echo "You have already installed libncurses5-dev" >>$logfile_build
 fi
@@ -94,19 +94,19 @@ fi
 # Now the complete board support package will be built.
 rm -r $logfile_build
 touch $logfile_build
-chmod 0777 $logfile_build
+su -p -m -c "chown $user:$user $logfile_build"
 
 #############################################
 # 1st Stage:Build toolchain                 #
 #############################################
 if [ ! -e $root_path/.stamp_toolchain ]
 then
-	source $root_path/toolchain/build_toolchain.sh || exit 0
+	su -p -m -c "source $root_path/toolchain/build_toolchain.sh" || exit 0
 	touch $root_path/.stamp_toolchain
 fi
 
 
-
+exit 0
 
 # Always set PATH environment but first after building toolchain#
 source $root_path/kernel/set.sh
