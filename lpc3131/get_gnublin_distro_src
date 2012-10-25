@@ -17,10 +17,11 @@ rm -r gnublin-develop-kernel
 
 cd $cur 
 
-find -name *git* -exec rm {} \ ; 
+
+find /tmp/gnublin -name ".git" -exec rm -r {} \; 
 
 cd $cur/gnublin/lpc3131/
 
-tar zc /tmp/gnublin_distro_builder.tar.gz
+tar zc -f /tmp/gnublin_distro_builder.tar.gz *
 
  
