@@ -3,11 +3,44 @@
 #############################################
 #         First Stage: Build toolchain      #
 #############################################
-10/25/12 12:00:26 -> Checksum of armv5te-qte-5.0.iso is correct.
-10/25/12 12:00:26 -> ==>File downloaded correctly
-10/25/12 12:00:26 -> Folder /media/eldk-iso mounted successfully.
-*** Installing ./targets/armv5te/eldk-eglibc-i686-arm-toolchain-qte-5.0.tar.bz2
-10/25/12 12:00:26 -> Folder /media/eldk-iso unmounted successfully.
-10/25/12 12:00:26 -> Create a new set.sh file
+10/25/12 16:19:21 -> Create a new set.sh file
+ 
+ 
+#############################################
+#         2nd Stage: Build bootloader       #
+#############################################
+10/25/12 16:19:21 -> Bootloader install dir extracted to /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/bootloader/apex/1.6.8
+10/25/12 16:19:21 -> Menuconfig called successfully.
+10/25/12 16:19:21 -> apex.bin build successfully.
+10/25/12 16:19:21 -> Bootloader installed successfully.
+ 
+ 
+#############################################
+#         3rd Stage: Build kernel           #
+#############################################
+10/25/12 16:19:21 -> Folder /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/rootfs/debian/debian_install/debian_process created correctly 
+10/25/12 16:19:21 -> Repository cloned correctly 
+10/25/12 16:19:21 -> Kernel from /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/Downloads/gnublin-develop-kernel/linux-2.6.33-lpc313x moved correctly to /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/kernel/linux-2.6.33-lpc313x
+10/25/12 16:19:21 -> Kernelconfig copied correctly!
+10/25/12 16:19:21 -> Make menuconfig called correctly
+10/25/12 16:19:21 -> Kernel compiled successfully
+10/25/12 16:19:21 -> Modules compiled successfully
+10/25/12 16:19:21 -> Kernel installed correctly
+10/25/12 16:19:21 -> Kernel compressed correctly
+ 
+ 
+#############################################
+#         4th Stage: Build rootfs           #
+#############################################
+ 
+ 
+#############################################################
+#         Completion Script at /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/rootfs/debian/debian_install           #
+#############################################################
+10/25/12 16:19:21 -> Script for first boot copied to /home/brenson/Arbeitsflaeche/Studium/01-Praktikum/03-Gnublin-repo/gnublin/lpc3131/rootfs/debian/debian_install/debian_process/build_1351174761/mnt_debootstrap/opt/first_boot.sh
+Packages to install: i2c-tools makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools wpasupplicant python rsyslog whois time procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl ftp gettext subversion php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd rsync ruby git fakeroot libjpeg62-dev
+You have already installed libncurses5-dev
+Packages to install: i2c-tools makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools wpasupplicant python rsyslog whois time procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl ftp gettext subversion php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd rsync ruby git fakeroot libjpeg62-dev
+You have already installed libncurses5-dev
 Packages to install: i2c-tools makedev module-init-tools dhcp3-client netbase ifupdown iproute iputils-ping wget net-tools vim nano hdparm bzip2 p7zip unrar unzip zip p7zip-full screen less usbutils psmisc strace info ethtool wireless-tools wpasupplicant python rsyslog whois time procps perl parted build-essential ccache bison flex autoconf automake gcc libc6 cpp curl ftp gettext subversion php5 gpsd gpsd-clients fswebcam uvccapture lm-sensors firmware-linux-free firmware-linux-nonfree firmware-realtek firmware-ralink firmware-linux firmware-brcm80211 firmware-atheros rcconf cgilib cgiemail cgi-mapserver lrzsz libnss-mdns libpam-modules nscd ssh libpcsclite1 libnl1 nfs-common tree lighttpd vsftpd rsync ruby git fakeroot libjpeg62-dev
 You have already installed libncurses5-dev

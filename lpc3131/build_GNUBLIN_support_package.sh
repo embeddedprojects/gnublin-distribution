@@ -36,7 +36,6 @@ source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_vers
 
 # Get sure that root starts this script #
 export user=$(whoami)
-env
 #if [ "$user" != "root" ]
 #then
 #	echo "You have to be root in order to start the build process!"
@@ -94,7 +93,7 @@ fi
 # Now the complete board support package will be built.
 rm -r $logfile_build
 touch $logfile_build
-su -p -m -c "chown $user:$user $logfile_build"
+chown $user:$user $logfile_build
 
 #############################################
 # 1st Stage:Build toolchain                 #
@@ -106,7 +105,7 @@ then
 fi
 
 
-exit 0
+
 
 # Always set PATH environment but first after building toolchain#
 source $root_path/kernel/set.sh
@@ -143,7 +142,7 @@ fi
 ######################################
 if [ ! -e $root_path/.stamp_rootfs ]
 then
-	source $debian_build_path/build_debian_system.sh
+	su -p -m -c "source $debian_build_path/build_debian_system.sh"
 	touch $root_path/.stamp_rootfs
 fi
 
@@ -160,7 +159,7 @@ then
 
 		
 
-	compress_debian_rootfs || exit 0 # compress the resulting rootfs
+	su -p -m -c "$debian_build_path/compress_debian_rootfs.sh" || exit 0 # compress the resulting rootfs
 	
 	# Copy the most important files #
 	# It's not necessary but better for the user #
