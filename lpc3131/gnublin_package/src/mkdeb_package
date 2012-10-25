@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "$1" = "" ]
+then
+	packages="*"
+else
+	packages="$1"
+fi
+	
+
+
+for i in $packages ; do
+
+	if [ "$i" = "README"  ] || [ "$i" = "mkdeb_package"  ]
+	then
+	continue
+	fi
+chmod -R 0755 $i  
+dpkg -b $i ../deb/${i}.deb
+
+done

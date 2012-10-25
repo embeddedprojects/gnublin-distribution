@@ -1,0 +1,49 @@
+You can also create your own '.deb' package
+
+
+The following shows the structure of a debian package.
+
+├── dog_app-2.0
+│   ├── DEBIAN
+│   │   └── control
+│   └── usr
+│       └── bin
+│           ├── dog-app
+│           ├── dog-app.c
+│           └── dog-example
+
+
+After installation process this structure will be copied to root. This means that you can find the dog-app at /usr/bin/dog-app after installing the '.deb' package.
+
+You will need also the DEBIAN folder with the control file:
+
+Package: dog-app
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 11747
+Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
+Homepage:
+Description: An anpplication for controlling an line based DOGM Display.
+
+
+After building the structure you can build your own '.deb' package with:
+
+dpkg -b dog_app-2.0 debianpackagename.deb
+
+
+
+
+You can also use the implemented Script in this folder for building everything here to a .deb package!
+
+
+
+
+
+
+
+
+
+

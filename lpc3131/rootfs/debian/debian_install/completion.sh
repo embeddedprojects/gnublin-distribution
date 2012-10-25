@@ -22,6 +22,10 @@ echo "#############################################################" >> $logfile
 	echo "alias ll='ls -l --color=auto'" >>	"${output_dir}/mnt_debootstrap/etc/bash.bashrc"
 	echo "alias grep='grep --colour=auto'" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
 	echo "alias ls='ls --color=auto'" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
+	echo "alias la='ls -a --color=auto'" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
+
+	cp -r $root_path/examples/* ${output_dir}/mnt_debootstrap/root/
+	cp -r $root_path/gnublin_package/deb/* ${output_dir}/mnt_debootstrap/root/	
 	
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64
 

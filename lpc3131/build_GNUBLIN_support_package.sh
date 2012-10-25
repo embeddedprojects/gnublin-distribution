@@ -5,8 +5,6 @@
 
 # Parameters 
 export distro_version="max"    								#paste "-min" if you want to build a minimal version of debian.
-#export tmp=$(cat /etc/lsb-release | grep DISTRIB_RELEASE)    #check for current OS Version
-#export host_os_version=${tmp:16:2}
 export filesystem_vers="ext3"
 
 
@@ -15,6 +13,7 @@ export filesystem_vers="ext3"
 #############
 export build_time="$(date '+%D %H:%M:%S') ->"
 export root_path=$(pwd)
+export user=$(whoami)
 export toolchain_path=$root_path/toolchain
 export cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
 export kernel_version=2.6.33
@@ -31,18 +30,6 @@ source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_vers
 
 
 
-
-
-
-# Get sure that root starts this script #
-export user=$(whoami)
-#if [ "$user" != "root" ]
-#then
-#	echo "You have to be root in order to start the build process!"
-#	exit 0
-#fi
-
-
 # Install libncurses for using make menuconfig #
 dpkg -l | grep libncurses5-dev >/dev/null
 if [ "$?" != 0 ]
@@ -57,8 +44,7 @@ fi
 # Only cleaning the whole board-support-package and exit #
 ##########################################################
 if [ "$1" = "clean" ]
-then
-	rm -rf $root_path/kernel/$kernel_name 
+then 
 	rm -rf $debian_installed_files_path 
 	rm -rf $bootloader_install_dir/apex-1.6.8 
 	rm -rf $toolchain_path/armv5te 
@@ -67,6 +53,7 @@ then
 	rm -rf $root_path/tools/gnublin-installer/apex.bin 
 	rm -rf $root_path/tools/gnublin-installer/zImage	
 	rm -rf $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 
+	rm -rf $root_path/gnublin_package/deb/*
 	echo "Successfully cleaned!"
 	# Uninstall also the toolchain	
 	if [ "$2" = "all" ]
@@ -78,6 +65,7 @@ then
 		#if [ "$desicion" = "y" ]
 		#then		
 		#rm -r /opt/eldk-*
+		rm -rf $root_path/kernel/$kernel_name
 		rm -rf $root_path/Downloads/*
 		rm -rf $root_path/output
 		#fi
@@ -155,9 +143,13 @@ then
 	# Correct files (interfaces, passwd)
 	
 		
-	# Copy created .deb packages into rootfs
+	
+	# build .deb packages #
+	cd $root_path/gnublin_package/src/
+	$root_path/gnublin_package/src/mkdeb_package
 
-		
+	# Copy created .deb packages into rootfs
+    
 
 	su -p -m -c "$debian_build_path/compress_debian_rootfs.sh" || exit 0 # compress the resulting rootfs
 	
@@ -168,24 +160,12 @@ then
 	cp $kernel_path/arch/arm/boot/zImage $root_path/output
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
 	
+	 
 
 	# Create stamp #
 	touch $root_path/.stamp_rootfs_post
 fi
 
-
-
-
-## Start Gnublin Installer ##
-#cd $root_path/tools/gnublin-installer/
-#if [ $host_os_version -ge 12 ]
-#then
-#	$root_path/tools/gnublin-installer/gnublin-installer-neu || $root_path/tools/gnublin-installer/gnublin-installer-alt
-	
-#else
-#	$root_path/tools/gnublin-installer/gnublin-installer-alt
-	
-#fi
 
 exit 1
 
