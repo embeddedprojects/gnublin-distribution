@@ -60,7 +60,8 @@ fi
 swapon /swapfile
 exit 0" > /etc/rc.local
 
-echo "Everything done successfull!"
+echo "Everything done successfull! Reboot now..."
+reboot
 
 else
 

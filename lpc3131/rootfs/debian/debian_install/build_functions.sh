@@ -261,7 +261,6 @@ fi
 ## Additional script for cleaning the rootfs from unused .deb packages -BN ##
 /opt/first_boot.sh
 mkswap swapfile
-reboot
 exit 0
 END
 exit" 2>${output_dir}/chroot_1_log.txt
@@ -364,7 +363,6 @@ modprobe ${ramzswap_kernel_module_name} num_devices=1 disksize_kb=${ramzswap_siz
 ## Additional script for cleaning the rootfs from unused .deb packages -BN ##
 /opt/first_boot.sh
 mkswap swapfile
-reboot
 exit 0
 END
 
