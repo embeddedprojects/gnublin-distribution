@@ -21,7 +21,7 @@ cd $cur
 find /tmp/gnublin -name ".git" -exec rm -r {} \; 
 
 cd $cur/gnublin/lpc3131/
-
+rm $cur/gnublin/lpc3131/get_gnublin_distro_src
 tar zc -f /tmp/gnublin_distro_builder.tar.gz *
 
  

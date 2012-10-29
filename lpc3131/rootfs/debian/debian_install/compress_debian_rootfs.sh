@@ -26,16 +26,10 @@ fi
 mount ${output_dir}/${output_filename}.img ${output_dir}/mnt_debootstrap -o loop
 if [ "$?" = "0" ]
 then
-    ######################################################
-    ######################################################
-	### 		GNUBLIN SUPPORT PACKAGE		   		   ###	
-	###           Remove and add some files        -BN ###
-	######################################################
-    ######################################################
+
+    ## Gnublin support package ##
 	source $debian_build_path/completion.sh
-	
-	####################################################
-	
+
 
 	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
 	cd ${output_dir}/mnt_debootstrap

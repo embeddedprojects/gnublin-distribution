@@ -3,15 +3,16 @@
 # Board support package building script
 
 
-# Parameters 
-export distro_version="max"    								#paste "-min" if you want to build a minimal version of debian.
-export filesystem_vers="ext3"
+# Parameters ###################
+export distro_version="max"   #  								#paste "-min" if you want to build a minimal version of debian.
+export filesystem_vers="ext3" #
+################################
 
+###################
+# Other Variables #
+###################
 
-#############
-# Variables #
-#############
-export build_time="$(date '+%D %H:%M:%S') ->"
+export build_time="$(date '+%D %H:%M') ->"
 export root_path=$(pwd)
 export user=$(whoami)
 export toolchain_path=$root_path/toolchain
@@ -25,16 +26,16 @@ export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 export logfile_build=$root_path/install.log
 export eldk_name="eldk-5.0"
 
+
 # Including settings through an additional file
 source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"
-
 
 
 # Install libncurses for using make menuconfig #
 dpkg -l | grep libncurses5-dev >/dev/null
 if [ "$?" != 0 ]
 then
-	su -m -p -c "apt-get install libncurses5-dev"
+	sudo -s -E apt-get install libncurses5-dev
 else
 	echo "You have already installed libncurses5-dev" >>$logfile_build
 fi
@@ -54,23 +55,19 @@ then
 	rm -rf $root_path/tools/gnublin-installer/zImage	
 	rm -rf $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 
 	rm -rf $root_path/gnublin_package/deb/*
-	echo "Successfully cleaned!"
-	# Uninstall also the toolchain	
-	if [ "$2" = "all" ]
-	then	
-		#echo "This step will delete your toolchain installed at /opt/eldk-*"
-		#echo "continue?(y/n)"
-		#read desicion
+	rm -rf $logfile_build
+	
+	
 		
-		#if [ "$desicion" = "y" ]
-		#then		
-		#rm -r /opt/eldk-*
+	if [ "$2" = "all" ]
+	then
 		rm -rf $root_path/kernel/$kernel_name
 		rm -rf $root_path/Downloads/*
 		rm -rf $root_path/output
-		#fi
 	fi
+	echo "Successfully cleaned!"
 	exit 1
+	
 fi
 
 
@@ -88,7 +85,8 @@ chown $user:$user $logfile_build
 #############################################
 if [ ! -e $root_path/.stamp_toolchain ]
 then
-	su -p -m -c "source $root_path/toolchain/build_toolchain.sh" || exit 0
+	 	
+	sudo -s -E source $root_path/toolchain/build_toolchain.sh || exit 0
 	touch $root_path/.stamp_toolchain
 fi
 
@@ -130,7 +128,7 @@ fi
 ######################################
 if [ ! -e $root_path/.stamp_rootfs ]
 then
-	su -p -m -c "source $debian_build_path/build_debian_system.sh"
+	sudo -s -E source $debian_build_path/build_debian_system.sh
 	touch $root_path/.stamp_rootfs
 fi
 
@@ -151,7 +149,7 @@ then
 	# Copy created .deb packages into rootfs
     
 
-	su -p -m -c "$debian_build_path/compress_debian_rootfs.sh" || exit 0 # compress the resulting rootfs
+	sudo -s -E $debian_build_path/compress_debian_rootfs.sh || exit 0 # compress the resulting rootfs
 	
 	# Copy the most important files #
 	# It's not necessary but better for the user #

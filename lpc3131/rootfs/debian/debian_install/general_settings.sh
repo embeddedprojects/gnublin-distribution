@@ -71,8 +71,8 @@ export bootloader_bin_name="apex.bin" # bootloader binary
 
 export tar_format="gz" # bz2(=bzip2) or gz(=gzip)
 
-export output_dir="${output_dir_base}/build_`date +%s`" # Subdirectory for each build-run, ending with the unified Unix-Timestamp (seconds passed since Jan 01 1970)
-
+#export output_dir="${output_dir_base}/build_`date +%j`" # Subdirectory for each build-run, ending with the unified Unix-Timestamp (seconds passed since Jan 01 1970)
+export output_dir="${output_dir_base}/build_rootfs"
 export work_image_size_MB=4096 # size of the temporary image file, in which the installation process is carried out
 
 export output_filename="debian_rootfs_gnublin" # base name of the output file (compressed rootfs)
@@ -100,6 +100,8 @@ else
 fi
 
 echo "Packages to install: $additional_packages" >>$logfile_build
+
+
 
 
 

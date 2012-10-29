@@ -1,10 +1,10 @@
 #!/bin/bash 
 
 # This script installs the eldk-toolchain automaticly.
-
+echo $eldk_name
 #Check if there is a previuos installation of eldk on your computer
 export eldk_version=$(ls /opt/ | grep eldk)
-
+logfile_build=$root_path/install.log
 echo " " >> $logfile_build
 echo " " >> $logfile_build
 echo "#############################################" >> $logfile_build
@@ -25,6 +25,8 @@ then
 
 	#Create only a softlink to your installation
 	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 2>>$logfile_build || exit 0
+	echo "Toolchain already installed!"
+	echo "$build_time Toolchain is already installed on your PC." >> $logfile_build
 	chown $user:$user /opt/$eldk_version/
 	chown $user:$user $toolchain_path/armv5te
 
