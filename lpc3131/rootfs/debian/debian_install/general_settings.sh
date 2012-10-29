@@ -11,8 +11,6 @@
 ##### GENERAL SETTINGS: #####
 #############################
 
-export host_os="Ubuntu" # Debian or Ubuntu (YOU NEED TO EDIT THIS!)
-
 export debian_mirror_url="http://ftp.debian.org/debian/" # mirror for debian
 
 export debian_target_version="squeeze" # The version of debian that you want to build (ATM, 'squeeze', 'wheezy' and 'sid' are supported)

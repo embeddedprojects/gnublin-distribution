@@ -35,9 +35,18 @@ dpkg -b dog_app-2.0 debianpackagename.deb
 
 
 
-
+#########################
+#Using the mkdeb Script:#
+#########################
 You can also use the implemented Script in this folder for building everything here to a .deb package!
 
+You have just to specify the name of your created folder:
+
+If it starts with NODEB_ , no .deb package will be created of this folder.
+
+Start building your .deb packages with:
+
+./mkdeb_package
 
 
 

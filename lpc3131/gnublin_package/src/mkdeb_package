@@ -11,11 +11,17 @@ fi
 
 for i in $packages ; do
 
-	if [ "$i" = "README"  ] || [ "$i" = "mkdeb_package"  ]
+	if [ "$i" = "README"  ] || [ "$i" = "mkdeb_package"  ] || [ "${i:0:6}" = "NODEB_"  ]
 	then
 	continue
 	fi
 chmod -R 0755 $i  
+
+if [ ! -d "../deb" ]
+then 
+	mkdir ../deb/
+fi
+
 dpkg -b $i ../deb/${i}.deb
 
 done

@@ -17,11 +17,16 @@ cd $bootloader_install_dir/apex-1.6.8 || exit 0
 
 
 #With the following command the configuration of your apex bootloader takes place. You should set the correct size of your Gnublin-boards RAM via "Platform Setup -> Choose RAM size"
-make menuconfig || exit 0
-echo "$build_time Menuconfig called successfully." >> $logfile_build
+if [ "$start_mkmenuconfig" = "yes" ]
+then
+	make menuconfig || exit 0
+	echo "$build_time Menuconfig called successfully." >> $logfile_build
+fi
 
 #After configuration, run the following command to make the binary file.
 make apex.bin || exit 0 
 echo "$build_time apex.bin build successfully." >> $logfile_build
 echo "$build_time Bootloader installed successfully." >> $logfile_build
+
+
 

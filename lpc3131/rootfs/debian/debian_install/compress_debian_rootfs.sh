@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Description: Compress the resulting rootfs
 source $debian_build_path/build_functions.sh
 
@@ -15,12 +16,12 @@ then
 	else
 		fn_my_echo "ERROR: State of Temporary filesystem is NOT OK! Exiting now."
 		umount_img all
-		exit 60
+		exit 0
 	fi
 else
 	fn_my_echo "ERROR: Image file still mounted. Exiting now!"
 	umount_img all
-	exit 61
+	exit 0
 fi
 
 mount ${output_dir}/${output_filename}.img ${output_dir}/mnt_debootstrap -o loop
@@ -49,7 +50,7 @@ Please check! Only valid entries are 'bz2' or 'gz'. Could not compress the Rootf
 else
 	fn_my_echo "ERROR: Image file could not be remounted correctly. Exiting now!"
 	umount_img all
-	exit 62
+	exit 0
 fi
 
 umount ${output_dir}/mnt_debootstrap
@@ -65,12 +66,12 @@ elif [ "$?" = "0" ] && [ "${clean_tmp_files}" = "yes" ]
 then
 	fn_my_echo "Directory '${output_dir}/mnt_debootstrap' is still mounted, so it can't be removed. Exiting now!"
 	umount_img all
-	exit 15
+	exit 0
 elif [ "$?" = "0" ] && [ "${clean_tmp_files}" = "no" ]
 then
 	fn_my_echo "Directory '${output_dir}/mnt_debootstrap' is still mounted, please check. Exiting now!"
 	umount_img all
-	exit 16
+	exit 0
 fi
 
 fn_my_echo "Rootfs successfully DONE!"

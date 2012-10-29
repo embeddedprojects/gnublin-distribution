@@ -29,25 +29,37 @@ source $debian_build_path/build_functions.sh		 # functions called by this main b
 
 
 check_priviliges # check if the script was run with root priviliges
-
-mkdir -p ${output_dir} # main directory for the build process
-if [ "$?" = "0" ]
+if [ ! -d "${output_dir}" ]
 then
+	mkdir -p ${output_dir} # main directory for the build process
 	echo "Output directory '${output_dir}' successfully created."
 else
-	echo "ERROR while trying to create the output directory '${output_dir}'. Exiting now!"
-	exit 1
+	echo "Output directory '${output_dir}' already created."
 fi
 
+#if [ "$?" = "0" ]
+#then
+#	echo "Output directory '${output_dir}' successfully created."
+#else
+#	echo "ERROR while trying to create the output directory '${output_dir}'. Exiting now!"
+#	exit 1
+#fi
 
-mkdir ${output_dir}/tmp # subdirectory for all downloaded or local temporary files
-if [ "$?" = "0" ]
+if [ ! -d "${output_dir}/tmp" ]
 then
+	mkdir ${output_dir}/tmp # subdirectory for all downloaded or local temporary files
 	echo "Subfolder 'tmp' of output directory '${output_dir}' successfully created."
 else
-	echo "ERROR while trying to create the 'tmp' subfolder '${output_dir}/tmp'. Exiting now!"
-	exit 2
+	echo "Output directory '${output_dir}/tmp' already created."
 fi
+
+#if [ "$?" = "0" ]
+#then
+#	echo "Subfolder 'tmp' of output directory '${output_dir}' successfully created."
+#else
+#	echo "ERROR while trying to create the 'tmp' subfolder '${output_dir}/tmp'. Exiting now!"
+#	exit 2
+#fi
 
 check_n_install_prerequisites # see if all needed packages are installed and if the versions are sufficient
 

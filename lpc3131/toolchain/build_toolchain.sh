@@ -1,9 +1,8 @@
 #!/bin/bash 
 
 # This script installs the eldk-toolchain automaticly.
-echo $eldk_name
 #Check if there is a previuos installation of eldk on your computer
-export eldk_version=$(ls /opt/ | grep eldk)
+export eldk_version=$(ls /opt/ | grep --max-count=1 eldk) 
 logfile_build=$root_path/install.log
 echo " " >> $logfile_build
 echo " " >> $logfile_build
@@ -35,16 +34,19 @@ then
 	#echo if you have already installed the toolchain in your toolchain directory
 	echo "Toolchain already installed!"
 	echo "$build_time Toolchain is already installed on your PC." >> $logfile_build 
-		
+	exit 1	
 
 else
 	#Install the toolchain
 
 	if [ ! -d "$root_path/Downloads" ]
 	then
-    	mkdir $root_path/Downloads
-		mkdir /opt/$eldk_name
-		chown $user:$user /opt/$eldk_name
+    	mkdir $root_path/Downloads || exit 0
+		chown $user:$user $root_path/Downloads
+		mkdir /opt/$eldk_name || exit 0
+		chown $user:$user /opt/$eldk_name 
+		echo "$build_time Folder $root_path/Downloads created successfully." >> $logfile_build 
+		echo "$build_time Folder /opt/$eldk_name created successfully." >> $logfile_build 
 	fi
 
     cd $root_path/Downloads 
@@ -54,21 +56,22 @@ else
 	#Downloading the ELDK 5.0 iso if you dont have it
 	if [ ! -f "$root_path/Downloads/armv5te-qte-5.0.iso" ]
 	then
-    	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso || exit 0 
+    	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/armv5te-qte-5.0.iso || exit 0
+		echo "$build_time Toolchain downloaded successfully." >> $logfile_build  
 	fi
 	
 
 	# Calculate Checksum # 
-	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/iso.sha256
-	sha256sum armv5te-qte-5.0.iso > $root_path/Downloads/armv5te-qte-5.0.sha256
+	wget ftp://ftp.denx.de/pub/eldk/5.0/iso/iso.sha256 || exit 0
+	sha256sum armv5te-qte-5.0.iso > $root_path/Downloads/armv5te-qte-5.0.sha256 || exit 0
 	export diff_tmp=$(diff $root_path/Downloads/armv5te-qte-5.0.sha256 $root_path/Downloads/iso.sha256)	
 	
 	#echo "testvar===>$diff_tmp"
 	if [ -n "$diff_tmp"  ]
 	then 
-		 echo "$build_time Checksum error in armv5te-qte-5.0.iso." >> $logfile_build
-		 exit 0	
-		 rm $root_path/Downloads/armv5te-qte-5.0.sha256
+		 echo "$build_time Checksum error in armv5te-qte-5.0.iso." >> $logfile_build	
+		 rm -rf $root_path/Downloads/armv5te-qte-5.0.sha256
+		 exit 0
 	fi
 		 echo "$build_time Checksum of armv5te-qte-5.0.iso is correct." >> $logfile_build
 		 echo "$build_time ==>File downloaded correctly" >> $logfile_build
@@ -76,7 +79,7 @@ else
 
 	
 	cd /media 
-    su -m -p -c "mkdir eldk-iso"
+    mkdir eldk-iso
 	
 
 	# Mount the iso file
@@ -125,3 +128,6 @@ then
 	 export PATH=\$P1:\$P2:\$PATH " > $root_path/kernel/set.sh
 
 fi
+
+
+exit 1 # everything ok
