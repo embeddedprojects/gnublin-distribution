@@ -1,0 +1,10 @@
+Package: socketcan-full
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 447
+Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
+Homepage:
+Description: An anpplication for using the CAN-Utils with MCP2515.
