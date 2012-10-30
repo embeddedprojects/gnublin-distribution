@@ -8,7 +8,7 @@ export distro_version="max"     # paste "-min" if you want to build a minimal ve
 export filesystem_vers="ext3"   # choose the final type of your filesystem setting
 export host_os="Ubuntu"         # Debian or Ubuntu (YOU NEED TO EDIT THIS!)
 export eldk_name="eldk-5.0"     # not important for now
-export start_mkmenuconfig="yes" # start make menuconfig (Bootloader and kernel) Say "no" if you dont want to start make menuconfig
+export start_mkmenuconfig="no"  # start make menuconfig (Bootloader and kernel) Say "no" if you dont want to start make menuconfig
 ##################################
 
 
@@ -84,6 +84,13 @@ chown $user:$user $logfile_build
 sudo -s -E apt-get install git make libncurses5-dev g++ dpkg-dev || exit 0
 
 echo "$build_time All necessary packages installed." >> $logfile_build
+
+# Create output folder #
+if [ ! -d "$root_path/output" ]
+then	
+	mkdir $root_path/output	
+fi	
+
 
 #############################################
 # 1st Stage:Build toolchain                 #
@@ -166,10 +173,7 @@ then
 	
 	# Copy the most important files #
 	# It's not necessary but better for the user to find all final created files at the same place #
-	if [ ! -d "$root_path/output" ]
-	then	
-		mkdir $root_path/output	
-	fi	
+	
 	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
 	cp $kernel_path/arch/arm/boot/zImage $root_path/output
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
