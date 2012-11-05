@@ -57,7 +57,8 @@ fi
 
 	#Change to kernel directory and copy .config
 	cd $root_path/kernel/$kernel_name
-	cp $root_path/kernel/$kernel_name/config_backup $root_path/kernel/$kernel_name/.config || exit 0
+	#cp $root_path/kernel/$kernel_name/config_backup $root_path/kernel/$kernel_name/.config || exit 0
+	cp $root_path/kernel/$kernel_name/arch/arm/configs/gnublin_defconfig $root_path/kernel/$kernel_name/.config || exit 0
 	echo "$build_time Kernelconfig copied correctly!" >> $logfile_build
 	
 
@@ -80,6 +81,8 @@ fi
 	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name * || exit 0
 	echo "$build_time Kernel compressed correctly" >> $logfile_build
 	cd $cur_path
+	cp $kernel_path/arch/arm/boot/zImage $root_path/output
+	cp $root_path/kernel/$kernel_name/lib/modules/* $root_path/output
 #fi
 
 

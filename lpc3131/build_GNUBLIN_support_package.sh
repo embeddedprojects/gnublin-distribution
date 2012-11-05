@@ -175,7 +175,7 @@ then
 	# It's not necessary but better for the user to find all final created files at the same place #
 	
 	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
-	cp $kernel_path/arch/arm/boot/zImage $root_path/output
+	
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
 	
 	 
