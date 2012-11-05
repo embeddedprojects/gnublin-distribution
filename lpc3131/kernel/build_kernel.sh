@@ -81,8 +81,8 @@ fi
 	tar -zc -f $cur_path/debian_process/$std_kernel_pkg_name * || exit 0
 	echo "$build_time Kernel compressed correctly" >> $logfile_build
 	cd $cur_path
-	cp $kernel_path/arch/arm/boot/zImage $root_path/output
-	cp $root_path/kernel/$kernel_name/lib/modules/* $root_path/output
+	cp -r $kernel_path/arch/arm/boot/zImage $root_path/output
+	cp -r $root_path/kernel/$kernel_name/lib/modules/* $root_path/output
 #fi
 
 
