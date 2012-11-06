@@ -35,6 +35,8 @@ echo "NFS removed successfull." >> tmp.txt
 update-rc.d rsync remove
 echo "RSYNC removed successfull." >> tmp.txt
 
+update-rc.d udev remove
+echo "RSYNC removed successfull." >> tmp.txt
 
 mv /opt/tmp.txt /opt/.success
 

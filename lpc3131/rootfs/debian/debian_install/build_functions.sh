@@ -232,10 +232,10 @@ iface lo inet loopback
 iface eth0 inet dhcp
 END
 
-echo gnublin-debian > /etc/hostname 2>>/deboostrap_stg2_errors.txt
+echo gnublin > /etc/hostname 2>>/deboostrap_stg2_errors.txt
 
 echo \"127.0.0.1 localhost\" >> /etc/hosts 2>>/deboostrap_stg2_errors.txt
-echo \"127.0.0.1 gnublin-debian\" >> /etc/hosts 2>>/deboostrap_stg2_errors.txt
+echo \"127.0.0.1 gnublin\" >> /etc/hosts 2>>/deboostrap_stg2_errors.txt
 echo \"nameserver ${nameserver_addr}\" > /etc/resolv.conf 2>>/deboostrap_stg2_errors.txt
 
 cat <<END > /etc/rc.local 2>>/deboostrap_stg2_errors.txt

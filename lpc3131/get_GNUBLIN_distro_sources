@@ -23,8 +23,8 @@ git clone http://code.google.com/p/gnublin-develop-kernel/
 cd $cur 
 
 
-find /tmp/gnublin -name ".git" -exec rm -r {} \; 
-#rm -r `find /tmp/gnublin -name ".git"`
+#find /tmp/gnublin -name ".git" -exec rm -r {} \; 
+rm -r `find /tmp/gnublin -name ".git"`
 
 cd $cur/gnublin/lpc3131/
 rm $cur/gnublin/lpc3131/get_gnublin_distro_src
