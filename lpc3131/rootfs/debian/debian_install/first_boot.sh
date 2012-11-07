@@ -12,31 +12,40 @@ echo "After this process the system is going down for reboot!..."
 touch /opt/tmp.txt
 
 update-rc.d apache2 remove
-echo "Apache removed successfull." > tmp.txt
+echo "Apache removed successfull." 
 
 update-rc.d avahi-daemon remove
-echo "Avahi removed successfull." >> tmp.txt
+echo "Avahi removed successfull." 
 
 update-rc.d gpsd remove
-echo "GPSD removed successfull." >> tmp.txt
+echo "GPSD removed successfull."
 
 update-rc.d lighttpd remove
-echo "Lighttp removed successfull." >> tmp.txt
+echo "Lighttp removed successfull." 
 
 update-rc.d nscd remove
-echo "NSCD removed successfull." >> tmp.txt
+echo "NSCD removed successfull."
 
 update-rc.d vsftpd remove
-echo "VSFTP removed successfull." >> tmp.txt
+echo "VSFTP removed successfull." 
 
 update-rc.d nfs-common remove
-echo "NFS removed successfull." >> tmp.txt
+echo "NFS removed successfull." 
 
 update-rc.d rsync remove
-echo "RSYNC removed successfull." >> tmp.txt
+echo "RSYNC removed successfull." 
 
 update-rc.d udev remove
-echo "RSYNC removed successfull." >> tmp.txt
+echo "udev removed successfull." 
+
+update-rc.d udev-mtab remove
+echo "udev-mtab removed successfull."
+
+update-rc.d alsa-utils remove
+echo "alsa-utils removed successfull."
+
+dpkg -r --ignore-depends=alsa-utils udev
+echo "udev completely removed." 
 
 mv /opt/tmp.txt /opt/.success
 

@@ -58,11 +58,13 @@ fi
 	#Change to kernel directory and copy .config
 	cd $root_path/kernel/$kernel_name
 	#cp $root_path/kernel/$kernel_name/config_backup $root_path/kernel/$kernel_name/.config || exit 0
-	cp $root_path/kernel/$kernel_name/arch/arm/configs/gnublin_defconfig $root_path/kernel/$kernel_name/.config || exit 0
+	#cp $root_path/kernel/$kernel_name/arch/arm/configs/gnublin_defconfig $root_path/kernel/$kernel_name/.config || exit 0
 	echo "$build_time Kernelconfig copied correctly!" >> $logfile_build
 	
 
 	#gnublin kernel build process
+	make gnublin_defconfig	
+	
 	if [ "$start_mkmenuconfig" = "yes" ]
 	then	
 		make menuconfig || exit 0
