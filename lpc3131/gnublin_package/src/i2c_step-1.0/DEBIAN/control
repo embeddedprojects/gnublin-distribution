@@ -1,0 +1,10 @@
+Package: i2c-step
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 10
+Maintainer: Eduard Tasnadi-Olescher
+Homepage: http://wiki.gnublin.org/
+Description: An anpplication for controlling the TCM222 stepper motor.

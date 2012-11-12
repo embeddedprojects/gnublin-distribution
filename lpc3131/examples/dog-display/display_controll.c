@@ -46,6 +46,7 @@ char *string_display = "Default String";
 long int write_speed = 120000;
 int fd;
 int shift_val, c, cursor_offset, curs_auto_dec;
+char *pinnumber="14";
 int hflag, modeflag, cursorflag, displayflag, shiftflag, initflag = 0;
 static uint8_t mode;
 static uint8_t bits = 8;
@@ -140,7 +141,7 @@ static void transfer(int fd)
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"amnhw:l:d:o:s:p:")) != -1)
+	while((c = getopt(argc,argv,"amnhw:l:d:o:s:p:i:")) != -1)
 	{
 		switch(c)
 		{
@@ -153,6 +154,7 @@ void parse_opts(int argc, char **argv)
 			case 's' : shift_val = atoi(optarg);shiftflag = 1;  break;
 			case 'a' : curs_auto_dec = 1;                       break;
 			case 'p' : write_speed = atoi(optarg);              break;
+			case 'i' : pinnumber =  optarg;				break;
 		}
 
 	}
@@ -172,6 +174,9 @@ void parse_opts(int argc, char **argv)
 		 "  -a            Change auto increment of cursor           \n"
 		 "                to auto decrement(for this command)       \n"
 		 "  -p            Change the writing speed(Higher = slower) \n"
+		 "				  default=120000;max=(2^65)-1				\n"
+		 "  -i 			  Use GPIO Pin x instead default GPIO Pin 14\n"
+		 "				  (For RS Pin on DOGM Display				\n"
 		 "All operations except [-w -o -s] and [-o -s] are allowed\n");
 	exit(1);
 		
@@ -180,7 +185,7 @@ void parse_opts(int argc, char **argv)
 #ifdef DEBUG	
 	/* debugging */
 	printf("string_display:%s\n",string_display);
-	printf("string_line:%s\n",string_line);
+	//printf("string_line:%s\n",string_line);
 	printf("devie_file:%s\n",device_file);
 	printf("cursor_offset:%d \n",cursor_offset);
 #endif	
@@ -376,8 +381,12 @@ int main(int argc, char **argv)
 
 	parse_opts(argc, argv);
 	
+	setenv("GPIO_PIN",pinnumber,1);
+	system("echo $GPIO_PIN");
 	
-
+	system("echo $GPIO_PIN > /sys/class/gpio/export");
+	system("echo low > /sys/class/gpio/gpio$GPIO_PIN/direction");
+	
 	fd = open(device_file, O_RDWR);
 	if (fd < 0)
 		pabort("can't open device");
@@ -388,10 +397,16 @@ int main(int argc, char **argv)
 	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1)
 		pabort("can't set spi mode");
-
+#ifdef DEBUG
+	printf("spi wr mode passed");
+#endif
+	
 	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1)
 		pabort("can't get spi mode");
+#ifdef DEBUG
+    printf("spi rd mode passed");
+#endif
 
 	/*
 	 * bits per word
@@ -399,21 +414,34 @@ int main(int argc, char **argv)
 	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't set bits per word");
+#ifdef DEBUG
+    printf("spi wr bits per word passed");
+#endif
 
 	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't get bits per word");
-
-	/*
+#ifdef DEBUG
+    printf("spi wrd bits per word passed");
+#endif
+	
+    /*
 	 * max speed hz
 	 */
 	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
 		pabort("can't set max speed hz");
+#ifdef DEBUG
+    printf("spi set wr max speed passed");
+#endif
 
 	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
 		pabort("can't get max speed hz");
+#ifdef DEBUG
+    printf("spi set wr max speed passed");
+#endif
+
 
 	printf("spi mode: %d\n", mode);
 	printf("bits per word: %d\n", bits);
@@ -423,8 +451,8 @@ int main(int argc, char **argv)
 	/* Do not init the display, maybe you only want to make a shift operation ? */
 	if(initflag)
 	{	
-		/* Display init */			
-		if((system("echo 0 >/sys/class/gpio/$GPIO_PIN/value")) != 0)
+		/* Display initialisation */			
+		if((system("echo 0 >/sys/class/gpio/gpio$GPIO_PIN/value")) != 0)
 		{		
 			printf("export GPIO_PIN=gpio[x] may help\n");
 			return -1;
@@ -449,10 +477,10 @@ int main(int argc, char **argv)
 			
 	
 			/* Make ready for Data transfer */
-			system("echo 1 >/sys/class/gpio/$GPIO_PIN/value"); 
+			system("echo 1 >/sys/class/gpio/gpio$GPIO_PIN/value"); 
 			fill_tx_real();
 			
-			system("echo 0 >/sys/class/gpio/$GPIO_PIN/value");
+			system("echo 0 >/sys/class/gpio/gpio$GPIO_PIN/value");
 		}
 
 		/* Only set cursor to position cursor_offset */		
@@ -471,10 +499,10 @@ int main(int argc, char **argv)
 			
 			
 			/* Make ready for Data transfer */
-			system("echo 1 >/sys/class/gpio/$GPIO_PIN/value"); 
+			system("echo 1 >/sys/class/gpio/gpio$GPIO_PIN/value"); 
 			fill_tx_real();
 			
-			system("echo 0 >/sys/class/gpio/$GPIO_PIN/value");
+			system("echo 0 >/sys/class/gpio/gpio$GPIO_PIN/value");
 		}		
 		
 		/* Only perform shift operation defined with shift_val */		
@@ -489,10 +517,10 @@ int main(int argc, char **argv)
 		if(displayflag & shiftflag & !cursorflag)
 		{
 			/* Make ready for Data transfer */
-			system("echo 1 >/sys/class/gpio/$GPIO_PIN/value"); 
+			system("echo 1 >/sys/class/gpio/gpio$GPIO_PIN/value"); 
 			fill_tx_real();
 			
-			system("echo 0 >/sys/class/gpio/$GPIO_PIN/value");
+			system("echo 0 >/sys/class/gpio/gpio$GPIO_PIN/value");
 
 			usleep(500000);
 			shift(shift_val);
