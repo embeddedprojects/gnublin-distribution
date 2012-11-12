@@ -29,6 +29,9 @@ rm -r `find /tmp/gnublin -name ".git"`
 cd $cur/gnublin/lpc3131/
 rm $cur/gnublin/lpc3131/get_gnublin_distro_src
 $cur/gnublin/lpc3131/build_GNUBLIN_support_package.sh
+cd $cur/gnublin/lpc3131/output
+
+tar zc -f /tmp/gnublin_distro.tar.gz *
 tar zc -f /tmp/gnublin_distro_complete.tar.gz *
 
 

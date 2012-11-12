@@ -21,14 +21,14 @@ fi
 
 #Starting the "embedded projects" app
 
-./display_test -w "embedded" -n
-./display_test -w "projects" -o 194  
-./display_test -s "+5"
-./display_test -s "-5"
-./display_test -n
-./display_test -w "First Display App in use" -o 128
-./display_test -s -10
-./display_test -n -s 10
+dog-app -w "embedded" -n
+dog-app -w "projects" -o 194  
+dog-app -s "+5"
+dog-app -s "-5"
+dog-app -n
+dog-app -w "First Display App in use" -o 128
+dog-app -s -10
+dog-app -n -s 10
 
 
 
