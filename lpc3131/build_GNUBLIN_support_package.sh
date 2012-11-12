@@ -51,7 +51,7 @@ then
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/apex.bin 
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/zImage	
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 
-	sudo -s -E rm -rf $root_path/gnublin_package/deb/*
+	#sudo -s -E rm -rf $root_path/gnublin_package/deb/*
 	sudo -s -E rm -rf $logfile_build
 	
 	
