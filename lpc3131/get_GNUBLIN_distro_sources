@@ -32,6 +32,9 @@ $cur/gnublin/lpc3131/build_GNUBLIN_support_package.sh
 cd $cur/gnublin/lpc3131/output
 
 tar zc -f /tmp/gnublin_distro.tar.gz *
+
+cd $cur/gnublin/lpc3131/
+rm $cur/gnublin/lpc3131/get_gnublin_distro_src
 tar zc -f /tmp/gnublin_distro_complete.tar.gz *
 
 

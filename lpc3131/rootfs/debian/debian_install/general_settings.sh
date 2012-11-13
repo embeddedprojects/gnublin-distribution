@@ -54,7 +54,7 @@ export ramzswap_size_kb="3072" # size of the ramzswap device in KB
 
 export ramzswap_kernel_module_name="ramzswap" # name of the ramzswap kernel module (could have a different name on newer kernel versions)
 
-export vm_swappiness="100" # Setting for general kernel RAM swappiness: With RAMzswap and low RAM, a high number (like 100) could be good. Default in Linux mostly is 60.
+export vm_swappiness="60" # Setting for general kernel RAM swappiness: With RAMzswap and low RAM, a high number (like 100) could be good. Default in Linux mostly is 60.
 
 export i2c_hwclock="no" # say "yes" here, if you connected a RTC to your gnublin board, otherwise say "no"
 
@@ -72,7 +72,7 @@ export tar_format="gz" # bz2(=bzip2) or gz(=gzip)
 
 #export output_dir="${output_dir_base}/build_`date +%j`" # Subdirectory for each build-run, ending with the unified Unix-Timestamp (seconds passed since Jan 01 1970)
 export output_dir="${output_dir_base}/build_rootfs"
-export work_image_size_MB=4096 # size of the temporary image file, in which the installation process is carried out
+export work_image_size_MB=2048 # size of the temporary image file, in which the installation process is carried out
 
 export output_filename="debian_rootfs_gnublin" # base name of the output file (compressed rootfs)
 
