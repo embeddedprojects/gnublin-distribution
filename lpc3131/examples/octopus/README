@@ -1,0 +1,8 @@
+Originales Demo Programm von
+    octopus_at90/v1.0_hut_octopus/projekte/adc
+
+usb.h
+    Header Datei von libusb-0.1.12.
+
+octopus.h
+    Header Datei von der liboctopus.
