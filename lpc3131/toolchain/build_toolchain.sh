@@ -113,6 +113,27 @@ fi
 
 if [ ! -e "$root_path/kernel/set.sh" ]
 then
+
+# Creating set.sh for eldk v5.2.1
+
+  if [ $eldk_version = "eldk-5.2.1"]
+  then
+	#Create the set.sh file
+	echo "$build_time Create a new set.sh file" >> $logfile_build	
+	
+	touch $root_path/kernel/set.sh
+	chmod 0777 $root_path/kernel/set.sh
+
+
+	echo     "	 P1=$toolchain_path/armv5te/sysroots/i686-eldk-linux/usr/bin/armv5te-linux-gnueabi/
+	 P2=$toolchain_path/armv5te/sysroots/i686-eldk-linux/bin/armv5te-linux-gnueabi/
+
+	 export ARCH=arm 
+	 export CROSS_COMPILE=arm-linux-gnueabi-
+	 export PATH=\$P1:\$P2:\$PATH " > $root_path/kernel/set.sh
+
+# Creating set.sh for older version of eldk
+   else
 	#Create the set.sh file
 	echo "$build_time Create a new set.sh file" >> $logfile_build	
 	

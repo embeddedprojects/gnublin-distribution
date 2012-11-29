@@ -41,11 +41,6 @@ echo "udev removed successfull."
 update-rc.d udev-mtab remove
 echo "udev-mtab removed successfull."
 
-update-rc.d alsa-utils remove
-echo "alsa-utils removed successfull."
-
-dpkg -r --ignore-depends=alsa-utils udev
-echo "udev completely removed." 
 
 mv /opt/tmp.txt /opt/.success
 
