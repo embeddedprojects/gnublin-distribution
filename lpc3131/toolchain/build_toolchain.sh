@@ -23,7 +23,7 @@ if [ -d "/opt/$eldk_version" ]
 then
 
 	#Create only a softlink to your installation
-	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 2>>$logfile_build || exit 0
+	ln -s /opt/$eldk_version/armv5te $toolchain_path/armv5te 2>>$logfile_build
 	echo "Toolchain already installed!"
 	echo "$build_time Toolchain is already installed on your PC." >> $logfile_build
 	chown $user:$user /opt/$eldk_version/
