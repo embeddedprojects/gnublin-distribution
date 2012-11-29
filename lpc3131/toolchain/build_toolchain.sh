@@ -149,6 +149,7 @@ then
 	 export PATH=\$P1:\$P2:\$PATH " > $root_path/kernel/set.sh
 
 fi
+fi
 
 
 exit 1 # everything ok
