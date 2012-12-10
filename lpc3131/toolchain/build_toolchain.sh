@@ -116,7 +116,7 @@ then
 
 # Creating set.sh for eldk v5.2.1
 
-  if [ $eldk_version = "eldk-5.2.1"]
+  if [ $eldk_version = "eldk-5.2.1" ]
   then
 	#Create the set.sh file
 	echo "$build_time Create a new set.sh file" >> $logfile_build	

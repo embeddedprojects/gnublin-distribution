@@ -81,7 +81,9 @@ touch $logfile_build
 chown $user:$user $logfile_build
 
 # Install utils for using make menuconfig #
-sudo -s -E apt-get install git make libncurses5-dev g++ dpkg-dev || exit 0
+sudo -s -E apt-get install make libncurses5-dev g++ dpkg-dev 
+sudo -s -E apt-get install git
+sudo -s -E apt-get install git-core
 
 echo "$build_time All necessary packages installed." >> $logfile_build
 
