@@ -1,7 +1,7 @@
 
 #! /bin/sh
 
-
+swapon /swapfile
 
 if [ ! -f /opt/.success  ]
 then
