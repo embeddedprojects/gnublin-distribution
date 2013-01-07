@@ -1,4 +1,4 @@
-Package: i2c-step
+Package: gnublin-tmc
 Version: 0.0.1-1
 Section: misc
 Priority: extra

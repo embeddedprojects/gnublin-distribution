@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Wrapper Script for reading values from the internal lpc3131 AD converter
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+channel="1"
+result=""
+json_f="0"
+devfile="/dev/adc"
+helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
+-h			Show this help
+-j			Convert output to json format
+-c			Select gpa<x> Pin (0 - 3 are valid and 1 is default)
+-d			Choose Path to device file
+
+Example:
+
+./gnublin-adcint -j -c 2     <- this command reads the value from channel <2> of the adc controller and prints the output in json compatible format.'
+
+
+check_channel() {
+	if [ "$1" -gt "3" ]
+	then
+		echo "channel is not valid"
+	fi 
+}
+
+
+
+
+while getopts c:d:jh opt
+ do
+      case $opt in
+          c) channel="${OPTARG}" ;;
+          d) devfile="${OPTARG}" ;;
+          j) json_f="1" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+check_channel $channel
+
+if [ ! -c $devfile ]
+then
+	echo "File: $devfile was not found"
+	exit 1
+fi
+
+
+
+echo "$channel" > "$devfile" 
+tmp=$(cat "$devfile")
+let result="${tmp}" 
+ echo $result
+
+
+
+
+if [ "$json_f" == "1" ]
+then
+    echo "{result:$result}"
+else
+    echo $result
+fi 
+
+
+
