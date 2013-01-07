@@ -1,0 +1,38 @@
+Autor: Michael Schwarz (misc)
+Datum: 20.12.2011 10:37
+Angehängte Dateien:
+
+    adc-module-bin.tar.gz (1,5 MB, 4 Downloads)
+    adc-module-src.tar.gz (2,8 KB, 4 Downloads)
+
+@Benedikt: Ja kannst du gerne ins Wiki stellen.
+
+Mit dem Header hast du völlig recht, das war nur schnell zum Probieren
+gedacht. Es ist auch nicht besonders effizient, da bei jedem Pin Zugriff
+die Datei geöffnet, geschrieben und geschlossen wird.
+Besser wäre es, die Datei am Anfang zu öffnen und dann mit rewind()
+immer wieder an den Anfang der Datei zu gehen und sie erst am Ende zu
+schließen.
+
+Ich habe jetzt das ADC Kernel-Modul fertiggestellt. Es unterstützt den
+Single Conversion Mode mit 10bit Auflösung für alle drei herausgeführten
+ADC Kanäle.
+
+Das Modul wird mit "insmod adc-module.ko" eingefügt (wenn ihr das fertig
+kompilierte Modul aus "adc-module-bin.tar.gz" verwendet, müsst ihr auch
+meinen Kernel verwenden)
+
+Das Modul erstellt die drei Devices /proc/adc0, /proc/adc1 und
+/proc/adc3. Jedesmal wenn von einem dieser Devices gelesen wird, führt
+der ADC eine A/D Wandlung durch und liefert das Ergebnis zurück.
+
+Testen kann man das z.B. mit "cat /proc/adc0 | od -i -An | tr -d ' '"
+
+Achtung: Die maximale Eingangsspannung des ADC ist 3.3V!
+
+Wer das Modul selbst kompilieren will, muss zuerst noch den Kernel Patch
+anwenden, der die Register des ADC definiert:
+"cd linux-2.6.33-lpc313x/
+patch -p1 < ../adc-registers.patch"
+
+
