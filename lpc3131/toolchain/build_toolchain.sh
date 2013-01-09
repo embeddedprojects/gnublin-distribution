@@ -151,5 +151,7 @@ then
 fi
 fi
 
-
+if [ "$nightly_build" != "yes" ]
+then
 exit 1 # everything ok
+fi

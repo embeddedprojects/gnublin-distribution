@@ -12,13 +12,19 @@ export start_mkmenuconfig="no"  # start make menuconfig (Bootloader and kernel).
 ##################################
 
 
+########################################
+#Check if nightly_build_mode is selected
+########################################
+if [ "$1" = "nightly_build" ]
+then
+export nightly_build="yes"
+fi
 
 
 ###################
 # Other Variables #
 ###################
 export build_time="$(date '+%D %H:%M') ->"
-export root_path=$(pwd)
 export user=$(whoami)
 export toolchain_path=$root_path/toolchain
 export cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
@@ -29,6 +35,15 @@ export debian_build_path=$root_path/rootfs/debian/debian_install
 export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
 export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 export logfile_build=$root_path/install.log
+
+
+#Some additions for the nightly_build
+if [ "$nightly_build" = "yes" ]
+then
+export export root_path="/home/eproo/Desktop/nightly_build_gnublin_distribution/gnublin/lpc3131"    #This path must be edited to fit your directory structure if you want to use the nightly_build
+else
+export root_path=$(pwd)
+fi
 
 
 # Include settings through an additional file
@@ -53,7 +68,8 @@ then
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 
 	#sudo -s -E rm -rf $root_path/gnublin_package/deb/*
 	sudo -s -E rm -rf $logfile_build
-	
+	sudo -s -E rm -rf $root_path/output
+
 	
 		
 	if [ "$2" = "all" ]
@@ -61,6 +77,9 @@ then
 		sudo -s -E rm -rf $root_path/kernel/$kernel_name
 		sudo -s -E rm -rf $root_path/Downloads/*
 		sudo -s -E rm -rf $root_path/output
+		if [ -d $root_path/backup ]; then
+                sudo -s -E rm -rf $root_path/backup
+		fi
 	fi
 	echo "Successfully cleaned!"
 	exit 1
@@ -79,6 +98,9 @@ fi
 rm -r $logfile_build
 touch $logfile_build
 chown $user:$user $logfile_build
+
+echo "$PATH" >> $logfile_build
+echo "$(env)" >> $logfile_build
 
 # Install utils for using make menuconfig #
 sudo -s -E apt-get install make libncurses5-dev g++ dpkg-dev 
@@ -99,13 +121,19 @@ fi
 #############################################
 if [ ! -e $root_path/.stamp_toolchain ]
 then
-	 	
-	sudo -s -E source $root_path/toolchain/build_toolchain.sh
-	if [ "$?" = "0" ]
+	if [ "$nightly_build" = "yes" ]
 	then
-		echo "$build_time An error ocured during build_toolchain." >> $logfile_build 
-		echo "ERROR while building toolchain"
-		exit 0
+		source $root_path/toolchain/build_toolchain.sh
+	else
+
+		sudo -s -E source $root_path/toolchain/build_toolchain.sh
+		if [ "$?" = "0" ]
+		then
+			echo "$build_time An error ocured during build_toolchain." >> $logfile_build 
+			echo "ERROR while building toolchain"
+			exit 0
+		fi
+
 	fi
 	touch $root_path/.stamp_toolchain
 fi
@@ -148,7 +176,12 @@ fi
 ######################################
 if [ ! -e $root_path/.stamp_rootfs ]
 then
-	sudo -s -E source $debian_build_path/build_debian_system.sh
+	if [ "$nightly_build" = "yes" ]
+	then
+		source $debian_build_path/build_debian_system.sh
+	else
+		sudo -s -E source $debian_build_path/build_debian_system.sh
+	fi
 	touch $root_path/.stamp_rootfs
 fi
 
@@ -173,7 +206,13 @@ then
 
     # Following script calls the script completion.sh!
 	# compress the resulting rootfs
-	sudo -s -E $debian_build_path/compress_debian_rootfs.sh || exit 0 
+	if [ "$nightly_build" = "yes" ]
+	then
+		$debian_build_path/compress_debian_rootfs.sh || exit 0 # compress the resulting rootfs
+	else
+		sudo -s -E $debian_build_path/compress_debian_rootfs.sh || exit 0 
+	fi
+
 	
 	# Copy the most important files #
 	# It's not necessary but better for the user to find all final created files at the same place #
@@ -188,6 +227,42 @@ then
 	touch $root_path/.stamp_rootfs_post
 fi
 
+if [ "$nightly_build" = "yes" ]
+then
+	echo "$(date) ---Nightly Build READY" >> $logfile_build 
+	#################################################################################################
+	# Create a history of 7 builds if nightly_build is selected.
+	#################################################################################################
+	
+	#check if the backup folder already exists.
+	if [ ! -d $root_path/backup ]; then
+	     sudo -s -E mkdir $root_path/backup
+	     sudo -s -E mkdir $root_path/backup/000
+	     sudo -s -E mkdir $root_path/backup/001
+	     sudo -s -E mkdir $root_path/backup/002
+	     sudo -s -E mkdir $root_path/backup/003
+	     sudo -s -E mkdir $root_path/backup/004
+	     sudo -s -E mkdir $root_path/backup/005
+	     sudo -s -E mkdir $root_path/backup/006
+	fi
+	
+	#move the directories that you always have the latest build in /000
+	     sudo -s -E rm -rf $root_path/backup/006
+	     sudo -s -E mv $root_path/backup/005 $root_path/backup/006
+	     sudo -s -E mv $root_path/backup/004 $root_path/backup/005
+	     sudo -s -E mv $root_path/backup/003 $root_path/backup/004
+	     sudo -s -E mv $root_path/backup/002 $root_path/backup/003
+	     sudo -s -E mv $root_path/backup/001 $root_path/backup/002
+	     sudo -s -E mv $root_path/backup/000 $root_path/backup/001
+	     sudo -s -E mkdir $root_path/backup/000
+	
+	#copy the output files plus the install.log file to the newest backup directory
+	     sudo -s -E cp -rf $root_path/output/* $root_path/backup/000
+	     sudo -s -E cp -f  $logfile_build $root_path/backup/000
+	     sudo -s -E echo   $build_time > $root_path/backup/000/build_time
+	
+	##################################################################################################
+fi
 
 exit 1
 

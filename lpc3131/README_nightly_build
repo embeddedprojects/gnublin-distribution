@@ -1,0 +1,6 @@
+The Nightly_build mode is intended to be used with a server or a pc which is always running. The nightly_build feature adds a cronjob to your crontab to build the complete Gnublin_Distribution every night.
+
+Just run the nightly_build.sh script once, and the Distribution will be built every night.
+
+
+ 
