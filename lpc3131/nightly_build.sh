@@ -17,7 +17,7 @@ fi
 
 echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 01 01 * * * /bin/bash "$build_file" clean > install_log.txt
-02 01 * * * /bin/bash "$build_file" nightly_build  > install_log.txt
+02 01 * * * /bin/bash "$build_file" nightly_build  > install_log.txt" > cronfile
 
 
 #Insert Cronjob for ROOT
