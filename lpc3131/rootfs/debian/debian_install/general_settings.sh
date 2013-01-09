@@ -15,7 +15,7 @@ export debian_mirror_url="http://ftp.debian.org/debian/" # mirror for debian
 
 export debian_target_version="squeeze" # The version of debian that you want to build (ATM, 'squeeze', 'wheezy' and 'sid' are supported)
 
-# google nameserver
+# google nameserver it's reachable from everywere
 export nameserver_addr="8.8.8.8"  
 
 # where to get the standard kernel #kernel_pkg_path="${HOME}/gnublin/built_kernels"

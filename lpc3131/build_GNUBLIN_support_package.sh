@@ -8,7 +8,7 @@ export distro_version="max"     # paste "-min" if you want to build a minimal ve
 export filesystem_vers="ext3"   # choose the final type of your filesystem setting
 export host_os="Ubuntu"         # Debian or Ubuntu (YOU NEED TO EDIT THIS!)
 export eldk_name="eldk-5.0"     # not important for now
-export start_mkmenuconfig="yes"  # start make menuconfig (Bootloader and kernel). Say "no" if you dont want to start make menuconfig
+export start_mkmenuconfig="no"  # start make menuconfig (Bootloader and kernel). Say "no" if you dont want to start make menuconfig
 ##################################
 
 
@@ -171,7 +171,9 @@ then
 	$root_path/gnublin_package/src/mkdeb_package
     
 
-	sudo -s -E $debian_build_path/compress_debian_rootfs.sh || exit 0 # compress the resulting rootfs
+    # Following script calls the script completion.sh!
+	# compress the resulting rootfs
+	sudo -s -E $debian_build_path/compress_debian_rootfs.sh || exit 0 
 	
 	# Copy the most important files #
 	# It's not necessary but better for the user to find all final created files at the same place #

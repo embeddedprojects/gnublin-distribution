@@ -14,7 +14,7 @@ echo "#############################################################" >> $logfile
 	rm -r ${output_dir}/mnt_debootstrap/Documentation
 	rm -r ${output_dir}/mnt_debootstrap/drivers
 	rm -r ${output_dir}/mnt_debootstrap/sound
-	
+	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
 	
 	cp -v $root_path/rootfs/debian/debian_install/first_boot.sh ${output_dir}/mnt_debootstrap/opt/first_boot.sh || exit 0
 	chmod +x ${output_dir}/mnt_debootstrap/opt/first_boot.sh
@@ -31,11 +31,10 @@ echo "#############################################################" >> $logfile
 	echo "COLUMNS=175" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
 	echo "set lines=35" >> "${output_dir}/mnt_debootstrap/etc/vim/vimrc"
 	
-	if [ "$distro_version" = "max" ]
-	then	
+		
 		cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
 		cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
-	fi
+	
 
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64 || exit 0
 

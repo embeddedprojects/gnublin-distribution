@@ -1,0 +1,103 @@
+#!/bin/bash
+
+# Wrapper Script for using the gpio pins in sysfs
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+pin="14"
+result=""
+inputf=""
+freef=""
+output_val=""
+json_f=""
+helpstring='This wrapper Script gets access to the gpio pins of gnublin via sysfs 
+-h			Show this help
+-j			Convert output to json format
+-c			Select gpio Pin (14 is default)
+-i			Pin in selected as input
+-o			Pin is selected as output and will also need a value
+-f 			free the gpio Pin
+Example:
+
+gnublin-gpio -i -c 14 -j    <- this command sets the GPIO_GPIO14 Pin as input, reads its value and prints out the result in json compatible format.
+gnublin-gpio -o 1 -c 11     <- this command sets the GPIO_GPIO11 Pin as output with a high value
+gnublin-gpio -o 0 -c 11     <- this command sets the GPIO_GPIO11 Pin as output with a low value'
+
+
+
+
+while getopts c:jhio:f opt
+ do
+      case $opt in
+          c) pin="${OPTARG}" ;;
+          i) inputf="1" ;;
+          o) output_val="${OPTARG}" ;;
+		  j) json_f="1" ;;
+		  f) freef="1" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+
+#first make sure that gpio pin is exported in sysfs
+if [ ! -d "/sys/class/gpio/gpio${pin}" ]
+then
+	echo "$pin" > /sys/class/gpio/export
+fi
+
+
+#convert the output val in string "high" or "low"
+if [ "$output_val" == "1" ]
+then
+	output_val="high"
+
+elif [ "$output_val" == "0" ]
+then
+	output_val="low"
+fi
+
+
+
+
+#No set/read the gpio value
+if [ "$inputf" == "1" ]
+then
+	result=$( cat "/sys/class/gpio/gpio${pin}/value" )
+elif [ -n "$output_val" ]
+then
+	echo "$output_val" > "/sys/class/gpio/gpio${pin}/direction"
+fi
+
+
+
+
+
+
+
+if [ "$json_f" == "1" ]
+then
+    echo "{ \"result\" : \"$result\" }"
+else
+    echo $result
+fi 
+
+
+
+if [ -n "$freef" ]
+then
+	echo "$pin" > /sys/class/gpio/unexport
+	echo "Pin GPIO_GPIO${pin} unexported"
+fi
+
+
+
+

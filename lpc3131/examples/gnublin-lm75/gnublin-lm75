@@ -1,0 +1,60 @@
+ #!/bin/bash
+
+
+# This script is reading out the temperature(s) of one or more LM75 temperature sensors connected to the GNUBLIN Board.
+# Author: Eduard Tasnadi-Olescher (tasnadi@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+
+address="0x4f"
+result=""
+i2cbus="1"
+json_f="0"
+helpstring='This Script is reading out the temperature(s) of one or more LM75 temperature sensors connected to the GNUBLIN Board.
+
+The correct syntax for this script is: gnublin-lm75 [Option..]       
+
+-h print this helptext
+-j convert output to json compatible format
+-a <Address> specify the I2CAddress of your LM75 sensor. <Address> should be a hex-value, for example 0x49.
+
+If you dont specify an I2CAddress the script uses the default I2CAddress 0x48. (All address-pins connected to GND)
+
+Examples:
+gnublin-lm75 -j -a 0x49 <- this command reads the temperature from a LM75 connected with I2CAddress 0x49 and prints the output in json compatible format.
+
+gnublin-lm75            <- this command reads the temperature from a LM75 connected with the default I2CAddress of 0x48 and prints the output.
+
+'
+
+while getopts a:jh opt
+ do
+      case $opt in
+
+          a) address="${OPTARG}" ;;
+          j) json_f="1" ;;
+          h) echo "$helpstring"; exit 1 ;;
+          ?) echo "For more information please use -h";
+             exit 1;;
+      esac
+done
+
+#read the result with i2cget
+result=$(i2cget -y ${i2cbus} ${address})
+
+#convert the result from hex to dec
+result=$(printf "%d\n" $result)
+
+#output the result in normal form or json compatible format
+if [ "$json_f" == "1" ]
+then
+    echo "{ \"result\" : \"$result\" }"
+else
+    echo $result
+fi 
+

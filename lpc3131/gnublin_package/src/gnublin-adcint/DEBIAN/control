@@ -1,0 +1,10 @@
+Package: gnublin-adcint
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 270
+Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
+Homepage:
+Description: An anpplication for controlling the internal ADC controller of GNUBLIN.

@@ -177,7 +177,8 @@ void parse_opts(int argc, char **argv)
 		 "				  default=120000;max=(2^65)-1				\n"
 		 "  -i 			  Use GPIO Pin x instead default GPIO Pin 14\n"
 		 "				  (For RS Pin on DOGM Display				\n"
-		 "All operations except [-w -o -s] and [-o -s] are allowed\n");
+		 "All operations except [-w -o -s] and [-o -s] at same time \n"
+         "are allowed\n");
 	exit(1);
 		
 	}

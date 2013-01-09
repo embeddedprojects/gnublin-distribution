@@ -1,7 +1,7 @@
 CC = arm-unknown-linux-uclibcgnueabi-gcc
 
 default:
-	$(CC) -static -o display_test display_controll.c 
+	$(CC) -static -o gnublin-dogm gnublin-dogm.c 
 
 clean:
 	rm display_test

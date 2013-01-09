@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Wrapper Script for reading values from the internal lpc3131 pwm controller
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+
+value_length=""
+value=""
+devfile="/dev/lpc313x_pwm"
+helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
+-h			Show this help
+-d			Choose Path to device file
+-v 			Hex-value for pwm duty cycle in 
+
+Example:
+
+gnublin-pwm -v ff     <- this command starts the pwm interface with specified value.'
+
+
+
+#modul autoload
+lsmod | grep "lpc313x_pwm"  >/dev/null
+
+if [ "$?" == "1" ]
+then
+	modprobe lpc313x_pwm
+fi 
+
+
+while getopts d:v:h opt
+ do
+      case $opt in
+          d) devfile="${OPTARG}" ;;
+   		  v) value="${OPTARG}" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+#check for device file
+if [ ! -c $devfile ]
+then
+	echo "File: $devfile was not found"
+	exit 1
+fi
+
+
+value_length=${#value}
+if [ "$value_length" != "2" ]
+then 
+	echo "Number of digits in expression value isn't correct!"
+	exit 1
+fi
+
+
+
+#activate pwm
+echo "$value" > $devfile
+
+
+
+
+
+
+

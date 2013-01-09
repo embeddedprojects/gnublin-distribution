@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Wrapper Script for reading values from the ads7828 module
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+channel=""
+result=""
+i2cbus="1"
+address="48"
+json_f="0"
+helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
+-h			Show this help
+-j			Convert output to json format
+-c			Select ADC Channel (0 - 7 possible, default is 0)
+-a			Address of the module (default is 0x48)
+
+Example:
+
+gnublin-adcmod -j -a 48 -c 2     <- this command reads the value from channel <2> of the adc module  with Address <0x48> and prints the output in json compatible format.'
+
+
+check_channel() {
+	if [ "$1" -gt "7" ]
+	then
+		echo "channel is not valid"
+	fi 
+}
+
+
+#modul autoload
+lsmod | grep "ads7828"  >/dev/null
+
+if [ "$?" == "1" ]
+then
+	modprobe ads7828 >/dev/null
+fi 
+
+while getopts c:a:jh opt
+ do
+      case $opt in
+          c) channel="${OPTARG}"
+             check_channel $channel
+	         result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address}/in${channel}_input") ;;
+	  	  a) address="${OPTARG}" ;;
+          j) json_f="1" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+ 
+
+if [ "$json_f" == "1" ]
+then
+    echo "{ \"result\" : \"$result\" }"
+else
+    echo $result
+fi 
+
+
+

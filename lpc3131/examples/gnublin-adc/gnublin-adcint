@@ -16,23 +16,31 @@ devfile="/dev/adc"
 helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
 -h			Show this help
 -j			Convert output to json format
--c			Select gpa<x> Pin (0 - 3 are valid and 1 is default)
+-c			Select gpa<x> Pin (1 is default)
 -d			Choose Path to device file
 
 Example:
 
-./gnublin-adcint -j -c 2     <- this command reads the value from channel <2> of the adc controller and prints the output in json compatible format.'
+gnublin-adcint -j -c 2     <- this command reads the value from channel <2> of the adc controller and prints the output in json compatible format.'
 
 
 check_channel() {
+
 	if [ "$1" -gt "3" ]
 	then
 		echo "channel is not valid"
+		exit 1
 	fi 
 }
 
 
+#modul autoload
+lsmod | grep "lpc313x_adc"  >/dev/null
 
+if [ "$?" == "1" ]
+then
+	modprobe lpc313x_adc
+fi 
 
 while getopts c:d:jh opt
  do
@@ -61,14 +69,12 @@ fi
 echo "$channel" > "$devfile" 
 tmp=$(cat "$devfile")
 let result="${tmp}" 
- echo $result
-
 
 
 
 if [ "$json_f" == "1" ]
 then
-    echo "{result:$result}"
+    echo "{ \"result\" : \"$result\" }"
 else
     echo $result
 fi 

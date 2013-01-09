@@ -1,5 +1,12 @@
-
 #! /bin/sh
+#
+# Author: Eduard Tasnadi-Olescher (tasnadi@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
 
 swapon /swapfile
 
@@ -10,6 +17,9 @@ echo "This is your first boot. Some applications will now be configured. This ma
 echo "After this process the system is going down for reboot!..."
 
 touch /opt/tmp.txt
+
+cd /root/deb
+dpkg -i *
 
 update-rc.d apache2 remove
 echo "Apache removed successfull." 

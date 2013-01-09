@@ -19,16 +19,16 @@
 #        echo "if applied"
 #fi
 
-#Starting the "embedded projects" app
+#Starting the "embedded projects" example
 
-dog-app -w "embedded" -n -i 14
-dog-app -w "projects" -o 194 -i 14 
-dog-app -s "+5" -i 14
-dog-app -s "-5" -i 14
-dog-app -n -i 14
-dog-app -w "First Display App in use" -o 128 -i 14
-dog-app -s -10 -i 14
-dog-app -n -s 10 -i 14
+gnublin-dogm -w "embedded" -n -i 14
+gnublin-dogm -w "projects" -o 194 -i 14 
+gnublin-dogm -s "+5" -i 14
+gnublin-dogm -s "-5" -i 14
+gnublin-dogm -n -i 14
+gnublin-dogm -w "First Display App in use" -o 128 -i 14
+gnublin-dogm -s -10 -i 14
+gnublin-dogm -n -s 10 -i 14
 
 
 
