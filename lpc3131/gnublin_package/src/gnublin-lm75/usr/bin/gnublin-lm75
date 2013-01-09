@@ -23,10 +23,10 @@ The correct syntax for this script is: gnublin-lm75 [Option..]
 -j convert output to json compatible format
 -a <Address> specify the I2CAddress of your LM75 sensor. <Address> should be a hex-value, for example 0x49.
 
-If you dont specify an I2CAddress the script uses the default I2CAddress 48. (All address-pins connected to GND)
+If you dont specify an I2CAddress the script uses the default I2CAddress 0x48. (All address-pins connected to GND)
 
 Examples:
-gnublin-lm75 -j -a 49 <- this command reads the temperature from a LM75 connected with I2CAddress 0x49 and prints the output in json compatible format.
+gnublin-lm75 -j -a 0x49 <- this command reads the temperature from a LM75 connected with I2CAddress 0x49 and prints the output in json compatible format.
 
 gnublin-lm75            <- this command reads the temperature from a LM75 connected with the default I2CAddress of 0x48 and prints the output.
 

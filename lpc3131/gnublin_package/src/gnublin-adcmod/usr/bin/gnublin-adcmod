@@ -12,7 +12,7 @@
 channel=""
 result=""
 i2cbus="1"
-address="48"
+address="0x48"
 json_f="0"
 helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
 -h			Show this help
@@ -22,7 +22,7 @@ helpstring='This wrapper Script prints out the current values of selected adc ch
 
 Example:
 
-gnublin-adcmod -j -a 48 -c 2     <- this command reads the value from channel <2> of the adc module  with Address <0x48> and prints the output in json compatible format.'
+gnublin-adcmod -j -a 0x48 -c 2     <- this command reads the value from channel <2> of the adc module  with Address <0x48> and prints the output in json compatible format.'
 
 
 check_channel() {
@@ -46,7 +46,7 @@ while getopts c:a:jh opt
       case $opt in
           c) channel="${OPTARG}"
              check_channel $channel
-	         result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address}/in${channel}_input") ;;
+	         result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${channel}_input") ;;
 	  	  a) address="${OPTARG}" ;;
           j) json_f="1" ;;
           ?) echo "$helpstring"
