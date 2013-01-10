@@ -7,8 +7,6 @@ You have to comment out the line where it says export root_path=$(pwd) and comme
 
 
 
-
-
 After that just run the nightly_build.sh script once, and the Distribution will be built every night at 1 o`clock. You can edit the build-time by editing the nightly_build.sh script where it adds the cronjob.
 
 
