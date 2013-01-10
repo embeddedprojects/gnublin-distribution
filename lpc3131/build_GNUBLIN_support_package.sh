@@ -24,6 +24,8 @@ fi
 ###################
 # Other Variables #
 ###################
+#export root_path="/home/eproo/Desktop/nightly_build_gnublin_distribution/gnublin/lpc3131"    #This path must be edited to fit your directory structure if you want to use the nightly_build
+export root_path=$(pwd)                                                                       #if you want to use the nightly_build feature add a # before export and remove the # from the line above
 export build_time="$(date '+%D %H:%M') ->"
 export user=$(whoami)
 export toolchain_path=$root_path/toolchain
@@ -36,14 +38,6 @@ export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debia
 export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 export logfile_build=$root_path/install.log
 
-
-#Some additions for the nightly_build
-if [ "$nightly_build" = "yes" ]
-then
-export export root_path="/home/eproo/Desktop/nightly_build_gnublin_distribution/gnublin/lpc3131"    #This path must be edited to fit your directory structure if you want to use the nightly_build
-else
-export root_path=$(pwd)
-fi
 
 
 # Include settings through an additional file
@@ -114,6 +108,11 @@ if [ ! -d "$root_path/output" ]
 then	
 	mkdir $root_path/output	
 fi	
+
+
+#get the newest version of the build_script and files
+cd $root_path
+git pull
 
 
 #############################################
