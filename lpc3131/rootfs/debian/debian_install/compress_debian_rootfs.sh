@@ -47,7 +47,7 @@ fi
 
 
 	## Before compressing the rootfs, first let qemu start on time again ##  
-	qemu-system-arm -M versatilepb -cpu arm926 -no-reboot -kernel ${root_path}/kernel/qemu_kernel/zImage -hda ${output_dir}/${output_filename}.img -m 512 -append "root=/dev/sda rootfstype=ext3 mem=512M devtmpfs.mount=0 rw ip=dhcp" && echo "qemu_second_start successfull" > $root_path/qemu_sec_start.txt
+	qemu-system-arm -M versatilepb -cpu arm926 -nographic -no-reboot -kernel ${root_path}/kernel/qemu_kernel/zImage -hda ${output_dir}/${output_filename}.img -m 512 -append "root=/dev/sda rootfstype=ext3 mem=512M devtmpfs.mount=0 rw ip=dhcp" && echo "qemu_second_start successfull" > $root_path/qemu_sec_start.txt
 	
 	echo "checking output directory second time"
 	ll ${output_dir}

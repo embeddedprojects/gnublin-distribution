@@ -85,7 +85,6 @@ fi
 
 
 
-
 # Building Stages
 # Now the complete board support package will be built.
 rm -r $logfile_build
