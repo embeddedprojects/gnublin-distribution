@@ -1,0 +1,10 @@
+Package: mdev
+Version: 0.0.1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 1200
+Maintainer: Tasnadi-Olescher Eduard <tasnadi@embedded-projects.net>
+Homepage:
+Description: A lightweighted udev clone for embedded systems.
