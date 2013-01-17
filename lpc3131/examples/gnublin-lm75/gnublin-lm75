@@ -15,20 +15,18 @@ address="0x4f"
 result=""
 i2cbus="1"
 json_f="0"
-helpstring='This Script is reading out the temperature(s) of one or more LM75 temperature sensors connected to the GNUBLIN Board.
+helpstring='This script is reading out the temperature(s) of one or more LM75 temperature sensor(s).
 
 The correct syntax for this script is: gnublin-lm75 [Option..]       
 
--h print this helptext
--j convert output to json compatible format
--a <Address> specify the I2CAddress of your LM75 sensor. <Address> should be a hex-value, for example 0x49.
+-h 			print this helptext
+-j 			convert output to json compatible format
+-a <address> 		LM75 sensor I2CAddress.<address> must be a hex-value.default=0x48
 
-If you dont specify an I2CAddress the script uses the default I2CAddress 0x48. (All address-pins connected to GND)
 
 Examples:
-gnublin-lm75 -j -a 0x49 <- this command reads the temperature from a LM75 connected with I2CAddress 0x49 and prints the output in json compatible format.
-
-gnublin-lm75            <- this command reads the temperature from a LM75 connected with the default I2CAddress of 0x48 and prints the output.
+gnublin-lm75 -j -a 0x49 <-read temperature.I2CAddress=0x49. print value in json format.
+gnublin-lm75            <-read temperature.default I2CAddress=0x48. print the value.
 
 '
 
@@ -44,8 +42,36 @@ while getopts a:jh opt
       esac
 done
 
+
+#check if adress is a hex-value
+if [  "${address:0:2}" != "0x" ]
+then
+    result="I2C-address is not a hex-value."
+    if [ "$json_f" == "1" ]
+    then
+        echo "{ \"result\" : \"$result\" }"
+    else
+        echo $result
+    fi
+    exit 1
+fi
+
 #read the result with i2cget
 result=$(i2cget -y ${i2cbus} ${address})
+
+#exit if something went wrong while reading the temperature
+if [ "$?" != "0" ]
+then
+    result="I2C-address is wrong or lm75 hardware-module is not connected."
+    if [ "$json_f" == "1" ]
+    then
+        echo "{ \"result\" : \"$result\" }"
+    else
+        echo $result
+    fi
+    exit 1
+fi
+
 
 #convert the result from hex to dec
 result=$(printf "%d\n" $result)
@@ -55,6 +81,6 @@ if [ "$json_f" == "1" ]
 then
     echo "{ \"result\" : \"$result\" }"
 else
-    echo $result
+    echo "$result "
 fi 
 

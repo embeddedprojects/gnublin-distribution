@@ -14,50 +14,81 @@ result=""
 i2cbus="1"
 address="0x48"
 json_f="0"
-helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
+helpstring='This Script prints out the value of a selected adc-channel from the gnublin-adc-module 
+
 -h			Show this help
 -j			Convert output to json format
 -c			Select ADC Channel (0 - 7 possible, default is 0)
--a			Address of the module (default is 0x48)
+-a			I2C-Address of the module (default is 0x48)
 
 Example:
 
-gnublin-adcmod -j -a 0x48 -c 2     <- this command reads the value from channel <2> of the adc module  with Address <0x48> and prints the output in json compatible format.'
+gnublin-adcmod -j -a 0x48 -c 2  <- channel=2, I2C-Address=0x48 print value in json format.'
 
 
 check_channel() {
 	if [ "$1" -gt "7" ]
 	then
 		echo "channel is not valid"
+			if [ "$json_f" == "1" ]
+			then
+			    echo "{ \"result\" : \"channel is not valid\" }"
+			fi
+			exit 1
 	fi 
 }
 
 
-#modul autoload
+#module autoload
 lsmod | grep "ads7828"  >/dev/null
-
 if [ "$?" == "1" ]
 then
 	modprobe ads7828 >/dev/null
+	echo "ADC-module loaded"
 fi 
 
+#parse the parameters
 while getopts c:a:jh opt
  do
       case $opt in
-          c) channel="${OPTARG}"
-             check_channel $channel
-	         result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${channel}_input") ;;
-	  	  a) address="${OPTARG}" ;;
+          c) channel="${OPTARG}" ;;
+
+	  a) address="${OPTARG}" ;;
           j) json_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
-		  h) echo "$helpstring"
+	  h) echo "$helpstring"
              exit 1 ;;
       esac
 done
 
- 
+#check if adress is a hex-value
+if [  "${address:0:2}" != "0x" ]
+then
+    result="I2C-address is not a hex-value."
+    if [ "$json_f" == "1" ]
+    then
+        echo "{ \"result\" : \"$result\" }"
+    else
+        echo $result
+    fi
+    exit 1
+fi
 
+#check for parameter problems
+check_channel $channel
+
+
+#read the value
+if [ -f /sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${channel}_input ]
+then
+#get the value of the selected adc channel
+result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${channel}_input" 2>/dev/null) 
+else 
+result="File not found. Please use the correct I2C-address or connect the adc-module."
+fi
+
+#print result in normal format or in json format
 if [ "$json_f" == "1" ]
 then
     echo "{ \"result\" : \"$result\" }"

@@ -12,8 +12,10 @@
 channel="1"
 result=""
 json_f="0"
-devfile="/dev/adc"
-helpstring='This wrapper Script prints out the current values of selected adc channel from the gnublin-adc-module 
+devfile="/dev/lpc313x_adc"
+string='
+Module automaticly loaded'
+helpstring='This Script prints out the values of a selected internal adc channel 
 -h			Show this help
 -j			Convert output to json format
 -c			Select gpa<x> Pin (1 is default)
@@ -21,7 +23,7 @@ helpstring='This wrapper Script prints out the current values of selected adc ch
 
 Example:
 
-gnublin-adcint -j -c 2     <- this command reads the value from channel <2> of the adc controller and prints the output in json compatible format.'
+gnublin-adcint -j -c 2   <- read value of channel 2 and print it in json format'
 
 
 check_channel() {
@@ -29,19 +31,39 @@ check_channel() {
 	if [ "$1" -gt "3" ]
 	then
 		echo "channel is not valid"
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"result\" : \"channel is not valid\" }"
+		fi
+		exit 1
+	elif [ "$1" = "2" ] 
+        then
+		echo "channel is not valid"
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"result\" : \"channel is not valid\" }"
+		fi
 		exit 1
 	fi 
 }
 
 
+# check if script was called with parameters
+if [ "$#" = "0" ]
+then 
+   echo "Keine Parameter übergeben. -h für Hilfe"
+   exit 1
+fi 
+
 #modul autoload
 lsmod | grep "lpc313x_adc"  >/dev/null
-
 if [ "$?" == "1" ]
 then
 	modprobe lpc313x_adc
+	echo $string
 fi 
 
+#parse parameters
 while getopts c:d:jh opt
  do
       case $opt in
@@ -58,20 +80,25 @@ done
 
 check_channel $channel
 
+#check device-file
 if [ ! -c $devfile ]
 then
 	echo "File: $devfile was not found"
+		if [ "$json_f" == "1" ]
+		then
+		echo "{ \"result\" : \"File: $devfile was not found\" }"
+		fi
 	exit 1
 fi
 
 
-
+#read the value
 echo "$channel" > "$devfile" 
 tmp=$(cat "$devfile")
 let result="${tmp}" 
 
 
-
+#print the result in normal format or in json format
 if [ "$json_f" == "1" ]
 then
     echo "{ \"result\" : \"$result\" }"

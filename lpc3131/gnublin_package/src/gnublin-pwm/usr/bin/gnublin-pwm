@@ -12,24 +12,26 @@
 
 value_length=""
 value=""
+test1=""
+string='
+
+Module automaticly loaded'
 devfile="/dev/lpc313x_pwm"
 helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
+
 -h			Show this help
 -d			Choose Path to device file
--v 			Hex-value for pwm duty cycle in 
+-v 			Hex-value for pwm duty cycle in. <high-byte><low-byte>
 
 Example:
-
 gnublin-pwm -v ff     <- this command starts the pwm interface with specified value.'
 
 
-
-#modul autoload
-lsmod | grep "lpc313x_pwm"  >/dev/null
-
-if [ "$?" == "1" ]
-then
-	modprobe lpc313x_pwm
+# check if script was called with parameters
+if [ "$#" = "0" ]
+then 
+   echo "Keine Parameter übergeben. -h für Hilfe"
+   exit 1
 fi 
 
 
@@ -37,21 +39,31 @@ while getopts d:v:h opt
  do
       case $opt in
           d) devfile="${OPTARG}" ;;
-   		  v) value="${OPTARG}" ;;
+   	  v) value="${OPTARG}" ;;
           ?) echo "$helpstring"
              exit 1 ;;
-		  h) echo "$helpstring"
+	  h) echo "$helpstring"
              exit 1 ;;
       esac
 done
 
+#modul autoload
+lsmod | grep "lpc313x_pwm"  >/dev/null
 
-#check for device file
+if [ "$?" == "1" ]
+then
+	modprobe lpc313x_pwm
+	echo $string
+fi 
+
+
+#check device-file
 if [ ! -c $devfile ]
 then
 	echo "File: $devfile was not found"
 	exit 1
 fi
+
 
 
 value_length=${#value}
@@ -61,7 +73,21 @@ then
 	exit 1
 fi
 
+test1=${value:0:1}
+test1=$(printf "%d" $test1)
+if [ $test1 -gt 15 -o $test1 -lt 0 ]
+then
+    echo "Value must be between 00 and ff."
+    exit 1
+fi
 
+test1=${value:1:1}
+test1=$(printf "%d" $test1)
+if [ $test1 -gt 15 -o $test1 -lt 0 ]
+then
+    echo "Value must be between 00 and ff."
+    exit 1
+fi
 
 #activate pwm
 echo "$value" > $devfile

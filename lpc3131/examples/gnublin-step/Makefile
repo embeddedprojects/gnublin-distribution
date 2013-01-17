@@ -3,7 +3,7 @@
 
 CC = arm-linux-gnueabi-gcc
 
-i2c-test: i2c-test.c
+gnublin-step: gnublin-step.c
 		$(CC) -o gnublin-step gnublin-step.c		
 
 clean:

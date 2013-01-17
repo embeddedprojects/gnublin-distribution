@@ -15,36 +15,63 @@ inputf=""
 freef=""
 output_val=""
 json_f=""
-helpstring='This wrapper Script gets access to the gpio pins of gnublin via sysfs 
+helpstring='This script grants access to the GNUBLIN gpio pins.It also works with pca9555 portexpander. 
 -h			Show this help
 -j			Convert output to json format
--c			Select gpio Pin (14 is default)
--i			Pin in selected as input
--o			Pin is selected as output and will also need a value
+-p <value>		Select gpio Pin (default=14) <value> between 1 and 20
+-i			configure pin as input
+-o <value>		configure pin as output and set a value 1=high,0=low
 -f 			free the gpio Pin
+
 Example:
-
-gnublin-gpio -i -c 14 -j    <- this command sets the GPIO_GPIO14 Pin as input, reads its value and prints out the result in json compatible format.
-gnublin-gpio -o 1 -c 11     <- this command sets the GPIO_GPIO11 Pin as output with a high value
-gnublin-gpio -o 0 -c 11     <- this command sets the GPIO_GPIO11 Pin as output with a low value'
-
+gnublin-gpio -i   -p 14 -j  <- set GPIO14 Pin as input, read value and print it in json format.
+gnublin-gpio -o 1 -p 11     <- set GPIO11 Pin as output with a high value
+gnublin-gpio -o 0 -p 11     <- set GPIO11 Pin as output with a low value'
 
 
 
-while getopts c:jhio:f opt
+
+while getopts p:jhio:f opt
  do
       case $opt in
-          c) pin="${OPTARG}" ;;
+          p) pin="${OPTARG}" ;;
           i) inputf="1" ;;
           o) output_val="${OPTARG}" ;;
-		  j) json_f="1" ;;
-		  f) freef="1" ;;
+	  j) json_f="1" ;;
+	  f) freef="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
-		  h) echo "$helpstring"
+          h) echo "$helpstring"
              exit 1 ;;
       esac
 done
+
+
+#make sure that you only use gpio pins which are avialable
+if [[ ("$pin" -gt "20" && "$pin" -lt "98") || "$pin" -gt "113" ]]
+then
+      if [ "$json_f" == "1" ]
+      then
+      echo "{ \"result\" : \"Invalid GPIO pin selected.\" }"
+      else
+      echo "Invalid GPIO pin selected."
+      fi
+      exit 1
+fi
+
+#make sure that you only can export gpio98-113 if the pca9555 portexpander is connected
+lsmod | grep "pca953x"  >/dev/null
+if [ "$?" == "1" -a "$pin" -gt "97" -a "$pin" -lt "114" ]
+then
+      if [ "$json_f" == "1" ]
+      then
+      echo "{ \"result\" : \"Invalid GPIO pin. Portexpander not connected or module pca953x not loaded\" }"
+      else
+      echo "Invalid GPIO pin selected. Portexpander not connected or module pca953x not loaded"
+      fi
+      exit 1
+fi 
+
 
 
 
@@ -68,13 +95,37 @@ fi
 
 
 
-#No set/read the gpio value
+#Now set/read the gpio value
 if [ "$inputf" == "1" ]
 then
+        #read the input
 	result=$( cat "/sys/class/gpio/gpio${pin}/value" )
 elif [ -n "$output_val" ]
 then
-	echo "$output_val" > "/sys/class/gpio/gpio${pin}/direction"
+
+#GPI4 is only an input, you cannot set it as an output
+if [ "$pin" = "4" ]
+then
+  if [ "$json_f" == "1" ]
+  then
+  echo "{ \"result\" : \"GPIO${pin} is only an input and cannot be set as an output.\" }"
+  else 
+  echo "GPIO${pin} is only an input and cannot be set as an output."
+  fi
+  exit 1
+fi
+
+      #set the output
+      echo "$output_val" > "/sys/class/gpio/gpio${pin}/direction"
+
+        if [ "$json_f" == "1" ]
+        then
+           echo "{ \"result\" : \"GPIO${pin} is now an output with $output_val level.\" }"
+        else
+           echo "GPIO${pin} is now an output with $output_val level."
+        fi
+
+      exit 0
 fi
 
 
@@ -82,7 +133,7 @@ fi
 
 
 
-
+#print the output in normal format or in json format
 if [ "$json_f" == "1" ]
 then
     echo "{ \"result\" : \"$result\" }"
@@ -91,7 +142,7 @@ else
 fi 
 
 
-
+#unexport gpio pins
 if [ -n "$freef" ]
 then
 	echo "$pin" > /sys/class/gpio/unexport
