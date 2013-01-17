@@ -33,7 +33,7 @@ void parse_opts(int argc, char **argv)
 	}
 	if (hflag)
 	{
-		printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3000, two rotations 6000 and so on\n\n");		
+		printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on\n\n");		
 	exit(1);
 		
 	}
@@ -51,7 +51,7 @@ int main (int argc, char **argv) {
     
     
     if (argc == 0) {
-        printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3000, two rotations 6000 and so on\n\n");
+        printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on\n\n");
 		    //exit(1);
 		}
 
