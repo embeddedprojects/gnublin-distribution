@@ -197,8 +197,10 @@ then
 	then
 		mkdir $root_path/gnublin_package/deb
 	fi
+        rm -r $root_path/gnublin_package/deb/*
 	cd $root_path/gnublin_package/src/
 	$root_path/gnublin_package/src/mkdeb_package
+        echo "Gnublin Packages Successfully created" >> $logfile_build
     
 
     # Following script calls the script completion.sh!

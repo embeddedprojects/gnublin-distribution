@@ -19,6 +19,8 @@ echo "#############################################################" >> $logfile
 	cp -v $root_path/rootfs/debian/debian_install/first_boot.sh ${output_dir}/mnt_debootstrap/opt/first_boot.sh || exit 0
 	chmod +x ${output_dir}/mnt_debootstrap/opt/first_boot.sh
 	echo "$build_time Script for first boot copied to ${output_dir}/mnt_debootstrap/opt/first_boot.sh" >> $logfile_build
+        cp -rf $root_path/gnublin_package/src/NODEB_mdev/etc ${output_dir}/mnt_debootstrap/
+        cp -rf $root_path/gnublin_package/src/NODEB_mdev/sbin ${output_dir}/mnt_debootstrap/
 	
 	
 	sed 's/root:x:0:0:root:\/root:\/bin\/bash/root::0:0:root:\/root:\/bin\/bash/g' "${output_dir}/mnt_debootstrap/etc/passwd" > tmp_file || exit 0
