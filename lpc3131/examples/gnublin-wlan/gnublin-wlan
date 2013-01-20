@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# Wrapper Script for getting connection to an AP via wlan
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+source wlan_functions.sh
+
+while getopts i:g:k:s:c:dw:at: opt
+ do
+      case $opt in
+          i) ip_client="${OPTARG}" ;;
+          g) ip_gateway="${OPTARG}" ;;
+          k) key="${OPTARG}" ;;
+		  s) ssid="${OPTARG}" ;;
+		  w) hwaddr="${OPTARG}" ;;
+		  c) conf="/etc/gnublin/wlan/${OPTARG}" ;;
+	      a) autom_con="true";;
+  		  d) shutdownf="true" ;;
+		  t) type="${OPTARG}" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+if [ ! -d "/etc/gnublin" ]; then
+	mkdir "/etc/gnublin"
+else
+	if [ ! -d "/etc/gnublin/wlan" ]; then
+		mkdir "/etc/gnublin/wlan"
+ 	fi
+fi
+
+
+
+
+
+
+
+
+
+if [ "$shutdownf" == "true" ]; then
+	# Shutdown the System #
+	shutdown_system	
+fi
+
+####   First Stage   ###
+#### WPA connection ####
+####  ENCRYPTION    ####
+if [ -n "$conf" ]; then
+
+	# Startup wpa_supplicant with specified config file #
+	echo "Startup wpa_supplicant with specified config file"
+	wpa_supplicant -i ${device} -D wext -c ${conf} -d -B
+
+elif [ "$autom_con" == "true" ]; then 
+
+	
+	
+	parse_iwlist_res
+	#wpa_supplicant_start
+fi
+
+
+
+####   Second Stage  ###
+#### IP receivment  ####
+if [ "$type" == "dhcp" ]; then
+
+	check_par "$device" "device (e.g wlan0)"
+	dhcp ${device}	
+
+elif [ "$type" == "static" ]; then
+	check_par "$ip_client" "ip_client"
+	check_par "$ip_gateway" "ip_gateway"
+
+else
+	echo "No ip receivment choosen."
+	echo "Please specify option -t with 'static' or 'dhcp'"
+	echo "in order to get an ip address"
+fi
+### IP RECEIVMENT ###
+#dhcp
+#static
+
+
+
+
+
+
+
