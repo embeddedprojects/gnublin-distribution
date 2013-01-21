@@ -97,9 +97,8 @@ then
     exit 1
 fi
 
-test1=${value:1:1}
-test1=$(printf "%d" $test1)
-if [ $test1 -gt 15 -o $test1 -lt 0 ]
+echo $value | grep -E "[^0-9a-fA-F]"
+if [ "$?" == "0" ]; 
 then
 	if [ "$json_f" == "1" ]
 	then
