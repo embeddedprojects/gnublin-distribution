@@ -1,0 +1,10 @@
+Package: gnublin-rtc
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 270
+Maintainer: Tasnadi-Olescher Eduard <tasnadi@embedded-projects.net>
+Homepage:
+Description: An anpplication for controlling a RTC connected to GNUBLIN.
