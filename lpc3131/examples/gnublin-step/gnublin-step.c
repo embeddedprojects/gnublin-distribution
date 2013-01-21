@@ -14,13 +14,14 @@ unsigned int position = 0;
 int c,hflag;
 char *filename = "/dev/i2c-1"; 
 int slave_address = ADDR; 
+int json_flag = 0;
 
 
 
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"hp:f:a:")) != -1)
+	while((c = getopt(argc,argv,"hjp:f:a:")) != -1)
 	{
 		switch(c)
 		{
@@ -28,12 +29,13 @@ void parse_opts(int argc, char **argv)
 			case 'p' : position = atoi(optarg);                 break;
 			case 'f' : filename = optarg;                       break;
 			case 'a' : slave_address = strtol (optarg,NULL,16); break;
+			case 'j' : json_flag = 1;                           break;
 		}
 
 	}
 	if (hflag)
 	{
-		printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on\n\n");		
+		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h\t\t\tShow this help\n-f <device>\t\tSpecify the i2c-device.default=/dev/i2c-1\n-j\t\t\tConvert output to json format.\n-a <I2C-address>\tSpecify the stepper modules I2C-address.default=0x60\n-p <Position>\t\tSpecify the desired position\n\nExample:\ngnublin-step -a 0x60 -p 3000  <-Drive the motor to position 3000 and use I2C-address 0x60.\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
 	exit(1);
 		
 	}
@@ -51,8 +53,8 @@ int main (int argc, char **argv) {
     
     
     if (argc == 0) {
-        printf("Usage: gnublin-step -f \"DEVICE\" -a I2C-address -p POSITION \n\nIf you dont specify an I2Caddress, the program will use the default address 0x60 \n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nIf you dont specify a device, the program will use the default I2C-Device /dev/i2c-1 \n\nAn examplecall can look like this: ./i2c-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on\n\n");
-		    //exit(1);
+	printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h\t\t\tShow this help\n-f <device>\t\tSpecify the i2c-device.default=/dev/i2c-1\n-j\t\t\tConvert output to json format.\n-a <I2C-address>\tSpecify the stepper modules I2C-address.default=0x60\n-p <Position>\t\tSpecify the desired position\n\nExample:\ngnublin-step -a 0x60 -p 3000  <-Drive the motor to position 3000 and use I2C-address 0x60.\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");
+      //exit(1);
 		}
 
 
@@ -61,11 +63,17 @@ int main (int argc, char **argv) {
 
 
     if ((fd = open(filename, O_RDWR)) < 0) { 
+      if (json_flag == 1)
+          printf("{\"result\" : \"i2c open error\"}\n");
+      else
         printf("i2c open error"); 
         return -1; 
     } 
 
     if (ioctl(fd, I2C_SLAVE, slave_address) < 0) { 
+      if (json_flag == 1)
+          printf("{\"result\" : \"ioctl I2C_SLAVE error\"}\n");
+      else
         printf("ioctl I2C_SLAVE error"); 
         return -1; 
     } 
@@ -75,7 +83,10 @@ int main (int argc, char **argv) {
       //GestFullStatus1 Command: This Command must be executed before Operating
       buffer[0] = 0x81;   
 
-      if (write(fd, buffer, 1) != 1) { 
+      if (write(fd, buffer, 1) != 1) {
+      if (json_flag == 1)
+          printf("{\"result\" : \"write error 0\"}\n");
+      else
          printf("write error 0\n"); 
          return -1; 
       } 
@@ -87,12 +98,17 @@ int main (int argc, char **argv) {
       buffer[0] = 0x88; 
 
       if (write(fd, buffer, 1) != 1) { 
+      if (json_flag == 1)
+          printf("{\"result\" : \"write error 1\"}\n");
+      else
          printf("write error 1\n"); 
          return -1; 
       } 
 
 
-
+      if (json_flag == 1)
+          printf("{\"result\" : \"Position is %i\"}\n", position);
+      else
       printf("Position is: %i\n", position); //Print the Position
         
       
@@ -105,12 +121,17 @@ buffer[4] = (unsigned char)  position;       // PositionByte2 (7:0)
 
 
       if (write(fd, buffer, 5) != 5) { 
+      if (json_flag == 1)
+          printf("{\"result\" : \"write error 2\"}\n");
+      else
          printf("write error 2\n"); 
          return -1; 
       } 
 
-
-printf("Step done.\n");
+      if (json_flag == 1)
+          printf("{\"result\" : \"Step done.\"}\n");
+      else
+          printf("Step done.\n");
 
 
 close(fd);

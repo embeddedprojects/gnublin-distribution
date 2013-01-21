@@ -20,7 +20,8 @@ devfile="/dev/lpc313x_pwm"
 helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
 
 -h			Show this help
--d			Choose Path to device file
+-j			print output in json format.
+-d			Choose Path to device file.
 -v 			Hex-value for pwm duty cycle in. <high-byte><low-byte>
 
 Example:
@@ -35,7 +36,7 @@ then
 fi 
 
 
-while getopts d:v:h opt
+while getopts d:v:hj opt
  do
       case $opt in
           d) devfile="${OPTARG}" ;;
@@ -60,7 +61,12 @@ fi
 #check device-file
 if [ ! -c $devfile ]
 then
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"File: $devfile was not found\" }"
+	else
 	echo "File: $devfile was not found"
+        fi
 	exit 1
 fi
 
@@ -69,7 +75,12 @@ fi
 value_length=${#value}
 if [ "$value_length" != "2" ]
 then 
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"Number of digits in expression value isn't correct!\" }"
+	else
 	echo "Number of digits in expression value isn't correct!"
+	fi
 	exit 1
 fi
 
@@ -77,7 +88,12 @@ test1=${value:0:1}
 test1=$(printf "%d" $test1)
 if [ $test1 -gt 15 -o $test1 -lt 0 ]
 then
-    echo "Value must be between 00 and ff."
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"Value must be between 00 and ff.\" }"
+	else
+        echo "Value must be between 00 and ff."
+	fi
     exit 1
 fi
 
@@ -85,13 +101,23 @@ test1=${value:1:1}
 test1=$(printf "%d" $test1)
 if [ $test1 -gt 15 -o $test1 -lt 0 ]
 then
-    echo "Value must be between 00 and ff."
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"Value must be between 00 and ff.\" }"
+	else
+        echo "Value must be between 00 and ff."
+	fi
     exit 1
 fi
 
 #activate pwm
 echo "$value" > $devfile
-
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"PWM successfully activated.\" }"
+	else
+        echo "PWM successfully activated."
+	fi
 
 
 
