@@ -32,6 +32,7 @@ echo "#############################################################" >> $logfile
 	echo "alias la='ls -a --color=auto'" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
 	echo "COLUMNS=175" >> "${output_dir}/mnt_debootstrap/etc/bash.bashrc"
 	echo "set lines=35" >> "${output_dir}/mnt_debootstrap/etc/vim/vimrc"
+	echo "kernel.printk = 3 3 1 7" > "${output_dir}/mnt_debootstrap/etc/sysctl.conf"
 	
 		
 		cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0

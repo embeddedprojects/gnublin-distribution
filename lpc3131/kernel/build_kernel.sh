@@ -47,7 +47,11 @@ fi
 		git clone https://code.google.com/p/gnublin-develop-kernel || exit 0
 		echo "$build_time Repository cloned correctly " >> $logfile_build
 	
+	else 
+		git pull
 	fi
+
+	
 		
 	
 	#Copy Kernel to kernel directory
