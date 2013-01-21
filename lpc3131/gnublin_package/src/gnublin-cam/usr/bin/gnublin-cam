@@ -36,7 +36,7 @@ gnublin-cam -b             <- start a webstream in the background.'
 
 
 
-while getopts p:jhsd:r:i: opt
+while getopts p:jhsbd:r:i: opt
  do
       case $opt in
           p) port="${OPTARG}" ;;
@@ -46,7 +46,7 @@ while getopts p:jhsd:r:i: opt
           d) device="${OPTARG}" ;;
           s) modus="stream" ;;
           b) modus="stream" 
-             daemon="&";;
+             daemon="-b";;
 	  j) json_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
@@ -83,7 +83,7 @@ then
 
 else
 	resx="800"
-	resx="600"
+	resy="600"
 fi
 
 
@@ -95,7 +95,7 @@ fi
 if [ "$modus" == "image" ]
 then
 
-	uvccapture -x $resx -y $resy -d $device -o $filename
+	uvccapture -o"$filename" -x"$resx" -y"$resy" -d"$device" 
 
       if [ "$json_f" == "1" ]
       then
@@ -108,7 +108,13 @@ then
 elif [ "$modus" == "stream" ]
 then
 
-	mjpg_streamer -i "/lib/input_uvc.so -d $device  -r $resolution" -o "/lib/output_http.so -p $port -w /usr/www -n" $daemon
+	mjpg-streamer -i "/lib/input_uvc.so -d $device  -r $resolution" -o "/lib/output_http.so -p $port -w /usr/www -n" $daemon
+      if [ "$json_f" == "1" -a "$daemon" == "-b" ]
+      then
+      echo "{ \"result\" : \"Stream started on Port $port with resolution=$resolution in background.\" }"
+      elif [ "$json_f" != "1" -a "$daemon" == "-b" ]
+      echo "Stream started on Port $port with resolution=$resolution in background."
+      fi
 
 else
       if [ "$json_f" == "1" ]

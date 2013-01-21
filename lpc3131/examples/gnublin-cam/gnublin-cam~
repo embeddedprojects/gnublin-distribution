@@ -109,12 +109,6 @@ elif [ "$modus" == "stream" ]
 then
 
 	mjpg-streamer -i "/lib/input_uvc.so -d $device  -r $resolution" -o "/lib/output_http.so -p $port -w /usr/www -n" $daemon
-      if [ "$json_f" == "1" -a "$daemon" == "-b" ]
-      then
-      echo "{ \"result\" : \"Stream started on Port $port with resolution=$resolution in background.\" }"
-      elif [ "$json_f" != "1" -a "$daemon" == "-b" ]
-      echo "Stream started on Port $port with resolution=$resolution in background."
-      fi
 
 else
       if [ "$json_f" == "1" ]

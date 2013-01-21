@@ -51,6 +51,11 @@ echo "udev removed successfull."
 update-rc.d udev-mtab remove
 echo "udev-mtab removed successfull."
 
+update-rc.d hwclock remove
+echo "hwclock removed successfull."
+
+update-rc.d hwclock.sh remove
+echo "hwclock.sh removed successfull."
 
 mv /opt/tmp.txt /opt/.success
 

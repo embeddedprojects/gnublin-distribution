@@ -23,13 +23,13 @@ helpstring='This script is designed, to easily interact with a RTC connected to 
 
 Example:
 gnublin-rtc -g                        <- Read the Time from the RTC.
-gnublin-cam -s "2013/01/20 16:16:16"  <- Set the RTC to specified date.
-gnublin-cam -x                        <- Set Linux time to date read from RTC.'
+gnublin-rtc -s "2013/01/20 16:16:16"  <- Set the RTC to specified date.
+gnublin-rtc -x                        <- Set Linux time to date read from RTC.'
 
 
 
 
-while getopts s:jhsgl opt
+while getopts s:jhsgx opt
  do
       case $opt in
           s) date="${OPTARG}" 
@@ -107,6 +107,7 @@ then
       else
       echo "Date not in correct format. -> YYYY/MM/DD HH:MM:SS "     
       exit 1
+      fi
    fi
 
 elif [ "$modus" == "sync" ]
