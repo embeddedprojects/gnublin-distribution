@@ -26,6 +26,7 @@ WPA Connection:
 -c 			Specify a config file wich wpa_supplicant can use to conect to an AP.
 			With this option selected, you dont need to specify the -k and -s
 			option.
+
 -d 			Shutdown wlan.
 
 IP Receivment:

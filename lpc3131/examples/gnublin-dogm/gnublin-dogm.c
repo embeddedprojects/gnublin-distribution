@@ -41,7 +41,7 @@ static void pabort(const char *s)
 	abort();
 }
 
-char *device_file = "/dev/spi0";
+char *device_file = "/dev/spidev0.0";
 char *string_display = "Default String";
 long int write_speed = 120000;
 int fd;
@@ -161,7 +161,7 @@ void parse_opts(int argc, char **argv)
 	if (hflag)
 	{
 		printf("Usage: %s [-wdhnso]\n", argv[0]);		
-		puts("  -D --device   device to use (default /dev/spidev1.1)\n"
+		puts("  -d            device to use (default /dev/spidev0.0)\n"
 	     "  -w            write string to display\n"
 	     "  -d            specify a device file\n"
 	     "  -o            Set cursor to position(Start line 1 = 128\n"
@@ -177,8 +177,7 @@ void parse_opts(int argc, char **argv)
 		 "				  default=120000;max=(2^65)-1				\n"
 		 "  -i 			  Use GPIO Pin x instead default GPIO Pin 14\n"
 		 "				  (For RS Pin on DOGM Display				\n"
-		 "All operations except [-w -o -s] and [-o -s] at same time \n"
-         "are allowed\n");
+		 "All operations except [-w -o -s] and [-o -s] are allowed\n");
 	exit(1);
 		
 	}
@@ -398,16 +397,10 @@ int main(int argc, char **argv)
 	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1)
 		pabort("can't set spi mode");
-#ifdef DEBUG
-	printf("spi wr mode passed");
-#endif
-	
+
 	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1)
 		pabort("can't get spi mode");
-#ifdef DEBUG
-    printf("spi rd mode passed");
-#endif
 
 	/*
 	 * bits per word
@@ -415,34 +408,21 @@ int main(int argc, char **argv)
 	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't set bits per word");
-#ifdef DEBUG
-    printf("spi wr bits per word passed");
-#endif
 
 	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1)
 		pabort("can't get bits per word");
-#ifdef DEBUG
-    printf("spi wrd bits per word passed");
-#endif
-	
-    /*
+
+	/*
 	 * max speed hz
 	 */
 	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
 		pabort("can't set max speed hz");
-#ifdef DEBUG
-    printf("spi set wr max speed passed");
-#endif
 
 	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
 		pabort("can't get max speed hz");
-#ifdef DEBUG
-    printf("spi set wr max speed passed");
-#endif
-
 
 	printf("spi mode: %d\n", mode);
 	printf("bits per word: %d\n", bits);
