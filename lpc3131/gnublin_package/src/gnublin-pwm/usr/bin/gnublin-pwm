@@ -54,6 +54,7 @@ lsmod | grep "lpc313x_pwm"  >/dev/null
 if [ "$?" == "1" ]
 then
 	modprobe lpc313x_pwm
+        sleep 2
 	echo $string
 fi 
 
