@@ -43,7 +43,7 @@ static void pabort(const char *s)
 
 char *device_file = "/dev/spidev0.0";
 char *string_display = "Default String";
-long int write_speed = 120000;
+long int write_speed = 1;
 int fd;
 int shift_val, c, cursor_offset, curs_auto_dec;
 char *pinnumber="14";
@@ -153,8 +153,8 @@ void parse_opts(int argc, char **argv)
 			case 'n' : initflag = 1;                          break;
 			case 's' : shift_val = atoi(optarg);shiftflag = 1;  break;
 			case 'a' : curs_auto_dec = 1;                       break;
-			case 'p' : write_speed = atoi(optarg);              break;
-			case 'i' : pinnumber =  optarg;				break;
+			case 't' : write_speed = 160000;              		break;
+			case 'i' : pinnumber =  optarg;						break;
 		}
 
 	}
@@ -173,8 +173,7 @@ void parse_opts(int argc, char **argv)
          "                                                          \n"
 		 "  -a            Change auto increment of cursor           \n"
 		 "                to auto decrement(for this command)       \n"
-		 "  -p            Change the writing speed(Higher = slower) \n"
-		 "				  default=120000;max=(2^65)-1				\n"
+		 "  -t            Slow down the write speed					\n"
 		 "  -i 			  Use GPIO Pin x instead default GPIO Pin 14\n"
 		 "				  (For RS Pin on DOGM Display				\n"
 		 "All operations except [-w -o -s] and [-o -s] are allowed\n");
