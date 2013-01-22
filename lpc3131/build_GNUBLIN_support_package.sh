@@ -63,6 +63,7 @@ then
 	#sudo -s -E rm -rf $root_path/gnublin_package/deb/*
 	sudo -s -E rm -rf $logfile_build
 	sudo -s -E rm -rf $root_path/output
+	sudo -s -E rm -rf $root_path/gnublin_package/deb/*
 
 	
 		
