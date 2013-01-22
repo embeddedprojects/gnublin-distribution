@@ -1,0 +1,128 @@
+#!/bin/bash
+
+# Wrapper Script for getting connection to an AP via wlan
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+trap '$BASH_COMMAND ; cleanup_trap' INT
+source wlan_functions.sh
+
+while getopts i:g:k:s:c:dt:ew: opt
+ do
+      case $opt in
+          i) ip_client="${OPTARG}" ;;
+          g) ip_gateway="${OPTARG}" ;;
+		  e) cat /etc/gnublin/wlan/wpa_supplicant.conf.examples | less
+			  exit 1 ;;
+          k) key="${OPTARG}" ;;
+		  w) device="${OPTARG}" ;;
+		  s) ssid="${OPTARG}" ;;
+		  c) conf="/etc/gnublin/wlan/${OPTARG}" ;;
+  		  d) shutdownf="true" ;;
+		  t) type="${OPTARG}" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+		  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+if [ -z "$1" ]; then
+	echo "$helpstring"
+	exit 1
+fi
+
+
+if [ ! -d "/etc/gnublin" ]; then
+	mkdir "/etc/gnublin"
+else
+	if [ ! -d "/etc/gnublin/wlan" ]; then
+		mkdir "/etc/gnublin/wlan"
+ 	fi
+fi
+
+
+
+
+
+
+
+
+
+if [ "$shutdownf" == "true" ]; then
+	# Shutdown the System #
+	shutdown_system	
+fi
+
+####   First Stage   ###
+#### WPA connection ####
+####  ENCRYPTION    ####
+if [ -n "$conf" ]; then
+
+	startup_device
+
+	# Startup wpa_supplicant with specified config file #
+	echo "Startup wpa_supplicant with specified config file"
+	wpa_supplicant -i ${device} -D wext -c ${conf} -d -B
+	check_connection
+
+else
+	startup_device
+	wpa_supplicant_autostart
+	check_connection
+
+fi
+
+
+####   Second Stage  ###
+#### IP receivment  ####
+if [ "$type" == "dhcp" ]; then
+
+	check_par "$device" "device (e.g wlan0)"
+	dhclient ${device}	
+
+elif [ "$type" == "static" ]; then
+	check_par "$ip_client" "ip_client"
+	check_par "$ip_gateway" "ip_gateway"
+	check_par "$device"	
+
+	ifconfig ${device} ${ip_client}
+	route add default gw ${ip_gateway}
+	echo "${ip_gateway}" > /etc/resolv.conf
+
+else
+	echo "No ip receivment choosen."
+	echo "Please specify option -t static or -t dhcp"
+	echo "in order to get an ip address"
+fi
+
+### IP RECEIVMENT ###
+#dhcp
+#static
+
+
+echo "Finally connection test:"
+if [ -n "$device" ]; then
+	echo "Checking Wlan connection...."
+	iwconfig ${device} | grep ${ssid} >/dev/null
+	if [ "$?" == "0" ]; then
+		echo "Wlan connection 				[OK]"
+	else
+		echo "Wlan connection				[ERROR]"
+	fi
+fi
+
+echo "Checking internet connection...."
+ping -c 1 www.google.de >/dev/null
+if [ "$?" == "0" ]; then
+	echo "Internet connection 				[OK]"
+else
+	echo "Internet connection				[ERROR]"
+fi
+
+
+
