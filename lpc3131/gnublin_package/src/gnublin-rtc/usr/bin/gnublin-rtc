@@ -52,6 +52,7 @@ then
 
  echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
  modprobe rtc-mcp7940
+ sleep 2
 
 fi
 
