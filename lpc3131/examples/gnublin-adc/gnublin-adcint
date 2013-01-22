@@ -23,7 +23,7 @@ helpstring='This Script prints out the values of a selected internal adc channel
 
 Example:
 
-gnublin-adcint -j -c 2   <- read value of channel 2 and print it in json format'
+gnublin-adcint -j -c 3   <- read value of channel 2 and print it in json format'
 
 
 check_channel() {

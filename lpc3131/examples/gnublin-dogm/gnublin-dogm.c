@@ -141,7 +141,7 @@ static void transfer(int fd)
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"amnhw:l:d:o:s:p:i:")) != -1)
+	while((c = getopt(argc,argv,"amnhw:l:d:o:s:i:t")) != -1)
 	{
 		switch(c)
 		{
