@@ -48,6 +48,8 @@ fi
 		echo "$build_time Repository cloned correctly " >> $logfile_build
 	
 	else 
+		cd $root_path/Downloads/$git_name_kernel
+		rm -r $root_path/kernel/kernel_name
 		git pull
 	fi
 
