@@ -399,9 +399,9 @@ int main(int argc, char **argv)
 	fd = open(device_file, O_RDWR);
 	if (fd < 0)	        
 		if (json_flag == 1)
-		pabort("{\"error_msg\" : \"can't open device\",\"result\" : \"-1\"}\n");
+		pabort("{\"error_msg\" : \"can't open device.Try modprobe spidev.\",\"result\" : \"-1\"}\n");
 		else
-		pabort("can't open device");
+		pabort("can't open device.Try modprobe spidev.\n");
 
 	/*
 	 * spi mode
@@ -411,14 +411,14 @@ int main(int argc, char **argv)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't set spi mode\",\"result\" : \"-2\"}\n");
 		else
-		pabort("can't set spi mode");
+		pabort("can't set spi mode\n");
 
 	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't get spi mode\",\"result\" : \"-3\"}\n");
 		else
-		pabort("can't get spi mode");
+		pabort("can't get spi mode\n");
 
 	/*
 	 * bits per word
@@ -428,14 +428,14 @@ int main(int argc, char **argv)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't set bits per word\",\"result\" : \"-4\"}\n");
 		else
-		pabort("can't set bits per word");
+		pabort("can't set bits per word\n");
 
 	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't get bits per word\",\"result\" : \"-5\"}\n");
 		else
-		pabort("can't get bits per word");
+		pabort("can't get bits per word\n");
 
 	/*
 	 * max speed hz
@@ -445,14 +445,14 @@ int main(int argc, char **argv)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't set max speed hz\",\"result\" : \"-6\"}\n");
 		else
-		pabort("can't set max speed hz");
+		pabort("can't set max speed hz\n");
 
 	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
 	        if (json_flag == 1)
 		pabort("{\"error_msg\" : \"can't get max speed hz\",\"result\" : \"-7\"}\n");
 		else
-		pabort("can't get max speed hz");
+		pabort("can't get max speed hz\n");
 
 	if (json_flag == 1)
 	printf("{\"spi mode\" : \"%d\",\"bits per word\" : \"%d\",\"max speed\" : \"%d Hz (%d KHz)\",\"result\" : \"0\"}\n,",mode, bits, speed, speed/1000);
@@ -510,7 +510,7 @@ int main(int argc, char **argv)
 			if (json_flag == 1)
 			printf("{\"Cursor_offset\" : \"%d\",\"result\" : \"0\"}\n",cursor_offset);
 			else
-			printf("Cursor_offset-->%d",cursor_offset);			
+			printf("Cursor_offset-->%d\n",cursor_offset);			
 			set_cursor(cursor_offset);
 			
 		

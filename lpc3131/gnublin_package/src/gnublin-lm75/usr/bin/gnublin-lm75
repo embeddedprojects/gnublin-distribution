@@ -79,7 +79,7 @@ result=$(printf "%d\n" $result)
 #output the result in normal form or json compatible format
 if [ "$json_f" == "1" ]
 then
-    echo "{ \"Temperature\" : \"$result\",\"result\" : \"0\" }"
+    echo "{ \"temperature\" : \"$result\",\"result\" : \"0\" }"
 else
     echo "$result °C "
 fi 

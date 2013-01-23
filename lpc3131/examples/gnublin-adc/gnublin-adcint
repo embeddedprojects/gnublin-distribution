@@ -112,7 +112,7 @@ let result="${tmp}"
 #print the result in normal format or in json format
 if [ "$json_f" == "1" ]
 then
-    echo "{ \"Voltage\" : \" $result\",\"result\" : \"0\" }"
+    echo "{ \"voltage\" : \" $result\",\"result\" : \"0\" }"
 else
     echo $result
 fi 
