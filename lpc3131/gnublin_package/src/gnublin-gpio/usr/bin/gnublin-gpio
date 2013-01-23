@@ -48,7 +48,7 @@ done
 
 
 #make sure that you only use gpio pins which are avialable
-if [[ ("$pin" -gt "20" && "$pin" -lt "98") || "$pin" -gt "113" ]]
+if [[ ("$pin" -gt "20" && "$pin" -lt "98") || "$pin" -gt "177" ]]
 then
       if [ "$json_f" == "1" ]
       then
@@ -59,9 +59,9 @@ then
       exit 1
 fi
 
-#make sure that you only can export gpio98-113 if the pca9555 portexpander is connected
+#make sure that you only can export gpio98-177 if the pca9555 portexpander is connected
 lsmod | grep "pca953x"  >/dev/null
-if [ "$?" == "1" -a "$pin" -gt "97" -a "$pin" -lt "114" ]
+if [ "$?" == "1" -a "$pin" -gt "97" -a "$pin" -lt "178" ]
 then
       if [ "$json_f" == "1" ]
       then
@@ -78,7 +78,18 @@ fi
 #first make sure that gpio pin is exported in sysfs
 if [ ! -d "/sys/class/gpio/gpio${pin}" ]
 then
-	echo "$pin" > /sys/class/gpio/export
+	echo "$pin" > /sys/class/gpio/export 2>/dev/null
+
+	if [ "$?" != "0" ]
+	then
+	           if [ "$json_f" == "1" ]
+		   then
+		      echo "{ \"error_msg\" : \"Invalid GPIO pin. Portexpanders not connected or module pca953x not loaded\",\"result\" : \"-4\" }"
+		   else
+		      echo "Invalid GPIO pin selected. Portexpanders not connected or module pca953x not loaded"
+		    fi
+		    exit 1
+	fi
 fi
 
 
