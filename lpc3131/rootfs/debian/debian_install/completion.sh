@@ -15,7 +15,13 @@ echo "#############################################################" >> $logfile
 	rm -r ${output_dir}/mnt_debootstrap/drivers
 	rm -r ${output_dir}/mnt_debootstrap/sound
 	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
-	
+	rm -r ${output_dir}/mnt_debootstrap/linux-2.6.33-lpc313x
+	rm    ${output_dir}/mnt_debootstrap/deboostrap_stg2_errors.txt
+	rm    ${output_dir}/mnt_debootstrap/elektor_defconfig
+	rm    ${output_dir}/mnt_debootstrap/post_deboostrap_errors.txt
+	rm    ${output_dir}/mnt_debootstrap/config_backup
+	rm    ${output_dir}/mnt_debootstrap/setup_log.txt
+
 	cp -v $root_path/rootfs/debian/debian_install/first_boot.sh ${output_dir}/mnt_debootstrap/opt/first_boot.sh || exit 0
 	chmod +x ${output_dir}/mnt_debootstrap/opt/first_boot.sh
 	echo "$build_time Script for first boot copied to ${output_dir}/mnt_debootstrap/opt/first_boot.sh" >> $logfile_build
