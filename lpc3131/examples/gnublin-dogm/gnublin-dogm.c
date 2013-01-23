@@ -37,8 +37,8 @@
 
 static void pabort(const char *s)
 {
-	perror(s);
-	abort();
+	printf("%s",s);
+	exit(1);
 }
 
 char *device_file = "/dev/spidev0.0";
@@ -457,10 +457,11 @@ int main(int argc, char **argv)
 	if (json_flag == 1)
 	printf("{\"spi mode\" : \"%d\",\"bits per word\" : \"%d\",\"max speed\" : \"%d Hz (%d KHz)\",\"result\" : \"0\"}\n,",mode, bits, speed, speed/1000);
 	else
+	{
 	printf("spi mode: %d\n", mode);
 	printf("bits per word: %d\n", bits);
 	printf("max speed: %d Hz (%d KHz)\n", speed, speed/1000);
-	
+	}
 	
 	/* Do not init the display, maybe you only want to make a shift operation ? */
 	if(initflag)
