@@ -58,21 +58,20 @@ int main (int argc, char **argv) {
 		}
 
 
-    printf("device = %s\n", filename);
 
 
 
     if ((fd = open(filename, O_RDWR)) < 0) { 
       if (json_flag == 1)
-          printf("{\"result\" : \"i2c open error\"}\n");
+          printf("{\"error_msg\" : \"Failed to open i2c device \",\"result\" : \"-1\"}\n");
       else
-        printf("i2c open error"); 
+        printf("Failed to open i2c device"); 
         return -1; 
     } 
 
     if (ioctl(fd, I2C_SLAVE, slave_address) < 0) { 
       if (json_flag == 1)
-          printf("{\"result\" : \"ioctl I2C_SLAVE error\"}\n");
+          printf("{\"error_msg\" : \"Failed to open i2c device \",\"result\" : \"-1\"}\n");
       else
         printf("ioctl I2C_SLAVE error"); 
         return -1; 
@@ -85,9 +84,9 @@ int main (int argc, char **argv) {
 
       if (write(fd, buffer, 1) != 1) {
       if (json_flag == 1)
-          printf("{\"result\" : \"write error 0\"}\n");
+          printf("{\"error_msg\" : \"GetFullStatus1 error\",\"result\" : \"-2\"}\n");
       else
-         printf("write error 0\n"); 
+         printf("GetFullStatus1 error\n"); 
          return -1; 
       } 
      
@@ -99,17 +98,17 @@ int main (int argc, char **argv) {
 
       if (write(fd, buffer, 1) != 1) { 
       if (json_flag == 1)
-          printf("{\"result\" : \"write error 1\"}\n");
+          printf("{\"error_msg\" : \"RunInit error\",\"result\" : \"-3\"}\n");
       else
-         printf("write error 1\n"); 
+         printf("RunInit error\n"); 
          return -1; 
       } 
 
 
-      if (json_flag == 1)
-          printf("{\"result\" : \"Position is %i\"}\n", position);
-      else
-      printf("Position is: %i\n", position); //Print the Position
+//      if (json_flag == 1)
+//          printf("{\"result\" : \"Position is %i\"}\n", position);
+//     else
+//     printf("Position is: %i\n", position); //Print the Position
         
       
 //SetPosition
@@ -122,14 +121,14 @@ buffer[4] = (unsigned char)  position;       // PositionByte2 (7:0)
 
       if (write(fd, buffer, 5) != 5) { 
       if (json_flag == 1)
-          printf("{\"result\" : \"write error 2\"}\n");
+          printf("{\"error_msg\" : \"SetPosition error\",\"result\" : \"-4\"}\n");
       else
-         printf("write error 2\n"); 
+         printf("SetPosition error\n"); 
          return -1; 
       } 
 
       if (json_flag == 1)
-          printf("{\"result\" : \"Step done.\"}\n");
+          printf("{\"result\" : \"0\"}\n");
       else
           printf("Step done.\n");
 

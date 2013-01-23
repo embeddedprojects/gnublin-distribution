@@ -11,6 +11,7 @@
 
 channel=""
 result=""
+error=""
 i2cbus="1"
 address="0x48"
 json_f="0"
@@ -29,10 +30,12 @@ gnublin-adcmod -j -a 0x48 -c 2  <- channel=2, I2C-Address=0x48 print value in js
 check_channel() {
 	if [ "$1" -gt "7" ]
 	then
-		echo "channel is not valid"
+
 			if [ "$json_f" == "1" ]
 			then
-			    echo "{ \"result\" : \"channel is not valid\" }"
+			    echo "{ \"error_msg\" : \"channel is not valid \",\"result\" : \"-1\" }"
+			else
+			echo "channel is not valid"
 			fi
 			exit 1
 	fi 
@@ -44,7 +47,7 @@ lsmod | grep "ads7828"  >/dev/null
 if [ "$?" == "1" ]
 then
 	modprobe ads7828 >/dev/null
-	echo "ADC-module loaded"
+	sleep 2
 fi 
 
 #parse the parameters
@@ -68,7 +71,7 @@ then
     result="I2C-address is not a hex-value."
     if [ "$json_f" == "1" ]
     then
-        echo "{ \"result\" : \"$result\" }"
+        echo "{ \"error_msg\" : \"$result \",\"result\" : \"-2\" }"
     else
         echo $result
     fi
@@ -84,17 +87,28 @@ if [ -f /sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${cha
 then
 #get the value of the selected adc channel
 result=$(cat "/sys/module/ads7828/drivers/i2c:ads7828/${i2cbus}-00${address:2}/in${channel}_input" 2>/dev/null) 
+
+	#print result in normal format or in json format
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"Voltage\" : \"$result \",\"result\" : \"0\" }"
+	else
+    echo $result
+	fi 
 else 
-result="File not found. Please use the correct I2C-address or connect the adc-module."
+
+	#print result in normal format or in json format
+	error="File not found. Please use the correct I2C-address or connect the adc-module."
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"error_msg\" : \"$error \",\"result\" : \"-3\" }"
+	else
+	    echo $error
+	fi 
 fi
 
-#print result in normal format or in json format
-if [ "$json_f" == "1" ]
-then
-    echo "{ \"result\" : \"$result\" }"
-else
-    echo $result
-fi 
+
+
 
 
 

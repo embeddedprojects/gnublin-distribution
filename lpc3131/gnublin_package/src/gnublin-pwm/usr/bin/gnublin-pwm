@@ -12,10 +12,7 @@
 
 value_length=""
 value=""
-test1=""
-string='
-
-Module automaticly loaded'
+json_f="0"
 devfile="/dev/lpc313x_pwm"
 helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
 
@@ -28,19 +25,25 @@ Example:
 gnublin-pwm -v ff     <- this command starts the pwm interface with specified value.'
 
 
+
 # check if script was called with parameters
 if [ "$#" = "0" ]
 then 
-   echo "Keine Parameter übergeben. -h für Hilfe"
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"error_msg\" : \"No parameters given. -h for help \",\"result\" : \"-1\" }"
+		else
+		echo "No parameters given. -h for help"
+		fi
    exit 1
 fi 
-
 
 while getopts d:v:hj opt
  do
       case $opt in
           d) devfile="${OPTARG}" ;;
    	  v) value="${OPTARG}" ;;
+          j) json_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
 	  h) echo "$helpstring"
@@ -55,7 +58,6 @@ if [ "$?" == "1" ]
 then
 	modprobe lpc313x_pwm
         sleep 2
-	echo $string
 fi 
 
 
@@ -64,7 +66,7 @@ if [ ! -c $devfile ]
 then
 	if [ "$json_f" == "1" ]
 	then
-	    echo "{ \"result\" : \"File: $devfile was not found\" }"
+	    echo "{ \"error_msg\" : \"File: $devfile was not found\",\"result\" : \"-2\" }"
 	else
 	echo "File: $devfile was not found"
         fi
@@ -78,7 +80,7 @@ if [ "$value_length" != "2" ]
 then 
 	if [ "$json_f" == "1" ]
 	then
-	    echo "{ \"result\" : \"Number of digits in expression value isn't correct!\" }"
+	    echo "{ \"error_msg\" : \"Number of digits in expression value isn't correct!\",\"result\" : \"-3\" }"
 	else
 	echo "Number of digits in expression value isn't correct!"
 	fi
@@ -86,12 +88,13 @@ then
 fi
 
 
+
 echo $value | grep -E "[^0-9a-fA-F]"
 if [ "$?" == "0" ]; 
 then
 	if [ "$json_f" == "1" ]
 	then
-	    echo "{ \"result\" : \"Value must be between 00 and ff.\" }"
+	    echo "{ \"error_msg\" : \"Value must be between 00 and ff\",\"result\" : \"-4\" }"
 	else
         echo "Value must be between 00 and ff."
 	fi
@@ -102,7 +105,7 @@ fi
 echo "$value" > $devfile
 	if [ "$json_f" == "1" ]
 	then
-	    echo "{ \"result\" : \"PWM successfully activated.\" }"
+	    echo "{ \"result\" : \"0\" }"
 	else
         echo "PWM successfully activated."
 	fi

@@ -52,7 +52,7 @@ static uint8_t mode;
 static uint8_t bits = 8;
 static uint32_t speed = 100000;
 static uint16_t delay;
-
+int json_flag = 0;
 
 /* This string contains the command for initializing the display */
 uint8_t const init_command[BUFF_SIZE] = {
@@ -127,6 +127,9 @@ static void transfer(int fd)
 	}
 	
 	if (ret == -1)
+		if (json_flag == 1)
+		printf("{\"error_msg\" : \"can't send spi message\",\"result\" : \"-11\"}\n");
+		else
 		printf("can't send spi message\n");
 	
 	clearstring(&tx_real[0]);
@@ -141,7 +144,7 @@ static void transfer(int fd)
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"amnhw:l:d:o:s:i:t")) != -1)
+	while((c = getopt(argc,argv,"amnjhw:l:d:o:s:i:t")) != -1)
 	{
 		switch(c)
 		{
@@ -154,6 +157,7 @@ void parse_opts(int argc, char **argv)
 			case 's' : shift_val = atoi(optarg);shiftflag = 1;  break;
 			case 'a' : curs_auto_dec = 1;                       break;
 			case 't' : write_speed = 160000;              		break;
+			case 'j' : json_flag = 1;                           break;
 			case 'i' : pinnumber =  optarg;						break;
 		}
 
@@ -164,6 +168,7 @@ void parse_opts(int argc, char **argv)
 		puts("  -d            device to use (default /dev/spidev0.0)\n"
 	     "  -w            write string to display\n"
 	     "  -d            specify a device file\n"
+	     "  -j            Convert Output to json Format\n"
 	     "  -o            Set cursor to position(Start line 1 = 128\n"
 		 "                                       Start line 2 = 192)\n"
 		 "                                                          \n"
@@ -330,6 +335,9 @@ int shift(int s_val)
 	
 	if(shift_val == 0)
 	{
+		if (json_flag == 1)
+		printf("{\"error_msg\" : \"shift value 0 is not allowed!\",\"result\" : \"-10\"}\n");
+		else
 		printf("shift value 0 is not allowed!\n");
 		return -1;
 	}	
@@ -381,13 +389,18 @@ int main(int argc, char **argv)
 	parse_opts(argc, argv);
 	
 	setenv("GPIO_PIN",pinnumber,1);
-	system("echo $GPIO_PIN");
+	
+//	if (json_flag != 1)
+//	system("echo $GPIO_PIN");
 	
 	system("echo $GPIO_PIN > /sys/class/gpio/export");
 	system("echo low > /sys/class/gpio/gpio$GPIO_PIN/direction");
 	
 	fd = open(device_file, O_RDWR);
-	if (fd < 0)
+	if (fd < 0)	        
+		if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't open device\",\"result\" : \"-1\"}\n");
+		else
 		pabort("can't open device");
 
 	/*
@@ -395,10 +408,16 @@ int main(int argc, char **argv)
 	 */
 	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't set spi mode\",\"result\" : \"-2\"}\n");
+		else
 		pabort("can't set spi mode");
 
 	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't get spi mode\",\"result\" : \"-3\"}\n");
+		else
 		pabort("can't get spi mode");
 
 	/*
@@ -406,10 +425,16 @@ int main(int argc, char **argv)
 	 */
 	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't set bits per word\",\"result\" : \"-4\"}\n");
+		else
 		pabort("can't set bits per word");
 
 	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't get bits per word\",\"result\" : \"-5\"}\n");
+		else
 		pabort("can't get bits per word");
 
 	/*
@@ -417,12 +442,21 @@ int main(int argc, char **argv)
 	 */
 	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't set max speed hz\",\"result\" : \"-6\"}\n");
+		else
 		pabort("can't set max speed hz");
 
 	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
 	if (ret == -1)
+	        if (json_flag == 1)
+		pabort("{\"error_msg\" : \"can't get max speed hz\",\"result\" : \"-7\"}\n");
+		else
 		pabort("can't get max speed hz");
 
+	if (json_flag == 1)
+	printf("{\"spi mode\" : \"%d\",\"bits per word\" : \"%d\",\"max speed\" : \"%d Hz (%d KHz)\",\"result\" : \"0\"}\n,",mode, bits, speed, speed/1000);
+	else
 	printf("spi mode: %d\n", mode);
 	printf("bits per word: %d\n", bits);
 	printf("max speed: %d Hz (%d KHz)\n", speed, speed/1000);
@@ -434,6 +468,9 @@ int main(int argc, char **argv)
 		/* Display initialisation */			
 		if((system("echo 0 >/sys/class/gpio/gpio$GPIO_PIN/value")) != 0)
 		{		
+		  	if (json_flag == 1)
+			printf("{\"error_msg\" : \"export GPIO_PIN=gpio[x] may help\",\"result\" : \"-8\"}\n");
+			else
 			printf("export GPIO_PIN=gpio[x] may help\n");
 			return -1;
 		}
@@ -447,11 +484,14 @@ int main(int argc, char **argv)
 
 	if(modeflag)
 	{
+		if (json_flag == 1)
+		printf("{\"error_msg\" : \"Display shift mode not implemented yet!\",\"result\" : \"-9\"}\n");
+		else
 		printf("Display shift mode not implemented yet!\n");
 	}
 	else {
 
-		/* Copy only one string or char onto the display --> Standart */
+		/* Copy only one string or char onto the display --> Standard */
 		if(displayflag & !cursorflag & !shiftflag) 
 		{
 			
@@ -466,6 +506,9 @@ int main(int argc, char **argv)
 		/* Only set cursor to position cursor_offset */		
 		if(cursorflag & !displayflag & !shiftflag) 		
 		{
+			if (json_flag == 1)
+			printf("{\"Cursor_offset\" : \"%d\",\"result\" : \"0\"}\n",cursor_offset);
+			else
 			printf("Cursor_offset-->%d",cursor_offset);			
 			set_cursor(cursor_offset);
 			

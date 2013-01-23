@@ -49,7 +49,7 @@ then
     result="I2C-address is not a hex-value."
     if [ "$json_f" == "1" ]
     then
-        echo "{ \"result\" : \"$result\" }"
+        echo "{ \"error_msg\" : \"$result\",\"result\" : \"-1\" }"
     else
         echo $result
     fi
@@ -57,7 +57,7 @@ then
 fi
 
 #read the result with i2cget
-result=$(i2cget -y ${i2cbus} ${address})
+result=$(i2cget -y ${i2cbus} ${address} 2>/dev/null)
 
 #exit if something went wrong while reading the temperature
 if [ "$?" != "0" ]
@@ -65,7 +65,7 @@ then
     result="I2C-address is wrong or lm75 hardware-module is not connected."
     if [ "$json_f" == "1" ]
     then
-        echo "{ \"result\" : \"$result\" }"
+        echo "{ \"error_msg\" : \"$result\",\"result\" : \"-2\" }"
     else
         echo $result
     fi
@@ -79,8 +79,8 @@ result=$(printf "%d\n" $result)
 #output the result in normal form or json compatible format
 if [ "$json_f" == "1" ]
 then
-    echo "{ \"result\" : \"$result\" }"
+    echo "{ \"Temperature\" : \"$result\",\"result\" : \"0\" }"
 else
-    echo "$result "
+    echo "$result °C "
 fi 
 

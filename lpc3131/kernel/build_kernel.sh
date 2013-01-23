@@ -49,7 +49,7 @@ fi
 	
 	else 
 		cd $root_path/Downloads/$git_name_kernel
-		rm -r $root_path/kernel/kernel_name
+		rm -r $root_path/kernel/$kernel_name
 		git pull
 	fi
 

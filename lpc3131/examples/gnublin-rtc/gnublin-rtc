@@ -62,7 +62,7 @@ if [ "$?" != "0" ]
 then
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Device-file /dev/rtc0 not found\" }"
+      echo "{ \"error_msg\" : \"Device-file /dev/rtc0 not found\",\"result\" : \"-1\" }"
       else
       echo "Device-file /dev/rtc0 not found. Please connect the RTC to the GNUBLIN."
       fi
@@ -79,7 +79,7 @@ then
       result=$(hwclock -r)
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"$result\" }"
+      echo "{ \"date\" : \"$result\",\"result\" : \"0\" }"
       else
       echo "$result"
       fi
@@ -96,7 +96,7 @@ then
       hwclock --set --date "$date"
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"RTC date set to $date.\" }"
+      echo "{ \"result\" : \"0\" }"
       else
       echo "RTC date set to $date."
       fi
@@ -104,7 +104,7 @@ then
       #if date is not in correct format print an error.
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Date not in correct format.\" }"
+      echo "{ \"error_msg\" : \"Date not in correct format.\",\"result\" : \"-2\" }"
       else
       echo "Date not in correct format. -> YYYY/MM/DD HH:MM:SS "     
       exit 1
@@ -117,14 +117,7 @@ then
       hwclock --hctosys
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Linux date set to RTCs date.\" }"
+      echo "{ \"result\" : \"0\" }"
       else
       echo "Linux date set to RTCs date."
       fi
-
-
-else
-      echo "Wrong mode selected. Please use -g, -l or -s <date>"
-      exit 1
-
-fi

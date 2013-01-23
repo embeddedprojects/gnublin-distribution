@@ -24,7 +24,7 @@ helpstring='This script grants access to the GNUBLIN gpio pins.It also works wit
 -f 			free the gpio Pin
 
 Example:
-gnublin-gpio -i   -p 14 -j  <- set GPIO14 Pin as input, read value and print it in json format.
+gnublin-gpio -i -p 14 -j    <- set GPIO14 Pin as input, read value and print it in json format.
 gnublin-gpio -o 1 -p 11     <- set GPIO11 Pin as output with a high value
 gnublin-gpio -o 0 -p 11     <- set GPIO11 Pin as output with a low value'
 
@@ -52,7 +52,7 @@ if [[ ("$pin" -gt "20" && "$pin" -lt "98") || "$pin" -gt "113" ]]
 then
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Invalid GPIO pin selected.\" }"
+      echo "{ \"error_msg\" : \"Invalid GPIO pin selected.\",\"result\" : \"-1\" }"
       else
       echo "Invalid GPIO pin selected."
       fi
@@ -65,7 +65,7 @@ if [ "$?" == "1" -a "$pin" -gt "97" -a "$pin" -lt "114" ]
 then
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Invalid GPIO pin. Portexpander not connected or module pca953x not loaded\" }"
+      echo "{ \"error_msg\" : \"Invalid GPIO pin. Portexpander not connected or module pca953x not loaded\",\"result\" : \"-2\" }"
       else
       echo "Invalid GPIO pin selected. Portexpander not connected or module pca953x not loaded"
       fi
@@ -108,7 +108,7 @@ if [ "$pin" = "4" ]
 then
   if [ "$json_f" == "1" ]
   then
-  echo "{ \"result\" : \"GPIO${pin} is only an input and cannot be set as an output.\" }"
+  echo "{  \"error_msg\" : \"GPIO${pin} is only an input and cannot be set as an output.\",\"result\" : \"-3\" }"
   else 
   echo "GPIO${pin} is only an input and cannot be set as an output."
   fi
@@ -120,7 +120,7 @@ fi
 
         if [ "$json_f" == "1" ]
         then
-           echo "{ \"result\" : \"GPIO${pin} is now an output with $output_val level.\" }"
+           echo "{ \"result\" : \"0\" }"
         else
            echo "GPIO${pin} is now an output with $output_val level."
         fi
@@ -130,23 +130,17 @@ fi
 
 
 
-
-
-
-#print the output in normal format or in json format
-if [ "$json_f" == "1" ]
-then
-    echo "{ \"result\" : \"$result\" }"
-else
-    echo $result
-fi 
-
-
 #unexport gpio pins
 if [ -n "$freef" ]
 then
 	echo "$pin" > /sys/class/gpio/unexport
-	echo "Pin GPIO_GPIO${pin} unexported"
+        if [ "$json_f" == "1" ]
+        then
+           echo "{ \"result\" : \"0\" }"
+        else
+           echo "Pin GPIO${pin} unexported"
+        fi
+
 fi
 
 

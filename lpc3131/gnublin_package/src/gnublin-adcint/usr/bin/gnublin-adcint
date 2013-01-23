@@ -23,25 +23,29 @@ helpstring='This Script prints out the values of a selected internal adc channel
 
 Example:
 
-gnublin-adcint -j -c 2   <- read value of channel 2 and print it in json format'
+gnublin-adcint -j -c 3   <- read value of channel 2 and print it in json format'
 
 
 check_channel() {
 
 	if [ "$1" -gt "3" ]
 	then
-		echo "channel is not valid"
+		
 		if [ "$json_f" == "1" ]
 		then
-			echo "{ \"result\" : \"channel is not valid\" }"
+			echo "{ \"error_msg\" : \"channel is not valid \",\"result\" : \"-1\" }"
+		else 
+		echo "channel is not valid"
 		fi
 		exit 1
 	elif [ "$1" = "2" ] 
         then
-		echo "channel is not valid"
+		
 		if [ "$json_f" == "1" ]
 		then
-			echo "{ \"result\" : \"channel is not valid\" }"
+			echo "{ \"error_msg\" : \"channel is not valid \",\"result\" : \"-1\" }"
+		else
+		echo "channel is not valid"
 		fi
 		exit 1
 	fi 
@@ -51,7 +55,12 @@ check_channel() {
 # check if script was called with parameters
 if [ "$#" = "0" ]
 then 
-   echo "Keine Parameter übergeben. -h für Hilfe"
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"error_msg\" : \"No parameters given. -h for help \",\"result\" : \"-2\" }"
+		else
+		echo "No parameters given. -h for help"
+		fi
    exit 1
 fi 
 
@@ -60,7 +69,7 @@ lsmod | grep "lpc313x_adc"  >/dev/null
 if [ "$?" == "1" ]
 then
 	modprobe lpc313x_adc
-	echo $string
+	sleep 2
 fi 
 
 #parse parameters
@@ -83,10 +92,12 @@ check_channel $channel
 #check device-file
 if [ ! -c $devfile ]
 then
-	echo "File: $devfile was not found"
+	
 		if [ "$json_f" == "1" ]
 		then
-		echo "{ \"result\" : \"File: $devfile was not found\" }"
+		echo "{ \"error_msg\" : \"File: $devfile was not found \",\"result\" : \"-2\" }"
+		else
+		echo "File: $devfile was not found"
 		fi
 	exit 1
 fi
@@ -101,7 +112,7 @@ let result="${tmp}"
 #print the result in normal format or in json format
 if [ "$json_f" == "1" ]
 then
-    echo "{ \"result\" : \"$result\" }"
+    echo "{ \"Voltage\" : \" $result\",\"result\" : \"0\" }"
 else
     echo $result
 fi 
