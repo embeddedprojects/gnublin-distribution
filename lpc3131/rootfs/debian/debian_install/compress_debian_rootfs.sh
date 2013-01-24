@@ -11,7 +11,7 @@ source $debian_build_path/build_functions.sh
 
 fn_my_echo "Compressing the rootfs now!"
 echo "checking output directory second time"
-	ll ${output_dir}
+	ls -alF ${output_dir}
 #Mount the Image Again
 mount |grep ${output_dir}/${output_filename}.img >/dev/null
 if [ ! "$?" = "0" ]
@@ -50,7 +50,7 @@ fi
 	qemu-system-arm -M versatilepb -cpu arm926 -nographic -no-reboot -kernel ${root_path}/kernel/qemu_kernel/zImage -hda ${output_dir}/${output_filename}.img -m 512 -append "root=/dev/sda rootfstype=ext3 mem=512M devtmpfs.mount=0 rw ip=dhcp" && echo "qemu_second_start successfull" > $root_path/qemu_sec_start.txt
 	
 	echo "checking output directory second time"
-	ll ${output_dir}
+	ls -alF ${output_dir}
 	#Mount the Image Again
 	mount |grep ${output_dir}/${output_filename}.img >/dev/null
 	if [ ! "$?" = "0" ]
