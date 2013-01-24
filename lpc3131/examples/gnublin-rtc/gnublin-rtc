@@ -121,3 +121,5 @@ then
       else
       echo "Linux date set to RTCs date."
       fi
+
+fi
