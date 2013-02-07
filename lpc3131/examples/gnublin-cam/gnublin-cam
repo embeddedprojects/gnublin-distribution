@@ -17,21 +17,30 @@ modus=""
 filename="out.jpg"
 daemon=""
 json_f=""
-helpstring='This script is designed, to easily take pictures from a webcam, or to start a webstream.   
--h			Show this help
--j			Convert output to json format
--i <filename>		take a picture and save it with given filename.
--r <resolution>		set resolution of the snapshot or the stream.(default=800x600)
--s			start a webstream
--b			start a webstream in the background.
--p <value>		set the port of the webstream.(default=8080)
--d <device>		set the device.(default=/dev/video0)
+helpstring='This script is designed, to easily take pictures from a webcam, or to start a webstream.  
+ 
+-h Show this help
+-j Convert output to json format
+-i <filename> take a picture and save it with given filename.
+-r <resolution> set resolution of the snapshot or the stream.(default=800x600)
+-s start a webstream
+-b start a webstream in the background.
+-p <value> set the port of the webstream.(default=8080)
+-d <device> set the device.(default=/dev/video0)
 
 Example:
-gnublin-cam -i out.jpg     <- Take a picture and save it to file out.jpg.
-gnublin-cam -s -r 640x480  <- start a webstream with resolution=640x480.
-gnublin-cam -s -p 5555     <- start a webstream on port 5555.
-gnublin-cam -b             <- start a webstream in the background.'
+
+Take a picture and save it to file out.jpg:
+gnublin-cam -i out.jpg
+
+start a webstream with resolution=640x480:
+gnublin-cam -s -r 640x480 
+
+start a webstream on port 5555:
+gnublin-cam -s -p 5555
+
+start a webstream in the background:
+gnublin-cam -b'
 
 
 
@@ -62,7 +71,7 @@ if [ "$?" != "0" ]
 then
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Webcam not connected or module uvcvideo not loaded\" }"
+      echo "{ \"error_msg\" : \"Webcam not connected or module uvcvideo not loaded.\",\"result\" : \"-1\" }"
       else
       echo "Webcam not connected or module uvcvideo not loaded"
       fi
@@ -99,7 +108,7 @@ then
 
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"Picture $filename successfully taken.\" }"
+      echo "{ \"result\" : \"0\" }"
       else
       echo "Picture $filename successfully taken."
       fi
@@ -111,15 +120,16 @@ then
 	mjpg-streamer -i "/lib/input_uvc.so -d $device  -r $resolution" -o "/lib/output_http.so -p $port -w /usr/www -n" $daemon
       if [ "$json_f" == "1" -a "$daemon" == "-b" ]
       then
-      echo "{ \"result\" : \"Stream started on Port $port with resolution=$resolution in background.\" }"
+      echo "{ \"result\" : \"0\" }"
       elif [ "$json_f" != "1" -a "$daemon" == "-b" ]
+      then
       echo "Stream started on Port $port with resolution=$resolution in background."
       fi
 
 else
       if [ "$json_f" == "1" ]
       then
-      echo "{ \"result\" : \"No mode selected.\" }"
+      echo "{ \"error_msg\" : \"No mode selected.\",\"result\" : \"-2\" }"
       else
       echo "No mode selected. Please specify a mode with -s, -b or -i."
       fi

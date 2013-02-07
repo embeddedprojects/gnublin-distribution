@@ -35,7 +35,7 @@ void parse_opts(int argc, char **argv)
 	}
 	if (hflag)
 	{
-		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h\t\t\tShow this help\n-f <device>\t\tSpecify the i2c-device.default=/dev/i2c-1\n-j\t\t\tConvert output to json format.\n-a <I2C-address>\tSpecify the stepper modules I2C-address.default=0x60\n-p <Position>\t\tSpecify the desired position\n\nExample:\ngnublin-step -a 0x60 -p 3000  <-Drive the motor to position 3000 and use I2C-address 0x60.\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
+		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
 	exit(1);
 		
 	}
@@ -53,7 +53,7 @@ int main (int argc, char **argv) {
     
     
     if (argc == 0) {
-	printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h\t\t\tShow this help\n-f <device>\t\tSpecify the i2c-device.default=/dev/i2c-1\n-j\t\t\tConvert output to json format.\n-a <I2C-address>\tSpecify the stepper modules I2C-address.default=0x60\n-p <Position>\t\tSpecify the desired position\n\nExample:\ngnublin-step -a 0x60 -p 3000  <-Drive the motor to position 3000 and use I2C-address 0x60.\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");
+      printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");
       //exit(1);
 		}
 
@@ -90,7 +90,6 @@ int main (int argc, char **argv) {
          return -1; 
       } 
      
-     sleep(1);
      
     
       //RunInit command:  This Command must be executed before Operating

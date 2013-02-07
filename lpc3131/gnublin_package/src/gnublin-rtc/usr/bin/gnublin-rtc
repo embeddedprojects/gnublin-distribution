@@ -12,24 +12,35 @@
 result=""
 modus=""
 date=""
-json_f=""
-helpstring='This script is designed, to easily interact with a RTC connected to the GNUBLIN.   
--h			Show this help
--j			Convert output to json format
--s <Date>		Set the RTC to specified <Date> = "YYYY/MM/DD HH:MM:SS"
--g			Read the Time from the RTC.
--x			Set Linux date to RTCs date.
+json_f="0"
+init_f="0"
+rm_f="0"
+helpstring='This script is designed, to easily interact with a RTC connected to the GNUBLIN.
+   
+-h Show this help
+-j Convert output to json format
+-s <Date> Set the RTC to specified <Date>="YYYY/MM/DD HH:MM:SS"
+-g Read the Time from the RTC.
+-x Set Linux date to RTCs date.
+-i Only initialize the RTC.
+-r Only remove the RTC driver.
 
 
-Example:
-gnublin-rtc -g                        <- Read the Time from the RTC.
-gnublin-rtc -s "2013/01/20 16:16:16"  <- Set the RTC to specified date.
-gnublin-rtc -x                        <- Set Linux time to date read from RTC.'
+Examples:
+
+Read the Time from the RTC:
+gnublin-rtc -g              
+    
+Set the RTC to specified date:
+gnublin-rtc -s "2013/01/20 16:16:16"
+
+Set Linux time to date read from RTC:
+gnublin-rtc -x'
 
 
 
 
-while getopts s:jhsgx opt
+while getopts s:jhsgxir opt
  do
       case $opt in
           s) date="${OPTARG}" 
@@ -37,6 +48,8 @@ while getopts s:jhsgx opt
           g) modus="get" ;;
           x) modus="sync" ;;
 	  j) json_f="1" ;;
+	  i) init_f="1" ;;
+	  r) rm_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
           h) echo "$helpstring"
@@ -45,15 +58,31 @@ while getopts s:jhsgx opt
 done
 
 
+
+if [ "$rm_f" == "1" ]
+then
+	  modprobe -r rtc-mcp7940 >/dev/null
+	  exit 1
+fi
+
+
+
 #first check if the module is loaded, if not load it automaticly
 lsmod | grep "mcp7940"  >/dev/null
 if [ "$?" != "0" ]
 then
 
- echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
- modprobe rtc-mcp7940
- sleep 2
+      if [ "$init_f" == "1" ]
+      then
+	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
+	modprobe rtc-mcp7940
+	exit 1
 
+      else
+	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
+	modprobe rtc-mcp7940
+	sleep 1
+      fi
 fi
 
 #check if device-file /dev/rtc0 exists

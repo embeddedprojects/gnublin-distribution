@@ -12,18 +12,24 @@
 channel="1"
 result=""
 json_f="0"
+brute_f="0"
 devfile="/dev/lpc313x_adc"
 string='
 Module automaticly loaded'
 helpstring='This Script prints out the values of a selected internal adc channel 
--h			Show this help
--j			Convert output to json format
--c			Select gpa<x> Pin (1 is default)
--d			Choose Path to device file
+-h Show this help
+-b show raw output
+-j Convert output to json format
+-c Select gpa<x> Pin (1 is default)
+-d Choose Path to device file
 
 Example:
 
-gnublin-adcint -j -c 3   <- read value of channel 2 and print it in json format'
+read value of channel 3 and print it in json format:
+gnublin-adcint -j -c 3
+
+read value of channel 1 and print it in normal format:
+gnublin-adcint -c 1'
 
 
 check_channel() {
@@ -38,16 +44,6 @@ check_channel() {
 		echo "channel is not valid"
 		fi
 		exit 1
-	elif [ "$1" = "2" ] 
-        then
-		
-		if [ "$json_f" == "1" ]
-		then
-			echo "{ \"error_msg\" : \"channel is not valid \",\"result\" : \"-1\" }"
-		else
-		echo "channel is not valid"
-		fi
-		exit 1
 	fi 
 }
 
@@ -57,28 +53,44 @@ if [ "$#" = "0" ]
 then 
 		if [ "$json_f" == "1" ]
 		then
-			echo "{ \"error_msg\" : \"No parameters given. -h for help \",\"result\" : \"-2\" }"
+			echo "{ \"error_msg\" : \"No parameters given. -h for help\",\"result\" : \"-2\" }"
 		else
 		echo "No parameters given. -h for help"
 		fi
    exit 1
 fi 
 
+
+#check if channel_value is an integer
+if [ "${channel//[0-9]*}" != "" ] 
+then
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"error_msg\" : \"Only Integers allowed for channel\",\"result\" : \"-3\" }"
+		else
+		echo "Only Integers allowed for channel"
+		fi
+   exit 1
+fi
+
+
+
 #modul autoload
 lsmod | grep "lpc313x_adc"  >/dev/null
 if [ "$?" == "1" ]
 then
 	modprobe lpc313x_adc
-	sleep 2
+	sleep 1
 fi 
 
 #parse parameters
-while getopts c:d:jh opt
+while getopts c:d:jhb opt
  do
       case $opt in
           c) channel="${OPTARG}" ;;
           d) devfile="${OPTARG}" ;;
           j) json_f="1" ;;
+          b) brute_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
 		  h) echo "$helpstring"
@@ -95,7 +107,7 @@ then
 	
 		if [ "$json_f" == "1" ]
 		then
-		echo "{ \"error_msg\" : \"File: $devfile was not found \",\"result\" : \"-2\" }"
+		echo "{ \"error_msg\" : \"File: $devfile was not found\",\"result\" : \"-4\" }"
 		else
 		echo "File: $devfile was not found"
 		fi
@@ -112,7 +124,9 @@ let result="${tmp}"
 #print the result in normal format or in json format
 if [ "$json_f" == "1" ]
 then
-    echo "{ \"voltage\" : \" $result\",\"result\" : \"0\" }"
+    echo "{ \"voltage\" : \"$result\",\"result\" : \"0\" }"
+elif [ "$brute_f" == "1"  ] 
+    echo $result
 else
     echo $result
 fi 

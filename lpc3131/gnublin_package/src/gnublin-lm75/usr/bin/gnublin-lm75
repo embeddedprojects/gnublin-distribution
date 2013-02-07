@@ -15,27 +15,35 @@ address="0x4f"
 result=""
 i2cbus="1"
 json_f="0"
+brute_f="0"
 helpstring='This script is reading out the temperature(s) of one or more LM75 temperature sensor(s).
 
 The correct syntax for this script is: gnublin-lm75 [Option..]       
 
--h 			print this helptext
--j 			convert output to json compatible format
--a <address> 		LM75 sensor I2CAddress.<address> must be a hex-value.default=0x48
+-h print this helptext
+-b show output in raw format
+-j convert output to json compatible format
+-a <address> LM75 sensor I2CAddress.<address> must be a hex-value.default=0x48
 
 
 Examples:
-gnublin-lm75 -j -a 0x49 <-read temperature.I2CAddress=0x49. print value in json format.
-gnublin-lm75            <-read temperature.default I2CAddress=0x48. print the value.
 
-'
+read temperature.I2CAddress=0x49. print value in json format:
+gnublin-lm75 -j -a 0x49 
 
-while getopts a:jh opt
+read temperature.default I2CAddress=0x48. print the value in raw format:
+gnublin-lm75 -b 
+
+read temperature.default I2CAddress=0x48. print the value:
+gnublin-lm75 '
+
+while getopts a:jhb opt
  do
       case $opt in
 
           a) address="${OPTARG}" ;;
           j) json_f="1" ;;
+          b) brute_f="1" ;;
           h) echo "$helpstring"; exit 1 ;;
           ?) echo "For more information please use -h";
              exit 1;;
@@ -80,7 +88,10 @@ result=$(printf "%d\n" $result)
 if [ "$json_f" == "1" ]
 then
     echo "{ \"temperature\" : \"$result\",\"result\" : \"0\" }"
+elif [ "$brute_f" == "1" ]
+then
+    echo "$result"
 else
-    echo "$result °C "
+    echo "$result °C"
 fi 
 

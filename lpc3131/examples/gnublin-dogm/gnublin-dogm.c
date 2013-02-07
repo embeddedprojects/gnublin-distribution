@@ -41,7 +41,7 @@ static void pabort(const char *s)
 	exit(1);
 }
 
-char *device_file = "/dev/spidev0.0";
+char *device_file = "/dev/spidev0.11";
 char *string_display = "Default String";
 long int write_speed = 1;
 int fd;
@@ -53,6 +53,10 @@ static uint8_t bits = 8;
 static uint32_t speed = 100000;
 static uint16_t delay;
 int json_flag = 0;
+int init_flag = 0;
+int remove_flag = 0;
+char *csnumber="11";
+char help[100];
 
 /* This string contains the command for initializing the display */
 uint8_t const init_command[BUFF_SIZE] = {
@@ -144,7 +148,7 @@ static void transfer(int fd)
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"amnjhw:l:d:o:s:i:t")) != -1)
+	while((c = getopt(argc,argv,"amnjhw:l:d:o:s:g:tic:r")) != -1)
 	{
 		switch(c)
 		{
@@ -158,32 +162,45 @@ void parse_opts(int argc, char **argv)
 			case 'a' : curs_auto_dec = 1;                       break;
 			case 't' : write_speed = 160000;              		break;
 			case 'j' : json_flag = 1;                           break;
-			case 'i' : pinnumber =  optarg;						break;
+			case 'g' : pinnumber =  optarg;			break;
+			case 'c' : csnumber =  optarg;			break;
+			case 'i' : init_flag = 1;			break;
+			case 'r' : remove_flag = 1;			break;
 		}
 
 	}
 	if (hflag)
 	{
 		printf("Usage: %s [-wdhnso]\n", argv[0]);		
-		puts("  -d            device to use (default /dev/spidev0.0)\n"
-	     "  -w            write string to display\n"
-	     "  -d            specify a device file\n"
-	     "  -j            Convert Output to json Format\n"
-	     "  -o            Set cursor to position(Start line 1 = 128\n"
-		 "                                       Start line 2 = 192)\n"
-		 "                                                          \n"
-	     "  -n            reset the display.                        \n"
-		 "  -s[+/-x]      shift display [x] times(left shift = -    \n"
-		 "                                        right shift= +    \n"
-         "                                                          \n"
-		 "  -a            Change auto increment of cursor           \n"
-		 "                to auto decrement(for this command)       \n"
-		 "  -t            Slow down the write speed					\n"
-		 "  -i 			  Use GPIO Pin x instead default GPIO Pin 14\n"
-		 "				  (For RS Pin on DOGM Display				\n"
-		 "All operations except [-w -o -s] and [-o -s] are allowed\n");
+		puts("-d device to use (default /dev/spidev0.11)\n"
+	     "-w write string to display\n"
+	     "-j Convert Output to json Format\n"
+	     "-o Set cursor to position(Start of line 1= 128; Start of line 2= 192)\n"
+	     "-n reset the display.\n"
+	     "-s[+/-x] shift display [x] times(left shift = - ; right shift= +  \n"
+		 "-a Change auto increment of cursor to auto decrement\n"
+		 "-t Slow down the write speed\n"
+		 "-g <X> Use GPIO Pin X instead default GPIO Pin 14 (For RS Pin on DOGM Display)\n"
+		 "-i -c <Y> Only initialize the spidev module with <Y> as Chipselect Pin.(default:<Y>=11)\n"
+		 "-r Only remove the spidev driver.\n"
+		 "\n\nExamples:\nWrite Hello to the Display:\ngnublin-dogm -n -w \"Hello\"\n\nWrite Hello to the Display connected with CS-Pin=18\ngnublin-dogm -n -w \"Hello\" -d /dev/spidev0.18\n\nJump to the second Line with Cursor\ngnublin-dogm -o 192\n\n"
+		 "All operations except [-w with -o and -s] and [-o with -s] are allowed\n");
 	exit(1);
 		
+	}
+	
+	if (init_flag)
+	{
+	  sprintf(help, "modprobe spidev cs_pin=%s",csnumber);
+	  system(help);
+	  exit (1);
+	}
+	
+	if (remove_flag)
+	{
+	  sprintf(help, "modprobe -r spidev");
+	  system(help);
+	  exit (1);
 	}
 
 #ifdef DEBUG	

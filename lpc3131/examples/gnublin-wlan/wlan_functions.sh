@@ -17,27 +17,26 @@ helpstring='This wrapper Script connects your Wlan Module to an Access Point:
 gnublin-wlan [-h/-e] [wpa option: -k/-s || -c] [Ip: -t static -i/-g || -t dhcp]
 
 Output:
--h 			Show this help.
--e 			Show lots of wpa_supplicant.conf examples 
+-h Show this help.
+-e Show lots of wpa_supplicant.conf examples 
 
 WPA Connection:
--k			Select the WPA key for your AP.
--s			Select the name (SSID) of your AP.
--c 			Specify a config file wich wpa_supplicant can use to conect to an AP.
-			With this option selected, you dont need to specify the -k and -s
-			option.
+-k Select the WPA key for your AP.
+-s Select the name (SSID) of your AP.
+-c Specify a config file wich wpa_supplicant can use to conect to an AP.
+   With this option selected, you dont need to specify the -k and -s option.
 
--d 			Shutdown wlan.
+-d Shutdown wlan.
 
 IP Receivment:
--t 			Specify the ip receive type. dhcp or static.
--i			Assign an ip address to your wlan module. Only possible with static option.
--g			Select the ip address of your gateway, only take this option with static.
+-t Specify the ip receive type. dhcp or static.
+-i Assign an ip address to your wlan module. Only possible with static option.
+-g Select the ip address of your gateway, only take this option with static.
 
--v 			Be verbose.
+-v Be verbose.
 
 Device:
--w			Specify the wlan device
+-w Specify the wlan device
 
 Examples:
 *********

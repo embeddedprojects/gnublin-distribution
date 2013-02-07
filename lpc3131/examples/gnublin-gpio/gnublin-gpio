@@ -16,17 +16,23 @@ freef=""
 output_val=""
 json_f=""
 helpstring='This script grants access to the GNUBLIN gpio pins.It also works with pca9555 portexpander. 
--h			Show this help
--j			Convert output to json format
--p <value>		Select gpio Pin (default=14) <value> between 1 and 20
--i			configure pin as input
--o <value>		configure pin as output and set a value 1=high,0=low
--f 			free the gpio Pin
+-h Show this help
+-j Convert output to json format
+-p <value> Select gpio Pin (default=14) <value> between 1 and 20
+-i configure pin as input
+-o <value> configure pin as output and set a value 1=high,0=low
+-f free the gpio Pin
 
 Example:
-gnublin-gpio -i -p 14 -j    <- set GPIO14 Pin as input, read value and print it in json format.
-gnublin-gpio -o 1 -p 11     <- set GPIO11 Pin as output with a high value
-gnublin-gpio -o 0 -p 11     <- set GPIO11 Pin as output with a low value'
+
+set GPIO14 Pin as input, read value and print it in json format:
+gnublin-gpio -i -p 14 -j
+
+set GPIO11 Pin as output with a high value:
+gnublin-gpio -o 1 -p 11     
+
+set GPIO11 Pin as output with a low value:
+gnublin-gpio -o 0 -p 11 '
 
 
 
@@ -73,7 +79,17 @@ then
 fi 
 
 
-
+#check if pin is an integer
+if [ "${pin//[0-9]*}" != "" ] 
+then
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"error_msg\" : \"Only Integers allowed for pin\",\"result\" : \"-5\" }"
+		else
+		echo "Only Integers allowed for pin"
+		fi
+   exit 1
+fi
 
 #first make sure that gpio pin is exported in sysfs
 if [ ! -d "/sys/class/gpio/gpio${pin}" ]
