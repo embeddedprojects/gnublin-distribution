@@ -298,6 +298,7 @@ cat <<END > /etc/fstab 2>>/deboostrap_stg2_errors.txt
 #
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 /dev/root	/	$filesystem_vers	noatime,errors=remount-ro	0	1
+none  /proc/bus/usb  usbfs  defaults  0  0
 #/dev/mmcblk0p3	none	swap	defaults	0	0
 END
 
