@@ -13,10 +13,12 @@
 value_length=""
 value=""
 json_f="0"
+brute_f="0"
 devfile="/dev/lpc313x_pwm"
 helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
 
 -h Show this help
+-b show output in raw format.
 -j print output in json format.
 -d Choose Path to device file.
 -v Hex-value for pwm duty cycle in. <high-byte><low-byte>
@@ -43,12 +45,13 @@ then
    exit 1
 fi 
 
-while getopts d:v:hj opt
+while getopts d:v:hjb opt
  do
       case $opt in
           d) devfile="${OPTARG}" ;;
    	  v) value="${OPTARG}" ;;
           j) json_f="1" ;;
+          j) brute_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
 	  h) echo "$helpstring"
@@ -95,7 +98,7 @@ fi
 
 
 value_length=${#value}
-if [ "$value_length" != "2" ]
+if [ "$value_length" != "4" ]
 then 
 	if [ "$json_f" == "1" ]
 	then
@@ -125,6 +128,9 @@ echo "$value" > $devfile
 	if [ "$json_f" == "1" ]
 	then
 	    echo "{ \"result\" : \"0\" }"
+	elif [ "$brute_f" == "1" ]
+	then
+
 	else
         echo "PWM successfully activated."
 	fi

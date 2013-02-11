@@ -13,11 +13,13 @@ result=""
 modus=""
 date=""
 json_f="0"
+brute_f="0"
 init_f="0"
 rm_f="0"
 helpstring='This script is designed, to easily interact with a RTC connected to the GNUBLIN.
    
 -h Show this help
+-b show output in raw format.
 -j Convert output to json format
 -s <Date> Set the RTC to specified <Date>="YYYY/MM/DD HH:MM:SS"
 -g Read the Time from the RTC.
@@ -40,7 +42,7 @@ gnublin-rtc -x'
 
 
 
-while getopts s:jhsgxir opt
+while getopts s:jhsgxirb opt
  do
       case $opt in
           s) date="${OPTARG}" 
@@ -48,6 +50,7 @@ while getopts s:jhsgxir opt
           g) modus="get" ;;
           x) modus="sync" ;;
 	  j) json_f="1" ;;
+	  b) brute_f="1" ;;
 	  i) init_f="1" ;;
 	  r) rm_f="1" ;;
           ?) echo "$helpstring"
@@ -74,12 +77,12 @@ then
 
       if [ "$init_f" == "1" ]
       then
-	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
+	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device >/dev/null
 	modprobe rtc-mcp7940
 	exit 1
 
       else
-	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device
+	echo mcp7940 0x6f > /sys/bus/i2c/devices/i2c-1/new_device >/dev/null
 	modprobe rtc-mcp7940
 	sleep 1
       fi

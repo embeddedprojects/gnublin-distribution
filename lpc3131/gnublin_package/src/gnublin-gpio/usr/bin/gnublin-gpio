@@ -13,10 +13,13 @@ pin="14"
 result=""
 inputf=""
 freef=""
+brutef=""
 output_val=""
 json_f=""
 helpstring='This script grants access to the GNUBLIN gpio pins.It also works with pca9555 portexpander. 
+
 -h Show this help
+-b show output in raw format.
 -j Convert output to json format
 -p <value> Select gpio Pin (default=14) <value> between 1 and 20
 -i configure pin as input
@@ -37,7 +40,7 @@ gnublin-gpio -o 0 -p 11 '
 
 
 
-while getopts p:jhio:f opt
+while getopts p:jhio:fb opt
  do
       case $opt in
           p) pin="${OPTARG}" ;;
@@ -45,6 +48,7 @@ while getopts p:jhio:f opt
           o) output_val="${OPTARG}" ;;
 	  j) json_f="1" ;;
 	  f) freef="1" ;;
+	  b) brutef="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
           h) echo "$helpstring"
@@ -127,6 +131,17 @@ if [ "$inputf" == "1" ]
 then
         #read the input
 	result=$( cat "/sys/class/gpio/gpio${pin}/value" )
+  if [ "$json_f" == "1" ]
+  then
+  echo "{  \"result\" : \"0\" }"
+  elif [ "$brutef" == "1" ]
+  then
+  echo $result
+  else 
+  echo "GPIO${pin} is $result"
+  fi
+
+
 elif [ -n "$output_val" ]
 then
 

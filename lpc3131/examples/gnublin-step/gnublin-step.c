@@ -15,13 +15,13 @@ int c,hflag;
 char *filename = "/dev/i2c-1"; 
 int slave_address = ADDR; 
 int json_flag = 0;
-
+int brute_flag = 0;
 
 
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"hjp:f:a:")) != -1)
+	while((c = getopt(argc,argv,"hjp:f:a:b")) != -1)
 	{
 		switch(c)
 		{
@@ -30,12 +30,13 @@ void parse_opts(int argc, char **argv)
 			case 'f' : filename = optarg;                       break;
 			case 'a' : slave_address = strtol (optarg,NULL,16); break;
 			case 'j' : json_flag = 1;                           break;
+			case 'b' : brute_flag = 1;                           break;
 		}
 
 	}
 	if (hflag)
 	{
-		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
+		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
 	exit(1);
 		
 	}
@@ -53,7 +54,7 @@ int main (int argc, char **argv) {
     
     
     if (argc == 0) {
-      printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");
+      printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");
       //exit(1);
 		}
 

@@ -55,6 +55,7 @@ static uint16_t delay;
 int json_flag = 0;
 int init_flag = 0;
 int remove_flag = 0;
+int brute_flag = 0;
 char *csnumber="11";
 char help[100];
 
@@ -148,7 +149,7 @@ static void transfer(int fd)
 void parse_opts(int argc, char **argv)
 {	
 	
-	while((c = getopt(argc,argv,"amnjhw:l:d:o:s:g:tic:r")) != -1)
+	while((c = getopt(argc,argv,"amnjhw:l:d:o:s:g:tic:rb")) != -1)
 	{
 		switch(c)
 		{
@@ -166,12 +167,13 @@ void parse_opts(int argc, char **argv)
 			case 'c' : csnumber =  optarg;			break;
 			case 'i' : init_flag = 1;			break;
 			case 'r' : remove_flag = 1;			break;
+			case 'b' : remove_flag = 1;			break;
 		}
 
 	}
 	if (hflag)
 	{
-		printf("Usage: %s [-wdhnso]\n", argv[0]);		
+		printf("This program was designed to easily interact with the dogm display.\n\n", argv[0]);		
 		puts("-d device to use (default /dev/spidev0.11)\n"
 	     "-w write string to display\n"
 	     "-j Convert Output to json Format\n"
@@ -183,6 +185,7 @@ void parse_opts(int argc, char **argv)
 		 "-g <X> Use GPIO Pin X instead default GPIO Pin 14 (For RS Pin on DOGM Display)\n"
 		 "-i -c <Y> Only initialize the spidev module with <Y> as Chipselect Pin.(default:<Y>=11)\n"
 		 "-r Only remove the spidev driver.\n"
+		 "-b show output in raw format"
 		 "\n\nExamples:\nWrite Hello to the Display:\ngnublin-dogm -n -w \"Hello\"\n\nWrite Hello to the Display connected with CS-Pin=18\ngnublin-dogm -n -w \"Hello\" -d /dev/spidev0.18\n\nJump to the second Line with Cursor\ngnublin-dogm -o 192\n\n"
 		 "All operations except [-w with -o and -s] and [-o with -s] are allowed\n");
 	exit(1);
@@ -416,9 +419,9 @@ int main(int argc, char **argv)
 	fd = open(device_file, O_RDWR);
 	if (fd < 0)	        
 		if (json_flag == 1)
-		pabort("{\"error_msg\" : \"can't open device.Try modprobe spidev.\",\"result\" : \"-1\"}\n");
+		pabort("{\"error_msg\" : \"can't open device.Try modprobe spidev, or gnublin-dogm -i first.\",\"result\" : \"-1\"}\n");
 		else
-		pabort("can't open device.Try modprobe spidev.\n");
+		pabort("can't open device.Try modprobe spidev, or gnublin-dogm -i first.\n");
 
 	/*
 	 * spi mode

@@ -25,7 +25,7 @@ helpstring='This Script prints out the value of a selected adc-channel of the gn
 -j Convert output to json format
 -i just initialize the adc module with given address (default is 0x48)
 -r just remove the adc driver.
--c Select ADC Channel (0 - 7 possible, default is 0)
+-c <x> Select ADC Channel (0 - 7 possible, default is 0)
 -a I2C-Address of the module (default is 0x48)
 
 Example:
