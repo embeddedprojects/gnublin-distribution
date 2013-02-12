@@ -36,7 +36,7 @@ void parse_opts(int argc, char **argv)
 	}
 	if (hflag)
 	{
-		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
+		printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-b show output in raw format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");		
 	exit(1);
 		
 	}

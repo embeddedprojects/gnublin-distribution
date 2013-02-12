@@ -167,7 +167,7 @@ void parse_opts(int argc, char **argv)
 			case 'c' : csnumber =  optarg;			break;
 			case 'i' : init_flag = 1;			break;
 			case 'r' : remove_flag = 1;			break;
-			case 'b' : remove_flag = 1;			break;
+			case 'b' : brute_flag = 1;			break;
 		}
 
 	}
@@ -476,6 +476,8 @@ int main(int argc, char **argv)
 
 	if (json_flag == 1)
 	printf("{\"spi mode\" : \"%d\",\"bits per word\" : \"%d\",\"max speed\" : \"%d Hz (%d KHz)\",\"result\" : \"0\"}\n,",mode, bits, speed, speed/1000);
+	else if ( brute_flag == 1 )
+	printf("%s written to the display",string_display);
 	else
 	{
 	printf("spi mode: %d\n", mode);

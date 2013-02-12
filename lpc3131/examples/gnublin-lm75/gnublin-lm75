@@ -11,7 +11,7 @@
 
 
 
-address="0x4f"
+address="0x48"
 result=""
 i2cbus="1"
 json_f="0"

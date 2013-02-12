@@ -20,7 +20,7 @@ helpstring='This Script prints out the values of a selected internal adc channel
 -h Show this help
 -b show raw output
 -j Convert output to json format
--c <x> Select gpa<x> Pin  (0 - 7 possible, default is 1)
+-c <x> Select gpa<x> Pin  (0 - 3 possible, default is 1)
 -d Choose Path to device file
 
 Example:

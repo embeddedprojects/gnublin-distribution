@@ -29,7 +29,7 @@ this command starts the pwm interface with specified value.
 gnublin-pwm -v 0xff
 
 this command starts the pwm interface with specified value.
-gnublin-pwm -v 0xff'
+gnublin-pwm -v 0x40'
 
 
 
@@ -51,7 +51,7 @@ while getopts d:v:hjb opt
           d) devfile="${OPTARG}" ;;
    	  v) value="${OPTARG}" ;;
           j) json_f="1" ;;
-          j) brute_f="1" ;;
+          b) brute_f="1" ;;
           ?) echo "$helpstring"
              exit 1 ;;
 	  h) echo "$helpstring"
@@ -124,13 +124,13 @@ then
 fi
 
 #activate pwm
-echo "$value" > $devfile
+echo "${value:2:2}" > $devfile
 	if [ "$json_f" == "1" ]
 	then
 	    echo "{ \"result\" : \"0\" }"
 	elif [ "$brute_f" == "1" ]
 	then
-
+	    echo "0"
 	else
         echo "PWM successfully activated."
 	fi
