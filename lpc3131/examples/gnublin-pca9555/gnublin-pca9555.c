@@ -6,7 +6,7 @@ int json_flag,brute_f;
 
 int main(int argc, char **argv)
 {
-   int hflag, c, mflag, pflag, iflag, oflag, ivalue, mvalue, pvalue;
+   int hflag, c, mflag, pflag, iflag, oflag, ivalue, mvalue=0, pvalue;
    int ovalue, i;
 
    
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
          case 'm' : mflag = 1; mvalue = atoi(optarg); break;
          case 'p' : pflag = 1; pvalue = atoi(optarg); break;
          case 'o' : oflag = 1; ovalue = atoi(optarg); break;
-         case 'i' : iflag = 1; ivalue = atoi(optarg); break; 					
+         case 'i' : iflag = 1; break; 					
       }
    }
    
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
    "-m<X> Specify the Portexpander number(0-7)\n"
    "-p<Y> Specify the portexpander pin (0-15)\n"
    "-o<value> Set pin as output with given <value>(0= low / 1 = high)\n"
-   "-i ToDO\n"
+   "-i Set pin as input and read its value.\n"
    "-l list all Portexpanders connected to GNUBLIN\n"
    "-j Convert Output to json Format\n"
    "-b show output in raw format\n"            
@@ -111,6 +111,7 @@ if(mflag && pflag && oflag)
 		}   
 	else
 	{ 
+		 pvalue = pvalue - 8;
 		 //Use 0x07 and 0x03 as registers
 		  if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x07, 0) < 0)
 		  {
@@ -209,6 +210,7 @@ if(pflag && oflag)
 	} 
 	else
 	{ 	
+		pvalue = pvalue - 8;
 		 //Use 0x07 and 0x03 as registers
 		if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x07, 0) < 0)
 		{
@@ -250,8 +252,8 @@ if(pflag && oflag)
    
    }
  
-#if 0
-   if(iflag && mflag)
+
+   if(iflag && pflag)
    {
       unsigned char port_tmp=0x02;
       if (pca9555_init(ppca9555_tmp,I2C_FILENAME, 0,0) < 0)
@@ -284,11 +286,11 @@ if(pflag && oflag)
 	      printf("Failed to open i2c device\n"); 
 	      return -1;
 	 }
-	 
+      
 	if (pvalue < 8) 
 	{ 
 		 //Use 0x06 and 0x02 as registers
-		if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x06, 1) < 0)
+		if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x06, 0) < 0)
 		{
 		      if (json_flag == 1)
 		      printf("{\"error_msg\" : \"Failed to open i2c device\",\"result\" : \"-1\"}\n");
@@ -296,7 +298,7 @@ if(pflag && oflag)
 		      printf("Failed to open i2c device\n"); 
 		      return -1;
 		}
-	 
+	
 		if (pca9555_get_pin_val(ppca9555_tmp,(unsigned char)pvalue, 0x02 ) == 0)
 		{
 		      if (json_flag == 1)
@@ -311,13 +313,14 @@ if(pflag && oflag)
 		      printf("{\"value\" : \"1\",\"result\" : \"0\"}\n");
 		    else
 		      printf("Value = 1\n"); 
-		    return -1;
+		    return 1;
 		}
 	}
 	 else
 	{ 
+		pvalue = pvalue - 8;
 		//Use 0x07 and 0x03 as registers
-		if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x07, 1) < 0)
+		if (pca9555_set_port_dir(ppca9555_tmp, (unsigned char)pvalue, 0x07, 0) < 0)
 		{
 		      if (json_flag == 1)
 		      printf("{\"error_msg\" : \"Failed to open i2c device\",\"result\" : \"-1\"}\n");
@@ -325,7 +328,7 @@ if(pflag && oflag)
 		      printf("Failed to open i2c device\n"); 
 		      return -1;
 		}
-	 
+		
 		if (pca9555_get_pin_val(ppca9555_tmp,(unsigned char)pvalue, 0x03 ) == 0)
 		{
 		      if (json_flag == 1)
@@ -342,8 +345,8 @@ if(pflag && oflag)
 		      printf("Value = 1\n"); 
 		    return -1;
 		}   
+	
 	}
-         
       }
       
       else
@@ -356,14 +359,9 @@ if(pflag && oflag)
       }
       
       
-      if (json_flag == 1)
-      printf("{\"result\" : \"0\"}\n");
-      else
-      printf("wert ist %02x\n",port_tmp);
-      
       return 0;
    }
-#endif 
+ 
 }
 
 

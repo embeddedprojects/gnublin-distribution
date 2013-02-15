@@ -243,10 +243,13 @@ int pca9555_get_pin_val(pca9555 *pca9555_tmp, unsigned char bit_tmp, unsigned ch
    
    if( (PORT0_VALUE == port_tmp) || (PORT1_VALUE == port_tmp) )
    {  
+
+     // printf("rec port 0x%02x\n", rec_tmp);
+     // printf("bit_tmp port 0x%02x\n", bit_tmp);
       rec_tmp = port_tmp;
       printf("", rec_tmp);
       pca9555_get_port_val(pca9555_tmp, &rec_tmp);
-      //printf("rec port 0x%02x\n", rec_tmp);
+
       if (rec_tmp & (1 << bit_tmp))
 	return 1;
       else

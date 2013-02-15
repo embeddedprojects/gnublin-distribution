@@ -1,7 +1,7 @@
-#include src/Makefile
+
 CC = arm-linux-gnueabi-gcc
 #CC = gcc
-#CFLAGS = -I /opt/eldk-5.2.1/armv5te/sysroots/armv5te-linux-gnueabi/usr/include/linux/ 
+CFLAGS = -g
 TARGET = gnublin-pca9555
 #TARGET = i2c_dev
 #TARGET = pca9555

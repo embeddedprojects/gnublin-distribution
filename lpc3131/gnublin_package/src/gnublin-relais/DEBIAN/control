@@ -1,0 +1,10 @@
+Package: gnublin-relais
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 270
+Maintainer: Benedikt Niedermayr <support@embedded-projects.net>
+Homepage:
+Description: An anpplication for controlling one or more relay-modules for GNUBLIN.
