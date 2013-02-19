@@ -1,0 +1,221 @@
+#! /bin/bash
+
+
+# Script for configuring a small Web demonstration with lighttpd
+# Author: Tasnadi-Olescher Eduard (support@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+
+initf=""
+removef=""
+json_f=""
+brutef=""
+helpstring='This script configures a small Webdemo. Please make sure to have a LAN/WLAN/USB connection.  
+
+-h Show this help
+-i initialize webdemo
+-r remove webdemo
+-j show output in json format
+-b show raw output
+
+Example:
+
+Initialize the webdemo:
+gnublin-webdemo -i
+
+Initialize the webdemo with json output:
+gnublin-webdemo -i -j   
+
+Remove the webdemo:
+gnublin-webdemo -r  '
+
+
+
+
+while getopts jhirb opt
+ do
+      case $opt in
+          r) removef="1" ;;
+          i) initf="1" ;;
+	  j) json_f="1" ;;
+	  b) brutef="1" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+          h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+
+
+
+
+if [ "$initf" == "1" ]
+then
+
+
+	#check if php5-cgi is installed
+	dpkg -l | grep "php5-cgi"  >/dev/null
+	if [ "$?" != "0" ]
+	then
+
+	  if [ "$json_f" == "1" ]
+	  then
+	  echo "{ \"error_msg\" : \"php5-cgi not installed.\",\"result\" : \"-1\" }"
+	  else
+	  echo "php5-cgi not installed. You can get it with: apt-get install php5-cgi"
+	  fi
+	  exit 1
+	fi
+
+
+	#check if LAN/WLAN/USB connection is available
+	ifconfig | grep 'eth\|wlan\|usb' >/dev/null
+	if [ "$?" != "0" ]
+	then
+
+	  if [ "$json_f" == "1" ]
+	  then
+	  echo "{ \"error_msg\" : \"No LAN/WLAN/USB connection avialable.\",\"result\" : \"-1\" }"
+	  else
+	  echo "No LAN/WLAN/USB connection avialable."
+	  fi
+	  exit 1
+
+	fi
+
+	#start the webserver 
+	update-rc.d lighttpd defaults
+
+
+	#check if www2 exists and www_backup not
+	if [ ! -d /var/www_backup -a -d /var/www2 ]
+	then
+
+	    mv /var/www /var/www_backup
+	    mv /var/www2 /var/www
+
+	elif [ -d /var/www_backup -a ! -d /var/www2 ]
+	then
+
+	    echo 0 > /dev/null
+
+	else
+
+	  if [ "$json_f" == "1" ]
+	  then
+	  echo "{ \"error_msg\" : \"Could not find /var/www2.\",\"result\" : \"-2\" }"
+	  else
+	  echo "Could not find /var/www2."
+	  fi
+	  exit 1
+
+	fi
+
+	#change own of /var/www folder
+	chown -R www-data:www-data /var/www 
+
+
+	#initialize the dogm display
+	chmod 777 /usr/bin/gnublin-dogm
+	gnublin-dogm -i
+
+
+	#restart lighttpd
+	/etc/init.d/lighttpd restart
+
+
+	#initialize the relay-card
+	modprobe pca953x addr1=0x20
+	echo 98 > /sys/class/gpio/export
+	echo 99 > /sys/class/gpio/export
+	echo 100 > /sys/class/gpio/export
+	echo 101 > /sys/class/gpio/export
+	echo 102 > /sys/class/gpio/export
+	echo 103 > /sys/class/gpio/export
+	echo 104 > /sys/class/gpio/export
+	echo 105 > /sys/class/gpio/export
+	echo 14 > /sys/class/gpio/export
+
+
+
+	#change rights
+	chmod -R 777 /sys/class/gpio/*  
+	chmod 777 /dev/spidev0.11
+	chmod -R 777 /dev/i2c-1
+
+
+
+	  if [ "$json_f" == "1" ]
+	  then
+		  echo "{\"result\" : \"0\" }"
+	  else
+		  echo "Initilization completed."
+		  exit 0
+	  fi
+
+
+elif [ "$removef" == "1" ]
+then
+
+	#check if www_backup exists and www2 not
+	if [ -d /var/www_backup -a ! -d /var/www2 ]
+	then
+
+	mv /var/www /var/www2
+	mv /var/www_backup /var/www
+
+	else
+
+	  if [ "$json_f" == "1" ]
+	  then
+	  echo "{ \"error_msg\" : \"Could not find /var/www_backup.\",\"result\" : \"-3\" }"
+	  else
+	  echo "Could not find /var/www_backup."
+	  fi
+	  exit 1
+
+	fi
+
+
+	#restart lighttpd
+	/etc/init.d/lighttpd restart
+
+	#check if relay pins are already exported
+	if [ ! -d /sys/class/gpio/gpio98 -a ! -d /sys/class/gpio/gpio99 -a ! -d /sys/class/gpio/gpio100 -a ! -d /sys/class/gpio/gpio101 -a ! -d /sys/class/gpio/gpio102 -a ! -d /sys/class/gpio/gpio103 -a ! -d /sys/class/gpio/gpio104 -a ! -d /sys/class/gpio/gpio105 ]
+	then
+
+	echo 98 > /sys/class/gpio/unexport
+	echo 99 > /sys/class/gpio/unexport
+	echo 100 > /sys/class/gpio/unexport
+	echo 101 > /sys/class/gpio/unexport
+	echo 102 > /sys/class/gpio/unexport
+	echo 103 > /sys/class/gpio/unexport
+	echo 104 > /sys/class/gpio/unexport
+	echo 105 > /sys/class/gpio/unexport
+	fi
+
+
+	#remove the module
+	gnublin-dogm -r
+	modprobe -r pca953x
+
+	  if [ "$json_f" == "1" ]
+	  then
+		  echo "{\"result\" : \"0\" }"
+	  else
+		  echo "Webdemo completely removed."
+
+	  fi
+	  exit 1
+
+
+fi
+
+

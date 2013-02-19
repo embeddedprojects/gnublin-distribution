@@ -1,0 +1,112 @@
+.modal {
+	height: auto;
+	visibility:hidden;
+	padding:8px;
+	
+	background:rgba(0,0,0,.3);
+
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	border-radius:8px;
+
+	top: 50%;
+	margin-top:-10%;
+
+	position:absolute !important;
+	margin-left: auto !important;
+	z-index:101;
+}
+
+.modal-header {
+	border-radius:4px 4px 0px 0px;
+	height: 34px;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 700;
+	padding-left: 7px;
+	line-height: 34px;
+	background: url(../images/header_bg.jpg) repeat-x;
+}
+
+.modal-body {
+	width: 100%;
+	height:100%;
+	min-height: 100px;
+	float:left;
+	background:#fcfcfc;
+
+	-webkit-box-shadow:0px 1px 3px rgba(0,0,0,.25);
+	-moz-box-shadow:0px 1px 3px rgba(0,0,0,.25);
+	box-shadow:0px 1px 3px rgba(0,0,0,.25);
+
+	-webkit-border-radius: 0px 0px 4px 4px;
+	-moz-border-radius: 0px 0px 4px 4px;
+	border-radius: 0px 0px 4px 4px;
+}
+
+.modal-content {
+	margin: 7px;
+}
+
+.reveal-modal-bg { 
+	position: fixed; 
+	height: 100%;
+	width: 100%;
+	background: #000;
+	background: rgba(0,0,0,.4);
+	z-index: 100;
+	display: none;
+	top: 0;
+	left: 0; 
+}
+
+input.blue {
+	padding: 4px 10px 4px 10px;
+  font-family: Lucida Grande, Helvetica, Arial, sans-serif;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: 500;
+  color: #fff;
+	line-height: 1.5;
+	background-image: linear-gradient(bottom,#52A8E8, #377AD0);
+	background-image: -webkit-linear-gradient(#52A8E8, #377AD0);
+	background-image: -moz-linear-gradient(0% 100% 90deg,#377AD0, #52A8E8);
+	background-image: -o-linear-gradient(bottom,#377AD0, #52A8E8);
+	background-image: -ms-linear-gradient(bottom,#377AD0, #52A8E8);
+	background-color: #52A8E8;
+	border: 1px solid #20559A;
+	box-shadow: 0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+input.blue:hover, input.blue:focus {
+	background-image: linear-gradient(bottom,#54A1D8, #1967CA);
+	background-image: -webkit-linear-gradient(#54A1D8, #1967CA);
+	background-image: -moz-linear-gradient(0% 100% 90deg,#1967CA, #54A1D8);
+	background-image: -o-linear-gradient(bottom,#1967CA, #54A1D8);
+	background-image: -ms-linear-gradient(bottom,#1967CA, #54A1D8);
+	background-color: #52A8E8;
+	color: #fff;
+}
+
+input.blue:active
+{
+	background-color: #2D7CD1;
+	box-shadow: 0 1px 1px rgba(255,255,255,.5), inset 0 2px 5px rgba(0,0,100,.5);
+	color: #fff;
+}
+@media only screen and (max-width: 767px) {
+        
+	#modal {
+		width: auto;
+		height: auto;
+		padding:8px;
+
+		margin-left:-150px !important;
+		margin-top:-78px;
+	}
+
+	.modal-body {
+		width: auto;
+		height:auto;
+   	}
+}

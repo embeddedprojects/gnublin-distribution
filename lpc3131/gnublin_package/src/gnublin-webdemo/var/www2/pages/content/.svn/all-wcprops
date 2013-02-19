@@ -1,0 +1,31 @@
+END
+network_list.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/gnublin-web/!svn/ver/4/pages/content/network_list.tpl
+END
+gpio_list.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/gnublin-web/!svn/ver/4/pages/content/gpio_list.tpl
+END
+logger_list.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/gnublin-web/!svn/ver/4/pages/content/logger_list.tpl
+END
+stepper_list.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/gnublin-web/!svn/ver/4/pages/content/stepper_list.tpl
+END
+display_list.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/gnublin-web/!svn/ver/4/pages/content/display_list.tpl
+END
