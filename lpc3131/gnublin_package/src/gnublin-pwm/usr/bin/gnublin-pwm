@@ -12,6 +12,8 @@
 
 value_length=""
 value=""
+clk=""
+clk_f="0"
 json_f="0"
 brute_f="0"
 devfile="/dev/lpc313x_pwm"
@@ -21,7 +23,8 @@ helpstring='This wrapper Script controls the pwm interface of GNUBLIN
 -b show output in raw format.
 -j print output in json format.
 -d Choose Path to device file.
--v Hex-value for pwm duty cycle in.(0x000-0xfff)
+-c <divider> Divide the PWM-Clock by 1,2,4 or 8
+-v <value> Hex-value for pwm duty cycle in.(0x000-0xfff)
 
 Example:
 
@@ -29,7 +32,12 @@ this command starts the pwm interface with specified value.
 gnublin-pwm -v 0xfff
 
 this command starts the pwm interface with specified value.
-gnublin-pwm -v 0x400'
+gnublin-pwm -v 0x400
+
+this command divides the pwm-clock by two.
+gnublin-pwm -c 2
+
+'
 
 
 
@@ -45,11 +53,13 @@ then
    exit 1
 fi 
 
-while getopts d:v:hjb opt
+while getopts d:v:hjbc: opt
  do
       case $opt in
           d) devfile="${OPTARG}" ;;
    	  v) value="${OPTARG}" ;;
+   	  c) clk="${OPTARG}" 
+	     clk_f="1";;
           j) json_f="1" ;;
           b) brute_f="1" ;;
           ?) echo "$helpstring"
@@ -59,18 +69,11 @@ while getopts d:v:hjb opt
       esac
 done
 
-#check if value is a hex-value
-if [  "${value:0:2}" != "0x" ]
-then
-    result="Value is not a hex-value."
-    if [ "$json_f" == "1" ]
-    then
-        echo "{ \"error_msg\" : \"$result\",\"result\" : \"-1\" }"
-    else
-        echo $result
-    fi
-    exit 1
-fi
+
+
+
+
+
 
 
 #modul autoload
@@ -93,6 +96,51 @@ then
 	echo "File: $devfile was not found"
         fi
 	exit 1
+fi
+
+
+#check if clk_f is set
+
+if [ "$clk_f" == "1" ]
+then
+      if [ "$clk" == "1" ]
+      then
+	    echo "clk1" > $devfile
+
+      elif [ "$clk" == "2" ]
+      then
+	    echo "clk2" > $devfile
+
+      elif [ "$clk" == "4" ]
+      then
+	    echo "clk3" > $devfile
+
+      elif [ "$clk" == "8"  ]
+      then
+	    echo "clk4" > $devfile
+
+      else
+	  if [ "$json_f" == "1" ]
+	  then
+	      echo "{ \"error_msg\" : \"Wrong Clock Divider selected\",\"result\" : \"-5\" }"
+	  else
+	      echo "Wrong Clock Divider selected. Only 1,2,4 or 8 is allowed!"
+	  fi
+       fi
+exit 1   
+fi
+
+#check if value is a hex-value
+if [  "${value:0:2}" != "0x" ]
+then
+    result="Value is not a hex-value."
+    if [ "$json_f" == "1" ]
+    then
+        echo "{ \"error_msg\" : \"$result\",\"result\" : \"-1\" }"
+    else
+        echo $result
+    fi
+    exit 1
 fi
 
 
