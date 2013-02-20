@@ -21,15 +21,15 @@ helpstring='This wrapper Script controls the pwm interface of GNUBLIN
 -b show output in raw format.
 -j print output in json format.
 -d Choose Path to device file.
--v Hex-value for pwm duty cycle in. <high-byte><low-byte>
+-v Hex-value for pwm duty cycle in.(0x000-0xfff)
 
 Example:
 
 this command starts the pwm interface with specified value.
-gnublin-pwm -v 0xff
+gnublin-pwm -v 0xfff
 
 this command starts the pwm interface with specified value.
-gnublin-pwm -v 0x40'
+gnublin-pwm -v 0x400'
 
 
 
@@ -98,7 +98,7 @@ fi
 
 
 value_length=${#value}
-if [ "$value_length" != "4" ]
+if [ "$value_length" != "5" ]
 then 
 	if [ "$json_f" == "1" ]
 	then
@@ -111,20 +111,20 @@ fi
 
 
 
-echo "${value:2:2}" | grep -E "[^0-9a-fA-F]"
+echo "${value:2:3}" | grep -E "[^0-9a-fA-F]"
 if [ "$?" == "0" ]; 
 then
 	if [ "$json_f" == "1" ]
 	then
-	    echo "{ \"error_msg\" : \"Value must be between 0x00 and 0xff\",\"result\" : \"-4\" }"
+	    echo "{ \"error_msg\" : \"Value must be between 0x000 and 0xfff\",\"result\" : \"-4\" }"
 	else
-        echo "Value must be between 0x00 and 0xff."
+        echo "Value must be between 0x000 and 0xfff."
 	fi
     exit 1
 fi
 
 #activate pwm
-echo "${value:2:2}" > $devfile
+echo "${value:2:3}" > $devfile
 	if [ "$json_f" == "1" ]
 	then
 	    echo "{ \"result\" : \"0\" }"
