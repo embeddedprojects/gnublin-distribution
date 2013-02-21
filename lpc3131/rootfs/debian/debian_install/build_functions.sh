@@ -338,9 +338,9 @@ get_n_check_file "${qemu_kernel_pkg_path}" "${qemu_kernel_pkg_name}" "qemu_kerne
 
 tar_all extract "${output_dir}/tmp/${qemu_kernel_pkg_name}" "${output_dir}/qemu-kernel"
 sleep 3
-tar_all extract "${output_dir}/tmp/${std_kernel_pkg_name}" "${output_dir}/mnt_debootstrap"
+#tar_all extract "${output_dir}/tmp/${std_kernel_pkg_name}" "${output_dir}/mnt_debootstrap"
 
-cp -ar ${output_dir}/qemu-kernel/lib/ ${output_dir}/mnt_debootstrap
+#cp -ar ${output_dir}/qemu-kernel/lib/ ${output_dir}/mnt_debootstrap
 
 if [ "${use_ramzswap}" = "yes" ]
 then
