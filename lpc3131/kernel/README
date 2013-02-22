@@ -1,3 +1,11 @@
 You can also get the latest stable release from our repository.
 
 git clone http://code.google.com/p/gnublin-develop-kernel/
+
+
+
+
+ATTENTION:
+
+Please don't use the Script ./build_kernel.sh manually. This script uses to get triggered by the
+main building (build_GNUBLIN_support_package) script!

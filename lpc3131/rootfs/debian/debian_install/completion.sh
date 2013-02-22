@@ -43,7 +43,8 @@ echo "#############################################################" >> $logfile
 		
 		cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
 		cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
-	
+		cp -r $root_path/output/2.6.33* ${output_dir}/mnt_debootstrap/lib/modules
+		cp 	  $root_path/output/zImage  ${output_dir}/mnt_debootstrap/
 
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64 || exit 0
 
