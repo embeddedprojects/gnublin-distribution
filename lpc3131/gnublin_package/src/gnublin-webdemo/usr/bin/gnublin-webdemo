@@ -188,7 +188,7 @@ then
 	/etc/init.d/lighttpd restart
 
 	#check if relay pins are already exported
-	if [ ! -d /sys/class/gpio/gpio98 -a ! -d /sys/class/gpio/gpio99 -a ! -d /sys/class/gpio/gpio100 -a ! -d /sys/class/gpio/gpio101 -a ! -d /sys/class/gpio/gpio102 -a ! -d /sys/class/gpio/gpio103 -a ! -d /sys/class/gpio/gpio104 -a ! -d /sys/class/gpio/gpio105 ]
+	if [  -d /sys/class/gpio/gpio98 -a  -d /sys/class/gpio/gpio99 -a  -d /sys/class/gpio/gpio100 -a  -d /sys/class/gpio/gpio101 -a  -d /sys/class/gpio/gpio102 -a  -d /sys/class/gpio/gpio103 -a  -d /sys/class/gpio/gpio104 -a  -d /sys/class/gpio/gpio105 ]
 	then
 
 	echo 98 > /sys/class/gpio/unexport
@@ -204,6 +204,7 @@ then
 
 	#remove the module
 	gnublin-dogm -r
+	sleep 0.5
 	modprobe -r pca953x
 
 	  if [ "$json_f" == "1" ]
