@@ -14,6 +14,26 @@ echo "#############################################################" >> $logfile
 	rm -r ${output_dir}/mnt_debootstrap/Documentation
 	rm -r ${output_dir}/mnt_debootstrap/drivers
 	rm -r ${output_dir}/mnt_debootstrap/sound
+	rm -r ${output_dir}/mnt_debootstrap/mm
+	rm -r ${output_dir}/mnt_debootstrap/crypto
+	rm -r ${output_dir}/mnt_debootstrap/scripts
+	rm -r ${output_dir}/mnt_debootstrap/security
+	rm -r ${output_dir}/mnt_debootstrap/virt
+	rm -r ${output_dir}/mnt_debootstrap/selinux
+	rm -r ${output_dir}/mnt_debootstrap/vmlinux
+	rm -r ${output_dir}/mnt_debootstrap/vmlinux.o
+	rm -r ${output_dir}/mnt_debootstrap/samples
+	rm -r ${output_dir}/mnt_debootstrap/tools
+	rm -r ${output_dir}/mnt_debootstrap/ipc
+	rm -r ${output_dir}/mnt_debootstrap/block
+	rm -r ${output_dir}/mnt_debootstrap/fs
+	rm -r ${output_dir}/mnt_debootstrap/net
+	rm -r ${output_dir}/mnt_debootstrap/Kbuild
+	rm    ${output_dir}/mnt_debootstrap/COPYING
+	rm    ${output_dir}/mnt_debootstrap/modules.builtin
+	rm    ${output_dir}/mnt_debootstrap/modules.order
+	rm    ${output_dir}/mnt_debootstrap/install_SD.sh
+	rm    ${output_dir}/mnt_debootstrap/CREDITS
 	rm -r ${output_dir}/mnt_debootstrap/lib/modules/2.6.33-gnublin-qemu-*/
 	rm -r ${output_dir}/mnt_debootstrap/linux-2.6.33-lpc313x
 	rm    ${output_dir}/mnt_debootstrap/deboostrap_stg2_errors.txt
