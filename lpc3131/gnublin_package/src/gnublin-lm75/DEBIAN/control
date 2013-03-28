@@ -1,10 +1,10 @@
 Package: gnublin-lm75
-Version: 0.0.1-1
+Version: 0.0.2-1
 Section: misc
 Priority: extra
 Architecture: armel
 Depends:
-Installed-Size: 270
-Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
-Homepage:
-Description: An anpplication for reading temperature values from the lm75 sensor connected via I2C.
+Installed-Size: 10708
+Maintainer: Simon Kunzmann <kunzmann@embedded-projects.net>
+Homepage: www.gnublin.org
+Description: An anpplication for reading the temperature via i2c from a LM75 sensor.
