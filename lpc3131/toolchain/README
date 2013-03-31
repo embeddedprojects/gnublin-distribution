@@ -1,13 +1,9 @@
+
+build_toolchain.sh
+==================
 The build_toolchain.sh script is called by the main script (build_GNUBLIN_support_package) and installs the eldkv5 toolchain.
 
 You should not run this script manually.
-
-
-
-
-
-
-
 
 
 If you want to run it manually anyway, you should edit the script and enter definitions for two variables.
@@ -15,4 +11,13 @@ If you want to run it manually anyway, you should edit the script and enter defi
 kernel_path=/PATH/WHERE/YOUR/KERNEL/DIRECTORY/IS/LOCATED
 toolchain_path=/PATH/WHERE/YOUR/TOOLCHAIN/SHOULD/BE/INSTALLED
 
- 
+
+
+Download toolchain manual
+=========================
+
+wget http://gnublin.org/downloads/eldk-eglibc-i686-arm-toolchain-qte-5.2.1.tar.bz2
+
+sudo tar xjf eldk-eglibc-i686-arm-toolchain-qte-5.2.1.tar.bz2 -C / 
+
+

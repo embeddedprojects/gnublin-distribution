@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 module="0"
 pin="0"
 inputf="0"

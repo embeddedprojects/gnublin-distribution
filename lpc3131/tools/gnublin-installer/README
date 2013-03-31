@@ -1,1 +1,6 @@
 Choose "Gnublin_installer_alt" for Ubuntu Version less than 12.04 
+
+
+ svn checkout http://gnublin-installer.googlecode.com/svn/trunk/ gnublin-installer-read-only 
+
+http://code.google.com/p/gnublin-installer/

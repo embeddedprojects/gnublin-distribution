@@ -1,9 +1,6 @@
-
-# ELDK 5
-
 CC = arm-linux-gnueabi-gcc
 
-gnublin-step: gnublin-step.c
+gnublin-lm75: gnublin-lm75.c
 		$(CC) -o gnublin-lm75 gnublin-lm75.c		
 
 clean:
