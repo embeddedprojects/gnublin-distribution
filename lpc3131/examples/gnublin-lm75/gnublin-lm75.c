@@ -120,7 +120,7 @@ int main (int argc, char **argv) {
 		else if (brute_flag ==1)
 		  printf("-%.0f \n", temp);
       		else
-		  printf("-%.3f °C \n\r", temp);
+		  printf("-%.3f C \n\r", temp);
 	}
 	else { //temperatur is positive
 		temp = value*0.125;
@@ -130,7 +130,7 @@ int main (int argc, char **argv) {
                   printf("%.0f \n", temp);
 
                 else
-		printf("%.3f °C \n\r", temp);
+		printf("%.3f C \n\r", temp);
 	}
 
 close(fd);

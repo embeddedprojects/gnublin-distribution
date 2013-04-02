@@ -4,7 +4,7 @@ Section: misc
 Priority: extra
 Architecture: armel
 Depends:
-Installed-Size: 11387
+Installed-Size: 11385
 Maintainer: Simon Kunzmann <kunzmann@embedded-projects.net>
 Homepage: www.gnublin.org
 Description: An anpplication for reading the temperature via i2c from a LM75 sensor.
