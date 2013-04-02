@@ -5,6 +5,6 @@ Priority: extra
 Architecture: armel
 Depends:
 Installed-Size: 11476
-Maintainer: Manuel Libert <libert@embedded-projects.net>
+Maintainer: Manuel Liebert <liebert@embedded-projects.net>
 Homepage: http://wiki.gnublin.org/
 Description: An anpplication for controlling the TCM222 stepper motor.

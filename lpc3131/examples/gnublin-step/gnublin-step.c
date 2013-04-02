@@ -46,7 +46,7 @@ void parse_opts(int argc, char **argv)
         }
         if (hflag | argc == 1)
         {
-                printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-b show output in raw format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n-i <Irun> Specify the Irun parameter\n-d <Ihold> Specify the iholD parameter\n-x <vmax> Specify the vmaX parameter\n-n <vmin> Specify the vmiN parameter\n-o <new_address> sets the new I2C Address to the controller\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");              
+                printf("This program is designed, to easily interact with a stepper-motor connected to the GNUBLIN.\n\n-h Show this help\n-f <device> Specify the i2c-device.default=/dev/i2c-1\n-j Convert output to json format.\n-b show output in raw format.\n-a <I2C-address> Specify the stepper modules I2C-address.default=0x60\n-p <Position> Specify the desired position\n-i <Irun> Specify the Irun parameter (0-15)\n-d <Ihold> Specify the iholD parameter (0-15)\n-x <vmax> Specify the vmaX parameter (0-15)\n-n <vmin> Specify the vmiN parameter (0-15)\n-o <new_address> sets the new I2C Address to the controller\n\nExamples:\n\nDrive the motor to position 3000 and use I2C-address 0x60:\ngnublin-step -a 0x60 -p 3000\n\nA complete rotation is position 3200, two rotations 6400 and so on.\n");              
         	exit(1);
         }
 }
@@ -79,7 +79,6 @@ int newAddress(int fd){
 	printf("\tThe new address will be set to: 0x%x \n", new_address);
   }
 
-    printf("%x\n", new_ad);
     printf("\tIf a bit of the OTP (on time programmable) is set, it cant be undone! \n\tIf you are sure to write the new Address (0x%x) then type 'yes' in CAPITALS\n\n\t", new_address);
     scanf("%s", yes);
     if(strcmp(yes, "YES") == 0){
@@ -90,10 +89,7 @@ int newAddress(int fd){
   	buffer[4] = (unsigned char) new_ad;
 
       	if (write(fd, buffer, 6) != 6) {
-      	if (json_flag == 1)
-         	 printf("{\"error_msg\" : \"SetOTPParam error\",\"result\" : \"-4\"}\n");
-      	else
-        	 printf("SetOTPParam error\n");
+                printf("ERROR: No module is connected on address 0x%x\n",slave_address);
          	return -1;
       	}
 
@@ -170,10 +166,10 @@ int main (int argc, char **argv) {
 
       if (write(fd, buffer, 8) != 8) {
       if (json_flag == 1)
-          printf("{\"error_msg\" : \"SetMotorParam error\",\"result\" : \"-4\"}\n");
-      else
-         printf("SetMotorParam error\n");
-         return -1;
+                 printf("{\"error_msg\" : \"no module is connected on address 0x%x\",\"result\" : \"-4\"}\n",slave_address);
+        else
+               	 printf("ERROR: No module is connected on address 0x%x\n",slave_address);
+	         return -1;
       }
 
 

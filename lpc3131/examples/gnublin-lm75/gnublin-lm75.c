@@ -8,31 +8,46 @@
 #include <getopt.h>
 
 
-#define ADDR 0x48
+#define ADDR 0x4f
 
 int c,hflag;
 char *filename = "/dev/i2c-1";
 int slave_address = ADDR;
 int json_flag = 0;
 int brute_flag = 0;
+char helpstring[]={
+"\nThis program is designed, to easily read the temperature from a LM75 Temp Sensor connected to the GNUBLIN.\n\n\r"
+"-h Show this help\n"
+"-j Convert output to json format\n"
+"-b show output in raw format\n"
+"-a set slave-address e.g. 0x48\n\n\r"
+"Examples:\n\n"
+"read temperature default I2CAddress=0x4f  print value in json format:\n"
+"gnublin-lm75 -j\n\n"
+"read temperature default I2CAddress=0x4f. print the value in raw format:\n"
+"gnublin-lm75 -b\n\n"
+"read temperature I2CAddress=0x48. print the value:\n"
+"gnublin-lm75 -a 0x48\n\n\r"
+};
 
 
 void parse_opts(int argc, char **argv)
 {
 
-	while((c = getopt(argc,argv,"hjb")) != -1)
+	while((c = getopt(argc,argv,"hjba:")) != -1)
 	{
 		switch(c)
 		{
 			case 'h' : hflag = 1;		break;	/* help */
 			case 'j' : json_flag = 1;	break;
 			case 'b' : brute_flag = 1;	break;
+			case 'a' : slave_address = strtol (optarg,NULL,16); break;
 		}
 
 	}
 	if (hflag)
 	{
-		printf("This program is designed, to easily read the temperature from a LM75 Temp Sensor connected to the GNUBLIN.\n\n-h Show this help\n-j Convert output to json format.\n-b show output in raw format\n\r");
+		printf("%s", helpstring);
 	exit(1);
 
 	}
@@ -50,7 +65,7 @@ int main (int argc, char **argv) {
 
 
     if (argc == 0) {
-	 printf("This program is designed, to easily read the temperature from a LM75 Temp Sensor connected to the GNUBLIN.\n\n-h Show this help\n-j Convert output to json format.\n-b show output in raw format\n\r");
+		printf("%s", helpstring);
 	 exit(1);
 	}
 
@@ -77,9 +92,9 @@ int main (int argc, char **argv) {
 
 	if (read(fd, rx_buf, 2) != 2){
 		if (json_flag == 1)
-		  printf("{\"error_msg\" : \"Failed to read from i2c device \",\"result\" : \"-1\"}\n");
+		  printf("{\"error_msg\" : \"Failed to read from i2c device Address correct?\",\"result\" : \"-1\"}\n");
 		else
-		  printf ("ERROR I2C read \n");
+		  printf ("ERROR I2C read! Address correct? \n");
 		  return -1;
 	}
 
@@ -103,19 +118,19 @@ int main (int argc, char **argv) {
 		if (json_flag == 1)
         	  printf("{\"temperature\" : \"-%.3f\",\"result\" : \"0\"}\n", temp);
 		else if (brute_flag ==1)
-		  printf("-%.3f \n", temp);
+		  printf("-%.0f \n", temp);
       		else
-		  printf("-%.3f °C \n\r", temp);
+		  printf("-%.3f Â°C \n\r", temp);
 	}
-	else {
+	else { //temperatur is positive
 		temp = value*0.125;
 		if (json_flag == 1)
                   printf("{\"temperature\" : \"%.3f\",\"result\" : \"0\"}\n", temp);
 		else if (brute_flag ==1)
-                  printf("-%.3f \n", temp);
+                  printf("%.0f \n", temp);
 
                 else
-		printf("%.3f °C \n\r", temp);
+		printf("%.3f Â°C \n\r", temp);
 	}
 
 close(fd);
