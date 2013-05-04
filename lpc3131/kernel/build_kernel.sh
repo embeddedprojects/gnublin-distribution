@@ -76,11 +76,11 @@ fi
 		make menuconfig || exit 0
 		echo "$build_time Make menuconfig called correctly" >> $logfile_build	
 	fi	
-	make zImage || exit 0
+	make -j $parallel_jobs zImage || exit 0
 	echo "$build_time Kernel compiled successfully" >> $logfile_build	
-	make modules || exit 0
+	make -j $parallel_jobs modules || exit 0
 	echo "$build_time Modules compiled successfully" >> $logfile_build
-	make modules_install INSTALL_MOD_PATH=$root_path/kernel/$kernel_name || exit 0
+	make -j $parallel_jobs modules_install INSTALL_MOD_PATH=$root_path/kernel/$kernel_name || exit 0
     echo "$build_time Kernel installed correctly" >> $logfile_build   
 	
 	cp $root_path/kernel/$kernel_name/arch/arm/boot/zImage $root_path/kernel/$kernel_name/zImage || exit 0

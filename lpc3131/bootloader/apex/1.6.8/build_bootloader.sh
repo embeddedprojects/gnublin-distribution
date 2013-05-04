@@ -24,7 +24,7 @@ then
 fi
 
 #After configuration, run the following command to make the binary file.
-make apex.bin || exit 0 
+make -j $parallel_jobs  apex.bin || exit 0 
 echo "$build_time apex.bin build successfully." >> $logfile_build
 echo "$build_time Bootloader installed successfully." >> $logfile_build
 

@@ -9,6 +9,7 @@ export filesystem_vers="ext3"   # choose the final type of your filesystem setti
 export host_os="Ubuntu"         # Debian or Ubuntu (YOU NEED TO EDIT THIS!)
 export eldk_name="eldk-5.0"     # not important for now
 export start_mkmenuconfig="no"  # start make menuconfig (Bootloader and kernel). Say "no" if you dont want to start make menuconfig
+export parallel_jobs="8"	# number of parallel jobs make calls
 ##################################
 
 
