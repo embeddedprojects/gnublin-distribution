@@ -1,0 +1,10 @@
+Package: gnublin-tools
+Version: 0.1
+Section: devel
+Priority: optional
+Architecture: armel
+Essential: no
+Depends: 
+Installed-Size: 72
+Maintainer: embedded projects GmbH <info@embedded-projects.net>
+Description: Gnublin tools
