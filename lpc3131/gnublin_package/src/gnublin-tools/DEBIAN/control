@@ -5,6 +5,6 @@ Priority: optional
 Architecture: armel
 Essential: no
 Depends: 
-Installed-Size: 72
+Installed-Size: 
 Maintainer: embedded projects GmbH <info@embedded-projects.net>
 Description: Gnublin tools
