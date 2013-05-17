@@ -1,43 +1,328 @@
 #!/bin/bash
 # Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Author: Benjamin Wöster (benjamin.woester@gmail.com)
 # Board support package building script
 
+function printHelp() {
+	echo '
+Usage:
+ build_GNUBLIN_support_package.sh [options]
+ build_GNUBLIN_support_package.sh clean [all]
+ build_GNUBLIN_support_package.sh clean-all
 
-# Parameters #####################
-export distro_version="max"     # paste "-min" if you want to build a minimal version of debian.
-export filesystem_vers="ext3"   # choose the final type of your filesystem setting
-export host_os="Ubuntu"         # Debian or Ubuntu (YOU NEED TO EDIT THIS!)
-export eldk_name="eldk-5.0"     # not important for now
-export start_mkmenuconfig="no"  # start make menuconfig (Bootloader and kernel). Say "no" if you dont want to start make menuconfig
-export parallel_jobs="8"	# number of parallel jobs make calls
-##################################
+Options:
+ -h, -?, --help                     This help message.
+ --bootloader-install-dir <dir>     Defaults to "<root_path>/bootloader/apex/1.6.8".
+ --crosscompiler-dir <dir>          Defaults to "<toolchain-dir>/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi",
+ --debian-build-dir <dir>           Defaults to "<root-path>/rootfs/debian/debian_install".
+ --debian-installed-files-dir <dir> Defaults to "<root-path>/rootfs/debian/debian_install/debian_process".
+ --distr-version <version>          Allowed values are "min" and "max".
+                                    Defaults to "max".
+ --fs-type <type>                   FS type used for the image. Possible values
+                                    include "ext2" and "ext3".
+                                    Defaults to "ext3".
+ --host-os <os>                     Allowed values are "Debian" and "Ubuntu".
+                                    Defaults to "Ubuntu".
+ --kernel-name <name>               Name of the compiled kernel.
+                                    Defaults to "linux-<version>-lpc313x".
+ --kernel-dir <dir>                 Defaults to "<root-path>/kernel/<kernel-name>".
+ --kernel-version <version>         The version of the kernel you want to use.
+                                    Allowed values are "2.6.33" and "3.3.0".
+                                    Defaults to "2.6.33".
+ --log-file <filepath>              Defaults to "<root-path>/install.log".
+ --nightly-build <yesno>            Set this option to "yes" if you use the
+                                    script for nightly builds. Please note, that
+                                    also have to specify the --root-dir option.
+                                    Defaults to "no".
+ --parallel-jobs <n>                Number of parallel jobs make calls.
+                                    Defaults to "8".
+ --root-dir <dir>                   Root directoy for the build.
+                                    Defaults to the current directoy.
+ --start-mkmenuconfig <yesno>       Allowed values are "yes" and "not". Set to
+                                    "yes" if you want to configure bootloader
+                                    and kernel.
+                                    Defaults to "no".
+ --toolchain-dir <dir>              Defaults to <root-dir>/toolchain
+'
+}
 
 
-########################################
-#Check if nightly_build_mode is selected
-########################################
-if [ "$1" = "nightly_build" ]
+# Available arguments
+
+ARG_BOOTLOADER_INSTALL_DIR=""
+ARG_CROSSCOMPILER_DIR=""
+ARG_DEBIAN_BUILD_DIR=""
+ARG_DEBIAN_INSTALLED_FILES_DIR=""
+ARG_DISTR_VERSION="max"
+ARG_FS_TYPE="ext3"
+ARG_HOST_OS="Ubuntu"
+ARG_KERNEL_NAME=""
+ARG_KERNEL_DIR=""
+ARG_KERNEL_VERSION="2.6.33"
+ARG_LOG_FILE=""
+ARG_NIGHTLY_BUILD="no"
+ARG_PARALLEL_JOBS="8"
+ARG_ROOT_DIR=""
+ARG_START_MKMENUCONFIG="no"
+ARG_TOOLCHAIN_DIR=""
+ARG_CLEAN="no"
+ARG_CLEAN_ALL="no"
+
+# Parse arguments
+# All arguments can be given in the format "--option=xyz" or "--option xyz"
+# If we don't find a '=', we consider proper input and use the next parameter
+# as option value
+# If we do find a '=', we delete everything up till '=' and take that as option
+# value
+
+while :
+do
+	case $1 in
+	-h | --help | -\?)
+	    printHelp
+	    exit 0
+	    ;;
+	--bootloader-install-dir)
+	    ARG_BOOTLOADER_INSTALL_DIR=$2
+	    shift 2
+	    ;;
+	--bootloader-install-dir=*)
+	    ARG_BOOTLOADER_INSTALL_DIR=${1#*=}
+	    shift
+	    ;;
+	--crosscompiler-dir)
+	    ARG_CROSSCOMPILER_DIR=$2
+	    shift 2
+	    ;;
+	--crosscompiler-dir=*)
+		ARG_CROSSCOMPILER_DIR=${1#*=}
+	    shift
+	    ;;
+	--debian-build-dir)
+	    ARG_DEBIAN_BUILD_DIR=$2
+	    shift 2
+	    ;;
+	--debian-build-dir=*)
+	    ARG_DEBIAN_BUILD_DIR=${1#*=}
+	    shift
+	    ;;
+	--debian-installed-files-dir)
+	    ARG_DEBIAN_INSTALLED_FILES_DIR=$2
+	    shift 2
+	    ;;
+	--debian-installed-files-dir=*)
+	    ARG_DEBIAN_INSTALLED_FILES_DIR=${1#*=}
+	    shift
+	    ;;
+	--distr-version)
+	    ARG_DISTR_VERSION=$2
+	    shift 2
+	    ;;
+	--distr-version=*)
+	    ARG_DISTR_VERSION=${1#*=}
+	    shift
+	    ;;
+	--fs-type)
+	    ARG_FS_TYPE=$2
+	    shift 2
+	    ;;
+	--fs-type=*)
+	    ARG_FS_TYPE=${1#*=}
+	    shift
+	    ;;
+	--host-os)
+	    ARG_HOST_OS=$2
+	    shift 2
+	    ;;
+	--host-os=*)
+	    ARG_HOST_OS=${1#*=}
+	    shift
+	    ;;
+	--kernel-name)
+	    ARG_KERNEL_NAME=$2
+	    shift 2
+	    ;;
+	--kernel-name=*)
+	    ARG_KERNEL_NAME=${1#*=}
+	    shift
+	    ;;
+	--kernel-dir)
+	    ARG_KERNEL_DIR=$2
+	    shift 2
+	    ;;
+	--kernel-dir=*)
+	    ARG_KERNEL_DIR=${1#*=}
+	    shift
+	    ;;
+	--kernel-version)
+	    ARG_KERNEL_VERSION=$2
+	    shift 2
+	    ;;
+	--kernel-version=*)
+	    ARG_KERNEL_VERSION=${1#*=}
+	    shift
+	    ;;
+	--log-file)
+	    ARG_LOG_FILE=$2
+	    shift 2
+	    ;;
+	--log-file=*)
+	    ARG_LOG_FILE=${1#*=}
+	    shift
+	    ;;
+	--nightly-build)
+	    ARG_NIGHTLY_BUILD=$2
+	    shift 2
+	    ;;
+	--nightly-build=*)
+	    ARG_NIGHTLY_BUILD=${1#*=}
+	    shift
+	    ;;
+	--parallel-jobs)
+	    ARG_PARALLEL_JOBS=$2
+	    shift 2
+	    ;;
+	--parallel-jobs=*)
+	    ARG_PARALLEL_JOBS=${1#*=}
+	    shift
+	    ;;
+	--root-dir)
+	    ARG_ROOT_DIR=$2
+	    shift 2
+	    ;;
+	--root-dir=*)
+	    ARG_ROOT_DIR=${1#*=}
+	    shift
+	    ;;
+	--start-mkmenuconfig)
+	    ARG_START_MKMENUCONFIG=$2
+	    shift 2
+	    ;;
+	--start-mkmenuconfig=*)
+	    ARG_START_MKMENUCONFIG=${1#*=}
+	    shift
+	    ;;
+	--toolchain-dir)
+	    ARG_TOOLCHAIN_DIR=$2
+	    shift 2
+	    ;;
+	--toolchain-dir=*)
+	    ARG_TOOLCHAIN_DIR=${1#*=}
+	    shift
+	    ;;
+	clean)
+	    ARG_CLEAN="yes"
+	    shift
+	    ;;
+	all)
+		if [ "$ARG_CLEAN" == "yes" ]
+		then
+	    	ARG_CLEAN_ALL="yes"
+		fi
+	    shift
+	    ;;
+	clean-all)
+	    ARG_CLEAN="yes"
+	    ARG_CLEAN_ALL="yes"
+	    shift
+	    ;;
+	--) # End of all options
+	    shift
+	    break
+	    ;;
+	-*)
+	    echo "WARN: Unknown option (ignored): $1" >&2
+	    shift
+	    ;;
+	*)  # no more options. Stop while loop
+	    break
+	    ;;
+	esac
+done
+
+
+# Generate default values for arguments that haven't been explicitly set
+
+if [ "$ARG_ROOT_DIR" == '' ]
 then
-export nightly_build="yes"
+	if [ "$ARG_NIGHTLY_BUILD" == 'yes' ]
+	then
+		echo 'You must specify option --root-dir for nightly builds.' >&2
+		exit 1
+	fi
+	ARG_ROOT_DIR=$(pwd)
+fi
+
+if [ "$ARG_BOOTLOADER_INSTALL_DIR" == '' ]
+then
+  ARG_BOOTLOADER_INSTALL_DIR="$ARG_ROOT_DIR/bootloader/apex/1.6.8"
+fi
+
+if [ "$ARG_TOOLCHAIN_DIR" == '' ]
+then
+	ARG_TOOLCHAIN_DIR="$ARG_ROOT_DIR/toolchain"
+fi
+
+if [ "$ARG_CROSSCOMPILER_DIR" == '' ]
+then
+	ARG_CROSSCOMPILER_DIR="$ARG_TOOLCHAIN_DIR/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi"
+fi
+
+if [ "$ARG_DEBIAN_BUILD_DIR" == '' ]
+then
+	ARG_DEBIAN_BUILD_DIR="$ARG_ROOT_DIR/rootfs/debian/debian_install"
+fi
+
+if [ "$ARG_DEBIAN_INSTALLED_FILES_DIR" == '' ]
+then
+	ARG_DEBIAN_INSTALLED_FILES_DIR="$ARG_ROOT_DIR/rootfs/debian/debian_install/debian_process"
+fi
+
+if [ "$ARG_KERNEL_NAME" == '' ]
+then
+	ARG_KERNEL_NAME="linux-$ARG_KERNEL_VERSION-lpc313x"
+fi
+
+if [ "$ARG_KERNEL_DIR" == '' ]
+then
+	ARG_KERNEL_DIR="$ARG_ROOT_DIR/kernel/$ARG_KERNEL_NAME"
+fi
+
+if [ "$ARG_LOG_FILE" == '' ]
+then
+	ARG_LOG_FILE="$ARG_ROOT_DIR/install.log"
 fi
 
 
-###################
-# Other Variables #
-###################
-#export root_path="/home/eproo/Desktop/nightly_build_gnublin_distribution/gnublin/lpc3131"    #This path must be edited to fit your directory structure if you want to use the nightly_build
-export root_path=$(pwd)                                                                       #if you want to use the nightly_build feature add a # before export and remove the # from the line above
+# Do exports depending on default/ user provided arguments 
+
+export distro_version="$ARG_DISTR_VERSION"
+export filesystem_vers="$ARG_FS_TYPE"
+export host_os="$ARG_HOST_OS"
+export start_mkmenuconfig="$ARG_START_MKMENUCONFIG"
+export parallel_jobs="$ARG_PARALLEL_JOBS"
+export root_path="$ARG_ROOT_DIR"
+export kernel_version="$ARG_KERNEL_VERSION"
+export kernel_name="$ARG_KERNEL_NAME"
+export toolchain_path="$ARG_TOOLCHAIN_DIR"
+export cross_compiler_path="$ARG_CROSSCOMPILER_DIR"
+export kernel_path="$ARG_KERNEL_DIR"
+export debian_build_path="$ARG_DEBIAN_BUILD_DIR"
+export debian_installed_files_path="$ARG_DEBIAN_INSTALLED_FILES_DIR"
+export bootloader_install_dir="$ARG_BOOTLOADER_INSTALL_DIR"
+export logfile_build="$ARG_LOG_FILE"
+
+# Check if nightly_build_mode is selected
+if [ "$ARG_NIGHTLY_BUILD" == 'yes' ]
+then
+	export nightly_build="yes"
+fi
+
 export build_time="$(date '+%D %H:%M') ->"
 export user=$(whoami)
-export toolchain_path=$root_path/toolchain
-export cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
-export kernel_version=2.6.33
-export kernel_name=linux-$kernel_version-lpc313x
-export kernel_path=$root_path/kernel/$kernel_name
-export debian_build_path=$root_path/rootfs/debian/debian_install
-export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
-export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
-export logfile_build=$root_path/install.log
+
+# not important for now
+export eldk_name="eldk-5.0"
 
 
 
@@ -50,7 +335,7 @@ source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_vers
 # Only cleaning the whole board-support-package and exit #
 ##########################################################
 
-if [ "$1" = "clean" ]
+if [ "$ARG_CLEAN" == "yes" ]
 then
 	 
 	sudo -s -E rm -rf $debian_installed_files_path 
@@ -68,7 +353,7 @@ then
 
 	
 		
-	if [ "$2" = "all" ]
+	if [ "$ARG_CLEAN_ALL" == "yes" ]
 	then
 		sudo -s -E rm -rf $root_path/kernel/$kernel_name
 		sudo -s -E rm -rf $root_path/Downloads/*
