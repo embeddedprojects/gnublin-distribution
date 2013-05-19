@@ -69,7 +69,13 @@ fi
 	
 
 	#gnublin kernel build process
-	make gnublin_defconfig	
+	if [ "$kernel_config" = "" ]
+	then
+		make gnublin_defconfig
+	else
+		cp "$kernel_config" ./.config
+		make oldconfig
+	fi
 	
 	if [ "$start_mkmenuconfig" = "yes" ]
 	then	

@@ -46,6 +46,10 @@ Options:
  --update <yesno>                   If set to "yes", runs a "git pull" on this
                                     repository before starting the build
                                     Defaults to "yes"
+ --use-kernel-config <filepath>     If set, will copy the specified file into the
+                                    kernel source tree as ".config" and run a 
+                                    "make oldconfig" instead of a "make gnublin_defconfig".
+                                    Can be combined with --start-mkmenuconfig
 '
 }
 
@@ -71,6 +75,7 @@ ARG_ROOT_DIR=""
 ARG_START_MKMENUCONFIG="no"
 ARG_TOOLCHAIN_DIR=""
 ARG_UPDATE="yes"
+ARG_USE_KERNEL_CONFIG=""
 
 # Parse arguments
 # All arguments can be given in the format "--option=xyz" or "--option xyz"
@@ -222,6 +227,14 @@ do
 	    ARG_UPDATE=${1#*=}
 	    shift
 	    ;;
+	--use-kernel-config)
+	    ARG_USE_KERNEL_CONFIG=$2
+	    shift 2
+	    ;;
+	--use-kernel-config=*)
+	    ARG_USE_KERNEL_CONFIG=${1#*=}
+	    shift
+	    ;;
 	clean)
 	    ARG_CLEAN="yes"
 	    shift
@@ -323,6 +336,7 @@ export debian_build_path="$ARG_DEBIAN_BUILD_DIR"
 export debian_installed_files_path="$ARG_DEBIAN_INSTALLED_FILES_DIR"
 export bootloader_install_dir="$ARG_BOOTLOADER_INSTALL_DIR"
 export logfile_build="$ARG_LOG_FILE"
+export kernel_config="$ARG_USE_KERNEL_CONFIG"
 
 # Check if nightly_build_mode is selected
 if [ "$ARG_NIGHTLY_BUILD" == 'yes' ]
