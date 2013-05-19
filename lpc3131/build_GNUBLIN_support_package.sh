@@ -43,6 +43,9 @@ Options:
                                     and kernel.
                                     Defaults to "no".
  --toolchain-dir <dir>              Defaults to <root-dir>/toolchain
+ --update <yesno>                   If set to "yes", runs a "git pull" on this
+                                    repository before starting the build
+                                    Defaults to "yes"
 '
 }
 
@@ -50,6 +53,8 @@ Options:
 # Available arguments
 
 ARG_BOOTLOADER_INSTALL_DIR=""
+ARG_CLEAN="no"
+ARG_CLEAN_ALL="no"
 ARG_CROSSCOMPILER_DIR=""
 ARG_DEBIAN_BUILD_DIR=""
 ARG_DEBIAN_INSTALLED_FILES_DIR=""
@@ -65,8 +70,7 @@ ARG_PARALLEL_JOBS="8"
 ARG_ROOT_DIR=""
 ARG_START_MKMENUCONFIG="no"
 ARG_TOOLCHAIN_DIR=""
-ARG_CLEAN="no"
-ARG_CLEAN_ALL="no"
+ARG_UPDATE="yes"
 
 # Parse arguments
 # All arguments can be given in the format "--option=xyz" or "--option xyz"
@@ -208,6 +212,14 @@ do
 	    ;;
 	--toolchain-dir=*)
 	    ARG_TOOLCHAIN_DIR=${1#*=}
+	    shift
+	    ;;
+	--update)
+	    ARG_UPDATE=$2
+	    shift 2
+	    ;;
+	--update=*)
+	    ARG_UPDATE=${1#*=}
 	    shift
 	    ;;
 	clean)
@@ -397,7 +409,11 @@ fi
 
 #get the newest version of the build_script and files
 cd $root_path
-git pull
+
+if [ "$ARG_UPDATE" == "yes" ]
+then
+	git pull
+fi
 
 
 #############################################
