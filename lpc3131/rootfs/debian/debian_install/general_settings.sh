@@ -18,6 +18,9 @@ export debian_target_version="squeeze" # The version of debian that you want to 
 # google nameserver it's reachable from everywere
 export nameserver_addr="8.8.8.8"  
 
+# we will clone kernel repositories from this url
+export repos_root_url="git://github.com/embeddedprojects"
+
 # where to get the standard kernel #kernel_pkg_path="${HOME}/gnublin/built_kernels"
 export std_kernel_pkg_path="$debian_installed_files_path"                                    
 
@@ -34,8 +37,6 @@ export std_kernel_pkg_name="linux-2.6.33.tar.gz" # standard kernel file name
 
 #Kernel package name before compression
 export default_kernel_pkg_name="$kernel_name"
-
-export git_name_kernel="gnublin-develop-kernel"
 
 export add_packages_ultimum="samba"
 

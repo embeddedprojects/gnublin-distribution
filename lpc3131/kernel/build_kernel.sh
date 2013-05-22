@@ -44,7 +44,7 @@ fi
 	then
 		cd $root_path/Downloads	|| exit 0
 		#Get kernel from repository 
-		git clone https://code.google.com/p/gnublin-develop-kernel || exit 0
+		git clone "$repos_root_url/$git_name_kernel" || exit 0
 		echo "$build_time Repository cloned correctly " >> $logfile_build
 	
 	else 

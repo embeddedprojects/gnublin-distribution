@@ -1,5 +1,6 @@
 #!/bin/bash
 # Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Author: Benjamin Wöster (benjamin.woester@gmail.com)
 # Board support package building script
 
 
@@ -39,6 +40,9 @@ export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debia
 export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
 export logfile_build=$root_path/install.log
 
+
+# set the kernel repository name depending on the selected kernel version
+export git_name_kernel="gnublin-lpc3131-$ARG_KERNEL_VERSION"
 
 
 # Include settings through an additional file
