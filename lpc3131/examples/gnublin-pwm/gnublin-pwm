@@ -1,0 +1,190 @@
+#!/bin/bash
+
+# Wrapper Script for reading values from the internal lpc3131 pwm controller
+# Author: Benedikt Niedermayr (niedermayr@embedded-projects.net)
+# Version 1.0
+# embedded projects GmbH
+
+# This program (including documentation) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License version 3 (GPLv3; http://www.gnu.org/licenses/gpl-3.0.html ) for more details.
+
+
+
+value_length=""
+value=""
+clk=""
+clk_f="0"
+json_f="0"
+brute_f="0"
+devfile="/dev/lpc313x_pwm"
+helpstring='This wrapper Script controls the pwm interface of GNUBLIN 
+
+-h Show this help
+-b show output in raw format.
+-j print output in json format.
+-d Choose Path to device file.
+-c <divider> Divide the PWM-Clock by 1,2,4 or 8
+-v <value> Hex-value for pwm duty cycle in.(0x000-0xfff)
+
+Example:
+
+this command starts the pwm interface with specified value.
+gnublin-pwm -v 0xfff
+
+this command starts the pwm interface with specified value.
+gnublin-pwm -v 0x400
+
+this command divides the pwm-clock by two.
+gnublin-pwm -c 2
+
+'
+
+
+
+# check if script was called with parameters
+if [ "$#" = "0" ]
+then 
+		if [ "$json_f" == "1" ]
+		then
+			echo "{ \"error_msg\" : \"No parameters given. -h for help \",\"result\" : \"-1\" }"
+		else
+		echo "No parameters given. -h for help"
+		fi
+   exit 1
+fi 
+
+while getopts d:v:hjbc: opt
+ do
+      case $opt in
+          d) devfile="${OPTARG}" ;;
+   	  v) value="${OPTARG}" ;;
+   	  c) clk="${OPTARG}" 
+	     clk_f="1";;
+          j) json_f="1" ;;
+          b) brute_f="1" ;;
+          ?) echo "$helpstring"
+             exit 1 ;;
+	  h) echo "$helpstring"
+             exit 1 ;;
+      esac
+done
+
+
+
+
+
+
+
+
+#modul autoload
+lsmod | grep "lpc313x_pwm"  >/dev/null
+
+if [ "$?" == "1" ]
+then
+	modprobe lpc313x_pwm
+        sleep 1
+fi 
+
+
+#check device-file
+if [ ! -c $devfile ]
+then
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"error_msg\" : \"File: $devfile was not found\",\"result\" : \"-2\" }"
+	else
+	echo "File: $devfile was not found"
+        fi
+	exit 1
+fi
+
+
+#check if clk_f is set
+
+if [ "$clk_f" == "1" ]
+then
+      if [ "$clk" == "1" ]
+      then
+	    echo "clk1" > $devfile
+
+      elif [ "$clk" == "2" ]
+      then
+	    echo "clk2" > $devfile
+
+      elif [ "$clk" == "4" ]
+      then
+	    echo "clk3" > $devfile
+
+      elif [ "$clk" == "8"  ]
+      then
+	    echo "clk4" > $devfile
+
+      else
+	  if [ "$json_f" == "1" ]
+	  then
+	      echo "{ \"error_msg\" : \"Wrong Clock Divider selected\",\"result\" : \"-5\" }"
+	  else
+	      echo "Wrong Clock Divider selected. Only 1,2,4 or 8 is allowed!"
+	  fi
+       fi
+exit 1   
+fi
+
+#check if value is a hex-value
+if [  "${value:0:2}" != "0x" ]
+then
+    result="Value is not a hex-value."
+    if [ "$json_f" == "1" ]
+    then
+        echo "{ \"error_msg\" : \"$result\",\"result\" : \"-1\" }"
+    else
+        echo $result
+    fi
+    exit 1
+fi
+
+
+
+value_length=${#value}
+if [ "$value_length" != "5" ]
+then 
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"error_msg\" : \"Number of digits in expression value isn't correct!\",\"result\" : \"-3\" }"
+	else
+	echo "Number of digits in expression value isn't correct!"
+	fi
+	exit 1
+fi
+
+
+
+echo "${value:2:3}" | grep -E "[^0-9a-fA-F]"
+if [ "$?" == "0" ]; 
+then
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"error_msg\" : \"Value must be between 0x000 and 0xfff\",\"result\" : \"-4\" }"
+	else
+        echo "Value must be between 0x000 and 0xfff."
+	fi
+    exit 1
+fi
+
+#activate pwm
+echo "${value:2:3}" > $devfile
+	if [ "$json_f" == "1" ]
+	then
+	    echo "{ \"result\" : \"0\" }"
+	elif [ "$brute_f" == "1" ]
+	then
+	    echo "0"
+	else
+        echo "PWM successfully activated."
+	fi
+
+
+
+
+
+

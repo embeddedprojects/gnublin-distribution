@@ -1,0 +1,10 @@
+Package: mjpg-streamer
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 141
+Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
+Homepage: http://wiki.gnublin.org/
+Description: An anpplication for webcam streams.

@@ -1,0 +1,65 @@
+USE A PRECOMPILED VERSION
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+You can find two binaries of the apex-bootloader in this folder. This two files are already compiled for 8MB RAM and 32MB RAM. You can choose the right apex.bin file and write it with the following command onto the right partition of your sd-card.
+
+dd if=apex.bin of=/dev/sdX2 bs=512
+
+or
+
+dd if=apex_32MB.bin of=/dev/sdX2 bs=512
+
+NOTE: You should change the letter X to the right letter of your partition! 
+
+
+BUILDING THE BOOTLOADER 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Execute your sourcing-file "set.sh" in the directory you have created it within a shell. If you have used the build_GNUBLIN_support_package.sh script to install your toolchain, kernel, etc. you can find your set.sh file in the directory "gnublin/lpc3131/kernel/LINUXVERSION-lpc313x/" 
+
+. ./set.sh
+
+!!NOTE!! you must execute the command with a dot and a space before ./set.sh
+
+
+#Here is the content of the set.sh file if you dont have the file and have installed the toolchain described in the wiki-article (old-method):
+
+#---set.sh---
+
+P1=/opt/eldk-5.0/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi/
+P2=/opt/eldk-5.0/armv5te/sysroots/i686-oesdk-linux/bin/armv5te-linux-gnueabi/
+
+export ARCH=arm 
+export CROSS_COMPILE=arm-linux-gnueabi-
+export PATH=$P1:$P2:$PATH
+
+#---
+
+#After you have executed the . ./set.sh command, you should change into the directory of the apex-VERSION.tar.gz file in the same shell you have executed the . ./set.sh command.
+
+tar zxvf apex-1.6.8.tar.gz
+cd apex-1.6.8
+
+
+#With the following command you can configure your apex bootloader. You should set the correct size of your Gnublin-boards RAM via "Platform Setup -> Choose RAM size"
+make menuconfig
+
+#After configuration, run the following command to make the binary file.
+make apex.bin
+
+
+#After the operation has finished, you can find your apex.bin file in the directory apex-1.6.8/src/arch-arm/rom/
+
+#You can copy the bootloader with the following command:
+!!!ATTENTION!! Please be sure that you use the right partition. (the smaller partition of the sd-card). In nearly all cases your bootloader partition is the second partition.
+
+#The correct path of your sd-cards boot-partition could look lite this:
+
+/dev/sdX2
+
+NOTE: You should change the letter X to the right letter of your partition! 
+
+sudo dd if=src/arch-arm/rom/apex.bin of=/dev/sdX2 bs=512
+
+#With the command above the bootloader is copied to the sd-card. After this step you should use the last command to sync your device, and to be sure that everything is written to your sd-card.
+
+sync
+

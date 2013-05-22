@@ -1,0 +1,13 @@
+The Nightly_build mode is intended to be used with a server or a pc which is always running. The nightly_build feature adds a cronjob to your crontab to build the complete Gnublin_Distribution every night.
+
+
+Please make sure to edit the build_GNUBLIN_support_package.sh file to fit your directory structure.
+
+You have to comment out the line where it says export root_path=$(pwd) and comment in the line where it says root_path=/YOUR/PATH/HERE  and the Path must be customized to point to your directory, where the build_GNUBLIN_support_package.sh file is located.
+
+
+
+After that just run the nightly_build.sh script once, and the Distribution will be built every night at 1 o`clock. You can edit the build-time by editing the nightly_build.sh script where it adds the cronjob.
+
+
+ 

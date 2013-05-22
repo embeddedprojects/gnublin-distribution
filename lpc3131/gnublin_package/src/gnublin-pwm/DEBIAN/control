@@ -1,0 +1,10 @@
+Package: gnublin-pwm
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 270
+Maintainer: Benedikt Niedermayr <niedermayr@embedded-projects.net>
+Homepage:
+Description: An anpplication to set the GNUBLIN Boards internal pwm interface.

@@ -1,0 +1,3 @@
+Download the eldk rootfs from our server
+
+wget http://gnublin.org/downloads/gnublin_distro/eldk/rootfs.tar.gz

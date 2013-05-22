@@ -1,0 +1,10 @@
+Package: gnublin-webdemo
+Version: 0.0.1-1
+Section: misc
+Priority: extra
+Architecture: armel
+Depends:
+Installed-Size: 10
+Maintainer: Eduard Tasnadi-Olescher
+Homepage: http://wiki.gnublin.org/
+Description: An anpplication for a small webdemo on GNUBLIN.

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+cd /tmp
+
+cur=$(pwd)
+# First load the repo Gnublin
+git clone http://code.google.com/p/gnublin/
+
+if [ ! -d "$cur/gnublin/lpc3131/Downloads" ]
+then 
+	mkdir $cur/gnublin/lpc3131/Downloads
+fi
+
+cd $cur/gnublin/lpc3131/Downloads
+# Load Kernel repo
+git clone http://code.google.com/p/gnublin-develop-kernel/
+
+#mv gnublin-develop-kernel/linux-2.6.33-lpc313x kernel/
+#rm -r gnublin-develop-kernel
+ 
+# delete everything what has to do with git
+
+cd $cur 
+
+
+#find /tmp/gnublin -name ".git" -exec rm -r {} \; 
+rm -r `find /tmp/gnublin -name ".git"`
+
+cd $cur/gnublin/lpc3131/
+rm $cur/gnublin/lpc3131/get_gnublin_distro_src
+$cur/gnublin/lpc3131/build_GNUBLIN_support_package.sh
+cd $cur/gnublin/lpc3131/output
+
+tar zc -f /tmp/gnublin_distro.tar.gz *
+
+cd $cur/gnublin/lpc3131/
+rm $cur/gnublin/lpc3131/get_gnublin_distro_src
+tar zc -f /tmp/gnublin_distro_complete.tar.gz *
+
+
+ 

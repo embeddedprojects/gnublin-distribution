@@ -1,0 +1,11 @@
+- wenn Stick ausgeworfen wird muss man schauen soll der wieder automatisch
+nach 
+
+cat /sys/devices/platform/fsl-usb2-udc.0/gadget/lun0/file/var/www/apps/harddiskcrypt/drives/QmVuZQ==.drive
+
+cat /sys/devices/platform/fsl-usb2-udc.0/gadget/lun0/file
+
+- auto Laufwerk öffnen nach login
+
+
+

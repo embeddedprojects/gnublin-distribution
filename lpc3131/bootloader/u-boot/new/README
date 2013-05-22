@@ -1,0 +1,20 @@
+how to use u-boot instead of apex bootloader:
+
+	tar xzvf u-boot_work-2009.11.tar.gz
+
+	. ./set.sh    (Please Note: Detailed Instructions about this Command can be found at http://wiki.gnublin.org/index.php/C/C%2B%2B_Entwicklungsumgebung_installieren )
+
+	cd u-boot_work-2009.11
+
+	make EA3131_config
+
+	make
+
+copy the bootloader to SD-Card:
+
+	sudo dd if=uboot.bin of=/dev/sdh2 bs=512         (change sdh2 to the second Partition of your SD-Card e.g. sdd2, sdf2, etc.)
+
+Format the first partition to FAT and copy the kernel uImage to this partition.
+
+Copy the rootfs to the third Partition (ext2 or ext3) 
+
