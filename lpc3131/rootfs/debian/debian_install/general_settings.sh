@@ -92,11 +92,14 @@ export create_disk="no" # create a bootable SD-card after building the rootfs?
 ####################################
 #check for min or max installation.#
 ####################################
-if [ "$1" = "min" ]
+if [ "$1" = "empty" ]
+then
+	export additional_packages=""
+elif [ "$1" = "min" ]
 then
 	export additional_packages="$add_packages_base"
-	#echo "minimal distribution choosen" >> 
-else
+elif [ "$1" = "max" ]
+then
 	export additional_packages="$add_packages_base $add_packages_max"
 fi
 
