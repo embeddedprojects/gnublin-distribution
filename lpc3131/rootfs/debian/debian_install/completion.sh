@@ -60,11 +60,24 @@ echo "#############################################################" >> $logfile
 	echo "set lines=35" >> "${output_dir}/mnt_debootstrap/etc/vim/vimrc"
 	echo "kernel.printk = 3 3 1 7" > "${output_dir}/mnt_debootstrap/etc/sysctl.conf"
 	
+	
+	if [ ! -d "$root_path/Downloads/gnublin-api" ] 	
+	then
+		cd $root_path/Downloads	|| exit 0
+		#Get gnublin-api from repository 
+		git clone https://github.com/embeddedprojects/gnublin-api.git || exit 0
+		echo "$build_time gnublin-api Repository cloned correctly " >> $logfile_build
+	
+	else 
+		cd $root_path/Downloads/gnublin-api
+		git pull
+	fi
 		
 		cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
 		cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
-		cp -r $root_path/output/${kernel_version}* ${output_dir}/mnt_debootstrap/lib/modules
-		cp 	  $root_path/output/zImage  ${output_dir}/mnt_debootstrap/
+		cp -r $root_path/output/${kernel_version}* ${output_dir}/mnt_debootstrap/lib/modules 
+		cp -r $root_path/Downloads/gnublin-api/ ${output_dir}/mnt_debootstrap/root/ || exit 0 
+		cp $root_path/output/zImage  ${output_dir}/mnt_debootstrap/
 
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64 || exit 0
 

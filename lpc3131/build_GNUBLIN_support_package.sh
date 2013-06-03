@@ -467,8 +467,20 @@ if [ ! -e $root_path/.stamp_bootloader ]
 then
 	
 	source $root_path/bootloader/apex/1.6.8/build_bootloader.sh || exit 0
+	
+	# Copy the most important files #
+	# It's not necessary but better for the user to find all final created files at the same place #
+	
+	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
+	
+	#create md5sums for the gnublin-installer
+	md5sum $root_path/output/apex.bin > $root_path/output/apex.bin.md5
+	
+	
 	touch $root_path/.stamp_bootloader
+	
 fi
+
 
 
 ######################################
@@ -481,6 +493,26 @@ then
 
 	# Move set.sh file into the kernel
 	cp $root_path/kernel/set.sh $kernel_path
+	
+	# Copy the most important files #
+	# It's not necessary but better for the user to find all final created files at the same place #
+	
+	mkdir -p $root_path/output/kernel/lib/modules/
+	cp -r $root_path/output/2.6.33* $root_path/output/kernel/lib/modules/
+	cp -r $root_path/output/3.3.0* $root_path/output/kernel/lib/modules/
+	cp $root_path/output/zImage $root_path/output/kernel
+	
+	#compress kernel & modules
+	cd $root_path/output/kernel/
+	tar cfvz $root_path/output/kernel.tar.gz .
+	
+	#create md5sums for the gnublin-installer
+	md5sum $root_path/output/kernel.tar.gz > $root_path/output/kernel.tar.gz.md5
+	rm -rf $root_path/output/2.6.33*
+	rm -rf $root_path/output/3.3.0*
+	rm $root_path/output/zImage
+	rm -r $root_path/output/kernel/
+	
 	touch $root_path/.stamp_kernel
 fi
 
@@ -533,11 +565,10 @@ then
 	# Copy the most important files #
 	# It's not necessary but better for the user to find all final created files at the same place #
 	
-	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
-	
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
 	
-	 
+	#create md5sums for the gnublin-installer
+	md5sum $root_path/output/${output_filename}.tar.${tar_format} > $root_path/output/${output_filename}.tar.${tar_format}.md5
 
 	# Create stamp #
 	touch $root_path/.stamp_rootfs_post
