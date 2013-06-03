@@ -474,7 +474,8 @@ then
 	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
 	
 	#create md5sums for the gnublin-installer
-	md5sum $root_path/output/apex.bin > $root_path/output/apex.bin.md5
+	cd $root_path/output/
+	md5sum apex.bin > apex.bin.md5
 	
 	
 	touch $root_path/.stamp_bootloader
@@ -507,7 +508,8 @@ then
 	tar cfvz $root_path/output/kernel.tar.gz .
 	
 	#create md5sums for the gnublin-installer
-	md5sum $root_path/output/kernel.tar.gz > $root_path/output/kernel.tar.gz.md5
+	cd $root_path/output/
+	md5sum kernel.tar.gz > kernel.tar.gz.md5
 	rm -rf $root_path/output/2.6.33*
 	rm -rf $root_path/output/3.3.0*
 	rm $root_path/output/zImage
@@ -568,7 +570,8 @@ then
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
 	
 	#create md5sums for the gnublin-installer
-	md5sum $root_path/output/${output_filename}.tar.${tar_format} > $root_path/output/${output_filename}.tar.${tar_format}.md5
+	cd $root_path/output/
+	md5sum ${output_filename}.tar.${tar_format} > ${output_filename}.tar.${tar_format}.md5
 
 	# Create stamp #
 	touch $root_path/.stamp_rootfs_post
