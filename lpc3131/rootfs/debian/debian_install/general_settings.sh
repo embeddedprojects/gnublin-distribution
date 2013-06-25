@@ -33,7 +33,7 @@ export qemu_kernel_pkg_name="kernel_2.6.33-gnublin-qemu-1.2_1335647673.tar.bz2"
 # where to put the files in general
 export output_dir_base="$debian_installed_files_path"                                 
 
-export std_kernel_pkg_name="linux-2.6.33.tar.gz" # standard kernel file name
+export std_kernel_pkg_name="linux-${kernel_version}.tar.gz" # standard kernel file name
 
 #Kernel package name before compression
 export default_kernel_pkg_name="$kernel_name"
