@@ -42,7 +42,7 @@ export logfile_build=$root_path/install.log
 
 
 # set the kernel repository name depending on the selected kernel version
-export git_name_kernel="gnublin-lpc3131-$ARG_KERNEL_VERSION"
+export git_name_kernel="gnublin-lpc3131-${kernel_version}"
 
 
 # Include settings through an additional file
