@@ -87,6 +87,7 @@ echo "$build_time Kernel compressed correctly" >> $logfile_build
 
 
 cd $cur_path
-cp -r $kernel_path/arch/arm/boot/zImage $root_path/output
-cp -r $root_path/kernel/$kernel_name/lib/modules/* $root_path/output
+mkdir $root_path/output/kernel
+cp $root_path/kernel/$kernel_name/arch/arm/boot/zImage $root_path/output/kernel
+cp -r $root_path/kernel/$kernel_name/lib/modules/* $root_path/output/kernel
 

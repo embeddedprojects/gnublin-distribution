@@ -34,7 +34,7 @@ export toolchain_path=$root_path/toolchain
 export cross_compiler_path=$toolchain_path/armv5te/sysroots/i686-oesdk-linux/usr/bin/armv5te-linux-gnueabi
 export kernel_version=2.6.33
 export kernel_name=linux-$kernel_version-lpc313x
-export kernel_path=$root_path/kernel/$kernel_name
+export kernel_path=$root_path/kernel/${kernel_version}
 export debian_build_path=$root_path/rootfs/debian/debian_install
 export debian_installed_files_path=$root_path/rootfs/debian/debian_install/debian_process
 export bootloader_install_dir=$root_path/bootloader/apex/1.6.8
@@ -156,6 +156,17 @@ if [ ! -e $root_path/.stamp_bootloader ]
 then
 	
 	source $root_path/bootloader/apex/1.6.8/build_bootloader.sh || exit 0
+	
+	# Copy the most important files #
+	# It's not necessary but better for the user to find all final created files at the same place #
+
+	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
+
+	#create md5sums for the gnublin-installer
+	cd $root_path/output/
+	md5sum apex.bin > apex.bin.md5
+	
+	
 	touch $root_path/.stamp_bootloader
 fi
 
@@ -170,6 +181,15 @@ then
 
 	# Move set.sh file into the kernel
 	cp $root_path/kernel/set.sh $kernel_path
+	
+	#compress kernel & modules
+	cd $root_path/output/kernel/
+	tar cfvz $root_path/output/kernel.tar.gz .
+
+	#create md5sums for the gnublin-installer
+	cd $root_path/output/
+	md5sum kernel.tar.gz > kernel.tar.gz.md5
+
 	touch $root_path/.stamp_kernel
 fi
 
@@ -222,9 +242,12 @@ then
 	# Copy the most important files #
 	# It's not necessary but better for the user to find all final created files at the same place #
 	
-	cp $bootloader_install_dir/apex-1.6.8/src/arch-arm/rom/apex.bin $root_path/output
 	
 	cp ${output_dir}/${output_filename}.tar.${tar_format} $root_path/output
+	
+	#create md5sums for the gnublin-installer
+	cd $root_path/output/
+	md5sum ${output_filename}.tar.${tar_format} > ${output_filename}.tar.${tar_format}.md5
 	
 	 
 
