@@ -31,8 +31,9 @@ Options:
                                     Defaults to "2.6.33".
  --log-file <filepath>              Defaults to "<root-path>/install.log".
  --nightly-build <yesno>            Set this option to "yes" if you use the
-                                    script for nightly builds. Please note, that
-                                    also have to specify the --root-dir option.
+                                    script for nightly builds.
+                                    Please note: you also have to specify the
+                                    --root-dir option when using this option.
                                     Defaults to "no".
  --parallel-jobs <n>                Number of parallel jobs make calls.
                                     Defaults to "8".
@@ -48,6 +49,7 @@ Options:
 
 
 # Available arguments
+# Assign default values to arguments, that are not dependent on other arguments
 
 ARG_BOOTLOADER_INSTALL_DIR=""
 ARG_CROSSCOMPILER_DIR=""
@@ -328,7 +330,7 @@ export eldk_name="eldk-5.0"
 export git_name_kernel="gnublin-lpc3131-${kernel_version}"
 
 # Include settings through an additional file
-source $root_path/rootfs/debian/debian_install/general_settings.sh	"$distro_version"
+source $root_path/rootfs/debian/debian_install/general_settings.sh "$distro_version"
 
 
 
@@ -347,7 +349,6 @@ then
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/apex.bin 
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/zImage	
 	sudo -s -E rm -rf $root_path/tools/gnublin-installer/${output_filename}.tar.${tar_format} 
-	#sudo -s -E rm -rf $root_path/gnublin_package/deb/*
 	sudo -s -E rm -rf $logfile_build
 	sudo -s -E rm -rf $root_path/output
 	sudo -s -E rm -rf $root_path/gnublin_package/deb/*
@@ -508,7 +509,7 @@ then
         rm -r $root_path/gnublin_package/deb/*
 	cd $root_path/gnublin_package/src/
 	$root_path/gnublin_package/src/mkdeb_package
-        echo "Gnublin Packages Successfully created" >> $logfile_build
+	echo "Gnublin Packages Successfully created" >> $logfile_build
     
 
     # Following script calls the script completion.sh!
@@ -556,19 +557,19 @@ then
 	fi
 	
 	#move the directories that you always have the latest build in /000
-	     sudo -s -E rm -rf $root_path/backup/006
-	     sudo -s -E mv $root_path/backup/005 $root_path/backup/006
-	     sudo -s -E mv $root_path/backup/004 $root_path/backup/005
-	     sudo -s -E mv $root_path/backup/003 $root_path/backup/004
-	     sudo -s -E mv $root_path/backup/002 $root_path/backup/003
-	     sudo -s -E mv $root_path/backup/001 $root_path/backup/002
-	     sudo -s -E mv $root_path/backup/000 $root_path/backup/001
-	     sudo -s -E mkdir $root_path/backup/000
+	sudo -s -E rm -rf $root_path/backup/006
+	sudo -s -E mv $root_path/backup/005 $root_path/backup/006
+	sudo -s -E mv $root_path/backup/004 $root_path/backup/005
+	sudo -s -E mv $root_path/backup/003 $root_path/backup/004
+	sudo -s -E mv $root_path/backup/002 $root_path/backup/003
+	sudo -s -E mv $root_path/backup/001 $root_path/backup/002
+	sudo -s -E mv $root_path/backup/000 $root_path/backup/001
+	sudo -s -E mkdir $root_path/backup/000
 	
 	#copy the output files plus the install.log file to the newest backup directory
-	     sudo -s -E cp -rf $root_path/output/* $root_path/backup/000
-	     sudo -s -E cp -f  $logfile_build $root_path/backup/000
-	     sudo -s -E echo   $build_time > $root_path/backup/000/build_time
+	sudo -s -E cp -rf $root_path/output/* $root_path/backup/000
+	sudo -s -E cp -f  $logfile_build $root_path/backup/000
+	sudo -s -E echo   $build_time > $root_path/backup/000/build_time
 	
 	##################################################################################################
 fi
