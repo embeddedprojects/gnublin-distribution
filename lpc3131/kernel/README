@@ -1,6 +1,6 @@
 You can also get the latest stable release from our repository.
 
-git clone http://code.google.com/p/gnublin-develop-kernel/
+git clone https://github.com/embeddedprojects/gnublin-lpc3131-2.6.33.git
 
 
 
