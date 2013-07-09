@@ -64,6 +64,7 @@ echo "#############################################################" >> $logfile
 	
 	cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
 	cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
+	cp -r $root_path/output/kernel/* ${output_dir}/mnt_debootstrap/ || exit 0
 		
 
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64 || exit 0
