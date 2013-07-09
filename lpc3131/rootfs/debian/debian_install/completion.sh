@@ -60,11 +60,11 @@ echo "#############################################################" >> $logfile
 	echo "set lines=35" >> "${output_dir}/mnt_debootstrap/etc/vim/vimrc"
 	echo "kernel.printk = 3 3 1 7" > "${output_dir}/mnt_debootstrap/etc/sysctl.conf"
 	
+	cp -r $root_path/Downloads/gnublin-api/ ${output_dir}/mnt_debootstrap/root/ || exit 0
+	
+	cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
+	cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
 		
-		cp -r $root_path/examples/ ${output_dir}/mnt_debootstrap/root/ || exit 0
-		cp -r $root_path/gnublin_package/deb/ ${output_dir}/mnt_debootstrap/root/ || exit 0
-		cp -r $root_path/output/${kernel_version}* ${output_dir}/mnt_debootstrap/lib/modules
-		cp 	  $root_path/output/zImage  ${output_dir}/mnt_debootstrap/
 
 	dd if=/dev/zero of=${output_dir}/mnt_debootstrap/swapfile bs=1M count=64 || exit 0
 

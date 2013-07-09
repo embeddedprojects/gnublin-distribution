@@ -51,7 +51,8 @@ Start building your .deb packages with:
 The results will be saved in ../deb folder!
 
 
-
+NOTE:
+The gnublin tools made with the gnublin-api are now downloaded from the gnublin-api repository and filled in and compiled while running the build script 
 
 
 

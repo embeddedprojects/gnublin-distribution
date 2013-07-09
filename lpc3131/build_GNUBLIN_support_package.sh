@@ -39,7 +39,7 @@ Options:
                                     Defaults to "8".
  --root-dir <dir>                   Root directoy for the build.
                                     Defaults to the current directoy.
- --start-mkmenuconfig <yesno>       Allowed values are "yes" and "not". Set to
+ --start-mkmenuconfig <yesno>       Allowed values are "yes" and "no". Set to
                                     "yes" if you want to configure bootloader
                                     and kernel.
                                     Defaults to "no".
@@ -499,7 +499,25 @@ then
 	
 	# Correct files (interfaces, passwd)
 	
-		
+	#download gnublin-api and build gnublin-tools
+	if [ ! -d "$root_path/Downloads/gnublin-api" ]   
+	then
+		cd $root_path/Downloads  || exit 0
+		#Get gnublin-api from repository 
+		git clone https://github.com/embeddedprojects/gnublin-api.git || exit 0
+		echo "$build_time gnublin-api Repository cloned correctly " >> $logfile_build
+	else 
+		cd $root_path/Downloads/gnublin-api 
+		git pull || exit 0
+	fi
+	cd $root_path/Downloads/gnublin-api
+	#install swig to make gnublin-api python 
+	sudo -s -E apt-get install swig2.0
+	make release || exit 0
+	echo "$build_time make gnublin-api" >> $logfile_build
+	mkdir -p $root_path/gnublin_package/src/gnublin-tools/
+	cp -r $root_path/Downloads/gnublin-api/deb/* $root_path/gnublin_package/src/gnublin-tools/
+	make clean || exit 0
 	
 	# build .deb packages #
 	if [ ! -d $root_path/gnublin_package/deb ]
