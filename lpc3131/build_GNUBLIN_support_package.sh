@@ -508,6 +508,7 @@ then
 		echo "$build_time gnublin-api Repository cloned correctly " >> $logfile_build
 	else 
 		cd $root_path/Downloads/gnublin-api 
+		make clean || exit 0
 		git pull || exit 0
 	fi
 	cd $root_path/Downloads/gnublin-api
