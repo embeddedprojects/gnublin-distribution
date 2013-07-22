@@ -56,7 +56,7 @@ ARG_CROSSCOMPILER_DIR=""
 ARG_DEBIAN_BUILD_DIR=""
 ARG_DEBIAN_INSTALLED_FILES_DIR=""
 ARG_DISTR_VERSION="max"
-ARG_FS_TYPE="ext3"
+ARG_FS_TYPE="ext4"
 ARG_HOST_OS="Ubuntu"
 ARG_KERNEL_NAME=""
 ARG_KERNEL_DIR=""
@@ -513,12 +513,12 @@ then
 	fi
 	cd $root_path/Downloads/gnublin-api
 	#install swig to make gnublin-api python 
-	sudo -s -E apt-get install swig2.0
+	sudo -s -E apt-get install swig2.0 || exit 0
 	make release || exit 0
 	echo "$build_time make gnublin-api" >> $logfile_build
 	mkdir -p $root_path/gnublin_package/src/gnublin-tools/
-	cp -r $root_path/Downloads/gnublin-api/deb/* $root_path/gnublin_package/src/gnublin-tools/
-	make clean || exit 0
+	cp -r $root_path/Downloads/gnublin-api/deb/* $root_path/gnublin_package/src/gnublin-tools/ || exit 0
+	
 	
 	# build .deb packages #
 	if [ ! -d $root_path/gnublin_package/deb ]
@@ -527,7 +527,7 @@ then
 	fi
         rm -r $root_path/gnublin_package/deb/*
 	cd $root_path/gnublin_package/src/
-	$root_path/gnublin_package/src/mkdeb_package
+	$root_path/gnublin_package/src/mkdeb_package || exit 0
 	echo "Gnublin Packages Successfully created" >> $logfile_build
     
 
