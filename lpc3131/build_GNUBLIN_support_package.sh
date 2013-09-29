@@ -385,8 +385,9 @@ echo "$(env)" >> $logfile_build
 
 # Install utils for using make menuconfig #
 sudo -s -E apt-get install make libncurses5-dev g++ dpkg-dev 
-sudo -s -E apt-get install git
+sudo -s -E apt-get install git 
 sudo -s -E apt-get install git-core
+sudo -s -E apt-get install swig2.0 gawk
 
 echo "$build_time All necessary packages installed." >> $logfile_build
 
