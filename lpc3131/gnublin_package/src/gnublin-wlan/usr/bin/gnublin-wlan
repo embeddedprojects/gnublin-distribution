@@ -11,6 +11,7 @@
 trap '$BASH_COMMAND ; cleanup_trap' INT
 source wlan_functions.sh
 
+
 while getopts i:g:k:s:c:dt:ew: opt
  do
       case $opt in
@@ -108,7 +109,7 @@ fi
 echo "Finally connection test:"
 if [ -n "$device" ]; then
 	echo "Checking Wlan connection...."
-	iwconfig ${device} | grep ${ssid} >/dev/null
+	iwconfig ${device} | grep "${ssid}" >/dev/null
 	if [ "$?" == "0" ]; then
 		echo "Wlan connection 				[OK]"
 	else

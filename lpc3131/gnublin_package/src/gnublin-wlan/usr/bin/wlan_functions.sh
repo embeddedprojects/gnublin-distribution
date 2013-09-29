@@ -67,19 +67,22 @@ wpa_supplicant_autostart () {
   check_val "$proto" "proto"
  
   ###-----> GENERATE PSK KEY WITH WPA_PASSPHRASSE!!! ######
- 
-  psk=$( wpa_passphrase ${ssid} ${key} | tail -n 2 | grep "psk" )
+
+  psk=$( wpa_passphrase "${ssid}" "${key}" | tail -n 2 | grep "psk" )
   check_val "$psk" "pre-shared key"
 
+  echo "network={
+        ssid=\"${ssid}\"
+        key_mgmt=WPA-PSK
+        proto=WPA
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+        ${psk}
+  }" > "/etc/wpa_supplicant/wpa_supplicant.conf"
 
-	echo "network={
-    ssid=\"${ssid}\"
-    key_mgmt=WPA-PSK
-    proto=${proto}
-    ${psk}
-}" > "/etc/gnublin/wlan/${ssid}"
 
-	wpa_supplicant -i ${device} -D wext -c /etc/gnublin/wlan/${ssid} -d -B
+
+	wpa_supplicant -i ${device} -D wext -c /etc/wpa_supplicant/wpa_supplicant.conf -d -B
 	sleep 3
 }
 
