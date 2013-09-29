@@ -3,7 +3,7 @@ ip_client=""
 ssid=""
 key=""
 psk=""
-proto="WPA"
+proto="WPA2"
 conf=""
 manualf=""
 autom_con=""
@@ -74,7 +74,7 @@ wpa_supplicant_autostart () {
   echo "network={
         ssid=\"${ssid}\"
         key_mgmt=WPA-PSK
-        proto=WPA
+        proto=WPA2
         pairwise=CCMP TKIP
         group=CCMP TKIP
         ${psk}
