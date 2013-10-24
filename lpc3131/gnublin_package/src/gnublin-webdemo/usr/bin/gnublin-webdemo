@@ -123,26 +123,15 @@ then
 
 
 	#initialize the dogm display
-	chmod 777 /usr/bin/gnublin-dogm
+	chmod +s /usr/bin/gnublin-dogm
+	chmod +s /usr/bin/gnublin-lm75
+	chmod +s /usr/bin/gnublin-pca9555
+	chmod +s /usr/bin/gnublin-relay
 	gnublin-dogm -i
 
 
 	#restart lighttpd
 	/etc/init.d/lighttpd restart
-
-
-	#initialize the relay-card
-	modprobe pca953x addr1=0x20
-	echo 98 > /sys/class/gpio/export
-	echo 99 > /sys/class/gpio/export
-	echo 100 > /sys/class/gpio/export
-	echo 101 > /sys/class/gpio/export
-	echo 102 > /sys/class/gpio/export
-	echo 103 > /sys/class/gpio/export
-	echo 104 > /sys/class/gpio/export
-	echo 105 > /sys/class/gpio/export
-	echo 14 > /sys/class/gpio/export
-
 
 
 	#change rights

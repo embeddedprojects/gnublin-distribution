@@ -115,6 +115,8 @@ check_connection () {
 	   iwconfig ${device} | grep "ESSID" | grep "${ssid}" > /dev/null	
 	  if [ "$?" == "0" ]; then
 	  		echo "Wlan connection established"
+			echo "Your IP: "	
+			ifconfig ${device} | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
 			return 0
 	  fi
 

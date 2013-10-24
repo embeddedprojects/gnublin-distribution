@@ -29,7 +29,7 @@ class Stepper
 		$value = $_GET['value'];
 
 		if($value >= 0 && $value <= 3199)
-			exec("/usr/bin/gnublin-step -a 0x76 -p $value");
+			exec("/usr/bin/gnublin-step -p $value");
 
 		exit;
 	}

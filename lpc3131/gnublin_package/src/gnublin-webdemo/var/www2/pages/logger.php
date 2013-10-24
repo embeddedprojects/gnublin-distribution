@@ -31,7 +31,7 @@ class Logger
 		$data = array();
 		for($i=0; $i<count($input); $i++) {
 			$data[$i] = array('label'=>$input[$i],
-												'value'=>$this->GetSensorData($input[$i]));
+			'value'=>$this->GetSensorData($input[$i]));
 
 		}
 
@@ -41,7 +41,7 @@ class Logger
 
 	function GetSensorData($sensor)
 	{
-		$temp = exec("/bin/bash /usr/bin/gnublin-lm75 -a 0x48", $result); 
+		$temp = exec("/usr/bin/gnublin-lm75", $result); 
 		return preg_replace('/[^0-9]+/','',$temp);
 	}
 

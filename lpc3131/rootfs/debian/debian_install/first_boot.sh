@@ -81,6 +81,25 @@ fi
 swapon /swapfile
 exit 0" > /etc/rc.local
 
+
+echo "Setup Network! Reboot now..."
+echo "8188eu" >> /etc/modules
+
+
+
+echo "timeout 5;" >> /etc/dhcp/dhclient.conf
+echo "enc28j60 irq_pin=12 cs_pin=19" >> /etc/modules
+
+
+echo "auto lo" > /etc/network/interfaces
+echo "iface lo inet loopback" >> /etc/network/interfaces
+echo "## Ethernet Interface 0" >> /etc/network/interfaces
+echo "auto eth0" >> /etc/network/interfaces
+echo "#start at boot automatically" >> /etc/network/interfaces
+echo "iface eth0 inet dhcp">> /etc/network/interfaces
+echo"    hwaddress ether ba:07:1b:0c:64:0e">> /etc/network/interfaces
+
+
 echo "Everything done successfull! Reboot now..."
 reboot
 

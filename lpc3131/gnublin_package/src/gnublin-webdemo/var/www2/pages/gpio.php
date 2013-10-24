@@ -32,8 +32,8 @@ class Gpio
 		if(!is_numeric($gpio))
 			exit;
 
-		exec("/bin/bash gnublin-gpio -b -p $gpio -i", $result);
-		echo $result[0];
+		exec("/usr/bin/gnublin-relay -b -p $gpio -i", $result);
+		echo trim($result[0]);
 
 		exit;
 	}
@@ -42,13 +42,13 @@ class Gpio
 	{
 		$gpio = $_GET['gpio'];
 	
-		exec("/bin/bash gnublin-gpio -b -p $gpio -i", $result);
+		exec("/usr/bin/gnublin-relay -b -p $gpio -i", $result);
 
 		$set = 0;
-		if($result[0]=='0')
+		if(trim($result[0])=='0')
 			$set = 1;
 
-		exec("/bin/bash gnublin-gpio -b -p $gpio -o $set");
+		exec("/usr/bin/gnublin-relay -b -p $gpio -o $set");
 
 		echo $set;
 		exit;

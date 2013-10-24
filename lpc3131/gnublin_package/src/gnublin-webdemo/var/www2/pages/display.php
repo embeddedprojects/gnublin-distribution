@@ -42,14 +42,14 @@ class Display
 	private function SetLine($text, $clr=false) 
 	{
 		if($clr)
-			exec("/usr/bin/gnublin-dogm -n -d /dev/spidev0.11 -w'$text'");
+			exec("/usr/bin/gnublin-dogm -n -w'$text'");
 		else
-			exec("/usr/bin/gnublin-dogm -d /dev/spidev0.11 -w'$text'");
+			exec("/usr/bin/gnublin-dogm -w'$text'");
 	}
 
 	private function NewLine()
 	{
-		exec("/usr/bin/gnublin-dogm -o 192 -d /dev/spidev0.11");
+		exec("/usr/bin/gnublin-dogm -o 192 ");
 	}
 
 

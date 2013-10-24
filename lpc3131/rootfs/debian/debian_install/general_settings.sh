@@ -80,7 +80,9 @@ export output_filename="debian_rootfs_gnublin" # base name of the output file (c
 
 export apt_prerequisites_debian="debootstrap binfmt-support qemu-user-static qemu qemu-kvm qemu-system parted" # packages needed for the build process on debian
 
-export apt_prerequisites_ubuntu="debootstrap binfmt-support qemu qemu-system qemu-kvm qemu-kvm-extras-static parted" # packages needed for the build process on ubuntu
+export apt_prerequisites_ubuntu="debootstrap binfmt-support qemu-user-static qemu qemu-system qemu-kvm parted" # packages needed for the build process on ubuntu
+
+#before 13.04 qemu-kvm-extras-static
 
 export clean_tmp_files="no" # delete the temporary files, when the build process is done?
 
