@@ -125,5 +125,10 @@ else
 	echo "Internet connection				[ERROR]"
 fi
 
+IP=$(/sbin/ifconfig wlan0 | grep -e "inet:" -e "addr:" | grep -v "inet6" | grep  
+-v "127.0.0.1" | head -n 1 | awk '{print $2}' | cut -c6-)
+
+echo $IP
+
 
 
